@@ -1,0 +1,38 @@
+<!DOCTYPE  <html>
+<<html>
+<head>
+	<!--jQeury library-->
+	<script src="../jQuery/jquery-2.1.4.min.js"></script>
+	<script src="../jQuery/jquery-ui.min.js"></script>
+
+	<title>test</title>
+
+	<link rel="stylesheet" type="text/css" href="testpage.css">
+	<script type="text/javascript">
+			var animateMe = function(targetElement, speed){
+		    
+		    $(targetElement).css({left:'-200px'});
+		    $(targetElement).animate(
+		        {
+		        'left': $(document).width() + 200
+		        }, 
+		        { 
+		        duration: speed, 
+		        complete: function(){
+		            animateMe(this, speed);
+		            }
+		        }
+		    );
+		    
+		};
+		animateMe($('#object1'), 5000);
+		animateMe($('#object2'), 3000);
+	</script>
+</head>
+<body>
+	<div id="object1"></div>
+	<div id="object2"></div>
+</body>
+
+
+</html>
