@@ -1,8 +1,8 @@
 // Create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width = 512;
-canvas.height = 480;
+canvas.width = 400; //actual 870
+canvas.height = 400; //870
 document.body.appendChild(canvas);
 
 // Background image
@@ -11,7 +11,7 @@ var bgImage = new Image();
 bgImage.onload = function () {
 	bgReady = true;
 };
-bgImage.src = "images/background.png";
+bgImage.src = "images/tdmap.png";
 
 // Hero image
 var heroReady = false;
@@ -70,8 +70,8 @@ var reset = function () {
 	hero.y = canvas.height / 2;
 
 	// Throw the monster somewhere on the screen randomly
-	monster.x = 32 + (Math.random() * (canvas.width - 64));
-	monster.y = 32 + (Math.random() * (canvas.height - 64));
+	monster.x = 32 + (1 * (canvas.width - 64));
+	monster.y = 32 + (1 * (canvas.height - 64));
 };
 
 // Update game objects
@@ -100,7 +100,22 @@ var update = function (modifier) {
 		dead(monster);
 	}
 
-	// Are they touching?
+	// confine object within canvas
+	if (hero.x >= canvas.height - 32) {
+		hero.x = canvas.height -32
+	}
+
+	if (hero.x <= 0) {
+		hero.x = 0
+	}
+
+	if (hero.y >= canvas.height - 32) {
+		hero.y = canvas.height -32
+	}
+
+	if (hero.y <= 0) {
+		hero.y = 0
+	}
 };
 
 // Draw everything
