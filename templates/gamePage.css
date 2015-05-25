@@ -1,10 +1,11 @@
+/* styling of the back ground. also, it regulates the nav bar at the top*/
 body{
     background-repeat: no-repeat;
     background-size:100% auto;
     padding-top: 55px;
 }
 
-
+/* styling of the left hand bar*/
 #leftHandBar{
 	height: 570px;
 	border: 2px solid white;
@@ -15,6 +16,7 @@ body{
 	float:left;
 }
 
+/*position of the profile pic, on the left hand bar. it needs to be linked to real profile in the future*/
 #profilePic{
 	position:absolute;
 	height: 70px;
@@ -23,6 +25,7 @@ body{
 	top:2%;
 }
 
+/* positon of user name, on the left hand bar*/
 #userName{
 	position:absolute;
 	height:20px;
@@ -35,6 +38,7 @@ body{
 
 }
 
+/* this part is for the positioning of each button*/
 #b1{
 	position:absolute;
 	top:20%;
@@ -65,6 +69,8 @@ body{
 	left:0%;
 }
 
+
+/* This part below is for styling of the button*/
 .btn{
 	-moz-box-shadow:inset 0px 1px 19px -4px #ad8985;
 	-webkit-box-shadow:inset 0px 1px 19px -4px #ad8985;
@@ -103,4 +109,63 @@ body{
 .btn:active {
 	position:relative;
 	top:1px;
+}
+
+
+/*The following is the styling for the center component*/
+/* all the id will start with "center"  to show that it is for center component*/
+
+
+/*positioning of the center space allocated for preview*/
+#c-centerSpace{
+	position: absolute;
+	background-color: ;
+	height: 550px;
+	top:10%;
+
+}
+
+/*kingdom center preview division*/
+#c-kingdom{
+	position: absolute;
+	background-color: #CC6600;
+	/*rgba function generates semi-transparent background*/
+	background-color: rgba(48, 75, 91, 0.7); 
+	border: ridge #522900;
+	left:0%;
+	top:0%;
+	height: 550px;
+	overflow-y: auto;
+}
+
+/*user profile picture*/
+#c-kingdom-profilePicture{
+	position: absolute;
+	background-color:;
+	height: 100px;
+}
+
+/*user profile name*/
+#c-kingdom-name{
+	position:absolute;
+	background-color: ;
+	top:-2%;
+}
+/*the follow two are for status input*/
+#c-kingdom-status{
+	position: absolute;
+	background-color: ;
+	top:10%;
+}
+
+#c-kingdom-status-display{
+	font-size: 20px;
+	font-family: cursive;
+	color: red;
+}
+
+/*close button*/
+#c-kingdom-closeButton{
+	position: absolute;
+	height: 30px;
 }
