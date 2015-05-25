@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--jQeury library-->
+	<script src="../jQuery/jquery-2.1.4.min.js"></script>
+	<script src="../jQuery/jquery-ui.min.js"></script>
+
+	<title>Game Page</title>
+
+	<!--User Scripts-->
+	<script type="text/javascript" src="gamePage.js"></script>
+	<link rel="stylesheet" type="text/css" href="gamePage.css"></link>
+
+
+</head>
+<body background="../images/gamePage/background.jpg">
+
+
+	<!-- top nav bar-->
+		<nav class="navbar navbar-inverse navbar-fixed-top" >
+	  		<div class="container">
+	  			<ul class="nav nav-pills col-lg-offset-4">
+				  <li role="presentation" ><a href="firstPage.html">Home</a></li>
+				  <li role="presentation"><a href="#">Record</a></li>
+				  <li role="presentation"><a href="#">Restart</a></li>
+				  <li role="presentation"><a href="#">Feedback</a></li>
+				  <li role="presentation"><a href="#">Q&A</a></li>
+				  <li role="presentation"><a href="signIn.html">Sign In</a></li>
+				</ul>
+	  		</div>
+		</nav>
+
+
+
+	<!--Left hand floating nav bar-->
+	<div id="leftHandBar" class="col-lg-2">
+		<!--this will be the profile pic-->
+		<div id="profilePic">
+			<img src="#">
+		</div>
+
+		<!--this will be the name of the user-->
+		<div id="userName">
+			<p>name</p>
+		</div>
+
+		<!-- Single button 1 -->
+		<div class="btn-group col-lg-12" id="b1">
+			<button type="button" class="btn btn-default col-lg-12 ">
+		    	Kingdom
+		  	</button>
+	  	</div>
+
+	  	<!-- Single button 2-->
+		<div class="btn-group col-lg-12" id="b2">
+		  <button type="button" class="btn btn-default dropdown-toggle col-lg-12" data-toggle="dropdown" aria-expanded="false">
+		    Rules
+		  </button>
+		  <ul class="dropdown-menu col-lg-12" role="menu" >
+		    <li><a href="#">Action</a></li>
+		    <li><a href="#">Another action</a></li>
+		    <li><a href="#">Something else here</a></li>
+		    <li class="divider"></li>
+		    <li><a href="#">Separated link</a></li>
+		  </ul>
+		</div>
+
+	</div>
+
+
+</body>
+	<!-- bootstrap file-->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="../bootstrap/bootstrap-theme.min.css"></link>
+	<script src="../bootstrap/bootstrap.min.js"></script>
+</html>

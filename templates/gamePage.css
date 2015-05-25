@@ -1,0 +1,48 @@
+body{
+    background-repeat: no-repeat;
+    background-size:100% auto;
+    padding-top: 55px;
+}
+
+
+#leftHandBar{
+	height: 570px;
+	border: 2px solid white;
+	border-radius: 5px;
+	background-color: #2A2A2F;
+	margin-left: 10px;
+	margin-top:0px;
+	float:left;
+}
+
+#profilePic{
+	position:absolute;
+	height: 70px;
+	width: 70px;
+	border:solid yellow;
+	top:2%;
+}
+
+#userName{
+	position:absolute;
+	height:20px;
+	width: 100px;
+	border:solid blue;
+	top:11%;
+	left:45%;
+	color:yellow;
+	font-size: 10px
+
+}
+
+#b1{
+	position:absolute;
+	top:20%;
+	left:0%;
+}
+
+#b2{
+	position:absolute;
+	top:27%;
+	left:0%;
+}

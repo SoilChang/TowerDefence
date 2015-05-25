@@ -1,0 +1,20 @@
+body{
+    background-repeat: no-repeat;
+    background-size:100% auto;
+}
+
+#form{
+	border-radius:10%;
+	margin-top: 200px;
+	border:double yellow;
+}
+
+#helmet{
+	height:70px;
+}
+#signInButton{
+	color:yellow;
+	font-family: cursive;
+	font-size: 20px;
+
+}
