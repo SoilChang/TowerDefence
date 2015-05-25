@@ -11,9 +11,13 @@ $(document).ready(function(){
 				var inputText = $('input[name=inputText]').val();
 				$('#c-kingdom-status-display').html(inputText);
 			});
+
+			$('#c-kingdom-closeButton').click(function(){
+				$('#c-kingdom').hide();
+			});
 		});
 
-		
+
 
 	});
 });
