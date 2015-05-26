@@ -1,0 +1,57 @@
+#banner{
+	position: relative;
+	height: 90px;
+	border: ;
+	border-radius: 5px;
+	background-color: #664C00;
+}
+#banner-header{
+	text-shadow:1px 1px 0 rgba(60,176,153,1);font-weight:bold;text-decoration:underline overline;text-transform:uppercase;color:#434099;background-color:#664C00;letter-spacing:4pt;word-spacing:9pt;font-size:65px;text-align:center;font-family:impact, sans-serif;line-height:1;
+}
+
+#carousel{
+	height: 453px;
+}
+
+#wrapper{
+	position:absolute;
+	height:453px;
+	width: 1000px;
+	left:11.5%;
+	overflow: hidden;
+	background-color: rgba(244, 219, 239, 0.7);
+
+}
+
+#regulator{
+	height: 453px;
+	width: 1000px;
+	margin-left:auto;
+	margin-right: auto;
+	display: block;
+}
+img{
+	max-height: 435px;
+	width: auto;
+}
+
+#footer{
+	position: absolute;
+	height: 96px;
+	background-color: #A39264;
+	bottom:0%;
+	text-shadow:1px 1px 0 rgba(60,176,153,1);font-weight:bold;text-transform:uppercase;color:#2F3021;background-color:#A39264;letter-spacing:-1pt;word-spacing:-2pt;font-size:42px;text-align:center;font-family:courier new, courier, monospace;line-height:1;
+
+}
+
+
+#footer-back{
+	position: absolute;
+}
+#footer-forward{
+	position: absolute;
+	left:70%;
+
+}
+
+

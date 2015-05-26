@@ -29,6 +29,13 @@ img{
 	height:100px;
 }
 
+#photoBook{
+	position:absolute;
+	margin-left:460px;
+	margin-top:20px;
+	height:150px;
+}
+
 #knight{
 	position:absolute;
 	margin-left:475px;

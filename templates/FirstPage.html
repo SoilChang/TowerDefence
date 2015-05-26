@@ -14,13 +14,31 @@
 
 </head>
 <body background="../images/FirstPage/FirstPage-background.jpg">
+	<!-- the div for light house -->
 	<div>
 		<img src="../images/FirstPage/lightHouse.png" id="lighthouse">
 		<img src="../images/FirstPage/credit.png"  id="credit">
 	</div>
+	<!-- the div for second tower -->
 	<div>
-		<img src="../images/FirstPage/2ndTower.png" id="secTower">
+		<a href="albumPage.html">
+			<img src="../images/FirstPage/2ndTower.png" id="secTower">
+		</a>
+		<img src="../images/FirstPage/photoBook.png" id="photoBook">
+		<!-- the following script is to hide and show photo book -->
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#photoBook').hide();
+				$('#secTower').hover(function(){
+					$('#photoBook').show();
+				},
+				function(){
+					$('#photoBook').hide();
+				});
+			});
+		</script>
 	</div>
+	<!-- the div for the knight -->
 	<div>
 		<a href="gamePage.html"><img src="../images/FirstPage/knight.png" id="knight"></a>
 		<img src="../images/FirstPage/enter.png" id="enter">

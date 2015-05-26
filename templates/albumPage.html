@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--jQeury library-->
+	<script src="../jQuery/jquery-2.1.4.min.js"></script>
+	<script src="../jQuery/jquery-ui.min.js"></script>
+
+	<title>Album Page</title>
+
+	<!--User Scripts-->
+	<script type="text/javascript" src="albumPage.js"></script>
+	<link rel="stylesheet" type="text/css" href="albumPage.css"></link>
+
+</head>
+<body>
+	<!-- banner at top -->
+	<div id="banner" class="col-lg-12">
+		<h1 id="banner-header">Photo Book</h1>
+	</div>
+
+	<!-- carousel  -->
+	<div id="carousel" class="carousel slide col-lg-12 " data-ride="carousel">
+	  <!-- Indicators -->
+	  <ol class="carousel-indicators">
+	    <li data-target="#carousel" data-slide-to="0" class="active"></li>
+	    <li data-target="#carousel" data-slide-to="1"></li>
+	    <li data-target="#carousel" data-slide-to="2"></li>
+	    <li data-target="#carousel" data-slide-to="3"></li>
+	  </ol>
+
+	  <!-- Wrapper for slides -->
+	  <div id="wrapper" class="carousel-inner" role="listbox" >
+	    <div class="item active">
+	    	<div id="regulator">
+	    		 <img src="../images/albumPage/war1.jpg" alt="image1">
+	    	</div>    
+	    </div>
+
+	    <div class="item">
+	    	<div id="regulator">
+	    		 <img src="../images/albumPage/war2.jpg" alt="image1">
+	    	</div>    
+	    </div>
+
+	    <div class="item">
+	        <div id="regulator">
+	    		 <img src="../images/albumPage/war3.jpg" alt="image1">
+	    	</div>    
+	    </div>
+
+	    <div class="item">
+	     	<div id="regulator">
+	    		<img src="../images/albumPage/war4.jpg" alt="image1">
+	    	</div>    
+	    </div>
+	  </div>
+
+	  <!-- Left and right controls -->
+	  <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+	    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+	    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a>
+	</div>
+
+	<!-- footer -->
+	<div id="footer" class="col-lg-12">
+		<!-- for going back first page -->
+		<div class="col-lg-4">
+			<a href="FirstPage.html"><h1 id="footer-back">back</h1></a>
+		</div>
+		<!-- for going forward to game page -->
+		<div class="col-lg-12">
+			<a href="gamePage.html"><h1 id="footer-forward">continue to game</h1></a>
+		</div>
+	</div>
+
+	
+
+</body>
+	<!-- bootstrap file-->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="../bootstrap/bootstrap-theme.min.css"></link>
+	<script src="../bootstrap/bootstrap.min.js"></script>
+</html>
