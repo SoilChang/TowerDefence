@@ -12,9 +12,22 @@ $(document).ready(function(){
 				$('#c-kingdom-status-display').html(inputText);
 			});
 
-			$('#c-kingdom-closeButton').click(function(){
-				$('#c-kingdom').hide();
-			});
+			// the following is the functionality specific to close button
+			$('#c-kingdom-closeButton').hover(function(){
+				// when hover
+				$('#c-kingdom-closeButton').animate(
+					{	'height':'40px','left':'95%','top':'0%',},'fast');
+				$('#c-kingdom-closeButton').click(function(){
+					$('#c-kingdom').hide();
+				});
+			},
+				// when unhover
+				function(){
+					$('#c-kingdom-closeButton').animate(
+					{	'height':'30px','left':'96%','top':'0%',},'fast');
+				}
+			);
+			
 		});
 
 

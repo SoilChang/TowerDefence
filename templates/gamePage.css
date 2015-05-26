@@ -136,6 +136,7 @@ body{
 	top:0%;
 	height: 550px;
 	overflow-y: auto;
+	overflow-x:hidden;
 }
 
 /*user profile picture*/
@@ -169,4 +170,35 @@ body{
 	position: absolute;
 	height: 30px;
 	left:96%;
+	top:0%;
+}
+
+/*live and armour div*/
+#c-kingdom-LiveArmour{
+	position: absolute;
+	background-color: ;
+	height: 140px;
+	top:20%;
+	font-family: cursive;
+	color: #00FF00;
+
+}
+
+/*equipment obtained*/
+#c-kingdom-equipment{
+	position: absolute;
+	background-color: ;
+	height: 250px;
+	top:50%;
+}
+
+/*for the positioning of */
+#c-kingdom-equipment-item{
+	display: inline-block;
+	margin-top: 5%;
+	height:150px;
+	background-color:;
+	border:;
+	font-family: cursive;
+	color:#99FF33;
 }

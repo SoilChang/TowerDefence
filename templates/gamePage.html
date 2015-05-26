@@ -107,7 +107,52 @@
 
 			<!-- the following is close button -->
 			<div>
-				<img src="../images/gamePage/closeButton.png"  id="c-kingdom-closeButton">
+				<button><img src="../images/gamePage/closeButton.png"  id="c-kingdom-closeButton"></button>
+			</div>
+
+			<!-- shows hp and armour value -->
+			<div class="col-lg-11" id="c-kingdom-LiveArmour">
+				<h1>Maximum Live: <a href="#">5</a> </h1>
+				<h1>Armour: <a href="#">1</a></h1>
+				<h1>Equipment:</h1>
+			</div>
+
+			<!-- show equipment obtained -->
+			<div class= "col-lg-11" id="c-kingdom-equipment">
+				<!-- first item -->
+				<div class="col-lg-2" id="c-kingdom-equipment-item" >
+					<img id="c-kingdome-equipment-item1" src="../images/gamePage/armour_leg.png">
+					<p id="c-kingdome-equipment-item-p1">Live bonus: 2<br> Armour bonus: 3</p>
+					<script type="text/javascript" >
+						$('#c-kingdome-equipment-item1').ready(function(){
+							$('#c-kingdome-equipment-item-p1').hide();
+							$('#c-kingdome-equipment-item1').hover(function(){
+								$('#c-kingdome-equipment-item-p1').show();
+							},
+							function(){
+								$('#c-kingdome-equipment-item-p1').hide();
+							});
+						});
+					</script>
+				</div>
+
+
+				<!-- second item -->
+				<div id="c-kingdom-equipment-item" class="col-lg-2" >
+					<img id="c-kingdome-equipment-item2" src="../images/gamePage/armour_head.png">
+					<p id="c-kingdome-equipment-item-p2">Live bonus: 2<br> Armour bonus: 3</p>
+					<script type="text/javascript">
+						$('#c-kingdome-equipment-item2').ready(function(){
+							$('#c-kingdome-equipment-item-p2').hide();
+							$('#c-kingdome-equipment-item2').hover(function(){
+								$('#c-kingdome-equipment-item-p2').show();
+							},
+							function(){
+								$('#c-kingdome-equipment-item-p2').hide();
+							});
+						});
+					</script>
+				</div>		
 			</div>
 		</div>
 
