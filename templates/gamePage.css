@@ -21,7 +21,7 @@ body{
 	position:absolute;
 	height: 70px;
 	width: 70px;
-	border:solid yellow;
+	border:;
 	top:2%;
 }
 
@@ -126,7 +126,7 @@ body{
 }
 
 /*kingdom center preview division*/
-#c-kingdom{
+#c-kingdom,#c-Rules,#c-Tower_Type,#c-Allies,#c-shop{
 	position: absolute;
 	background-color: #CC6600;
 	/*rgba function generates semi-transparent background*/
@@ -135,7 +135,7 @@ body{
 	left:0%;
 	top:0%;
 	height: 550px;
-	overflow-y: auto;
+	overflow-y: scroll;
 	overflow-x:hidden;
 }
 
@@ -144,12 +144,15 @@ body{
 	position: absolute;
 	background-color:;
 	height: 100px;
+	top:3%;
 }
 
 /*user profile name*/
 #c-kingdom-name{
 	position:absolute;
 	background-color: ;
+	color:#8AE62E;
+	font-family: cursive;
 	top:-2%;
 }
 /*the follow two are for status input*/
@@ -166,11 +169,15 @@ body{
 }
 
 /*close button*/
-#c-kingdom-closeButton{
-	position: absolute;
+#c-kingdom-closeButton,
+#c-Rules-closeButton,
+#c-Tower_Type-closeButton,
+#c-Allies-closeButton,
+#c-shop-closeButton{
+	position: fixed;
 	height: 30px;
-	left:96%;
-	top:0%;
+	left:87.7%;
+	top:10.5%;
 }
 
 /*live and armour div*/
@@ -192,7 +199,7 @@ body{
 	top:50%;
 }
 
-/*for the positioning of */
+/*for the positioning of equipment items*/
 #c-kingdom-equipment-item{
 	display: inline-block;
 	margin-top: 5%;
@@ -201,4 +208,18 @@ body{
 	border:;
 	font-family: cursive;
 	color:#99FF33;
+}
+
+/*text styling for the rules*/
+#c-Rules-h1,
+#c-Tower_Type-h1{
+	text-shadow:1px 1px 0 rgba(128,255,136,1);font-weight:normal;color:#C94928;letter-spacing:0pt;word-spacing:1pt;text-align:center;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;line-height:2;
+}
+#c-Rules-h2,
+#c-Tower_Type-h2{
+	text-shadow:1px 1px 0 rgba(128,255,136,1);font-weight:normal;color:#2D8C33;letter-spacing:0pt;word-spacing:1pt;text-align:left;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;line-height:2;
+}
+#c-Rules-p,
+#c-Tower_Type-p{
+	text-shadow:1px 1px 0 rgba(255,255,0,1);font-weight:normal;color:#2D8C73;letter-spacing:0pt;word-spacing:1pt;font-size:14px;text-align:left;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;line-height:2;
 }
