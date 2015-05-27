@@ -80,6 +80,13 @@
 		  </button>
 		</div>
 
+		<!-- single button 6 -->
+		<div class="btn-group col-lg-12" id="b6">
+		  <button type="button" class="btn  col-lg-12" >
+		    Game
+		  </button>
+		</div>
+
 	</div>
 
 
@@ -102,13 +109,15 @@
 				  <div class="form col-lg-11 ">
 				    <input type="text" class="form-control" id="c-kingdom-status-input" placeholder="Set your status for your friends to see!!" name="inputText">
 				  </div>
-				  <button type="submit" class="btn btn-default" id="c-kingdom-status-button">Set</button> 
+				  <button  class="btn btn-default" id="c-kingdom-status-button">Set</button>
 				</form>
 				<p id="c-kingdom-status-display"></p>
 				<script type="text/javascript">
 					$('#c-kingdom').ready(function(){
 						// the following code is to add input text status to the display message
-						$('#c-kingdom-status-button').click(function(){
+						$('#c-kingdom-status-button').click(function(e){
+							e.preventDefault();
+							e.stopPropagation();
 							var inputText = $('input[name=inputText]').val();
 							$('#c-kingdom-status-display').html(inputText);
 						});
@@ -182,7 +191,7 @@
 							});
 						});
 					</script>
-				</div>		
+				</div>
 			</div>
 		</div>
 
@@ -224,7 +233,7 @@
 						<h2 id="c-Rules-h2">Shop</h2>
 						<p id="c-Rules-p">If you want to challenge more difficult stages, you may want to equip you castle with better armour so that even if you fail to stop the monsters, your castles will not be damaged so much. <br><br> There are two attributes which you castle can gain: live and armour. Live gives your castle more hit points. So your castles can survive more hits. Armour reduces the damage your castle receives if a monster hits it. <br><br> To make your castle more tanky, armour is more effective against large amount of low-damage monsters while Live is more effective to defend against small amount of high-damage monsters. </p>
 					</li>
-					
+
 				</ol>
 			</div>
 		</div>
@@ -269,7 +278,7 @@
 				</ol>
 			</div>
 
-		
+
 		</div>
 
 		<!-- this is the 4th Allies tab -->
@@ -340,87 +349,119 @@
 				<button id='c-shop-button_group-Weapons'      type="button" class="btn btn-primary">Weapons</button>
 			</div>
 
-			<!-- item display tab -->
-			<!-- tab for helmet -->
-			<div id="c-shop-item_display-Helmets" class="col-lg-12">		
-				<ul>
-					<li><h1>helmet</h1></li>
-					<li role="presentation" class="divider"></li>
-				</ul>
-			</div>
-			<!-- tab for chest plate -->
-			<div id="c-shop-item_display-Chest_Plates" class="col-lg-12">
-				<h1>chest plate</h1>
-			</div>
-			<!-- tab for legs -->
-			<div id="c-shop-item_display-Legs" class="col-lg-12">
-				<h1>legs</h1>
-			</div>
-			<!-- tab for arms -->
-			<div id="c-shop-item_display-Arms" class="col-lg-12">
-				<h1>arms</h1>
-			</div>
-			<!-- tab for weapons -->
-			<div id="c-shop-item_display-Weapons" class="col-lg-12">
-				<h1>weapons</h1>
-			</div>
+			<!-- item display tab -->			
+				<div>
+					<!-- tab for helmet -->
+					<div id="c-shop-item_display-Helmets" class="col-lg-12">
+						<ul>
+							<li><h1>helmet</h1></li>
+							<li role="presentation" class="divider"></li>
+						</ul>
+					</div>
+					<!-- tab for chest plate -->
+					<div id="c-shop-item_display-Chest_Plates" class="col-lg-12">
+						<h1>chest plate</h1>
+					</div>
+					<!-- tab for legs -->
+					<div id="c-shop-item_display-Legs" class="col-lg-12">
+						<h1>legs</h1>
+					</div>
+					<!-- tab for arms -->
+					<div id="c-shop-item_display-Arms" class="col-lg-12">
+						<h1>arms</h1>
+					</div>
+					<!-- tab for weapons -->
+					<div id="c-shop-item_display-Weapons" class="col-lg-12">
+						<h1>weapons</h1>
+					</div>
 
-			<!-- the following script is to display item display tab -->
-			<script type="text/javascript">
-				$('#c-shop').ready(function(){
-					$('#c-shop-item_display-Helmets').hide();
-					$('#c-shop-item_display-Chest_Plates').hide();
-					$('#c-shop-item_display-Legs').hide();
-					$('#c-shop-item_display-Arms').hide();
-					$('#c-shop-item_display-Weapons').hide();
+					<!-- the following script is to display item display tab -->
+					<script type="text/javascript">
+						$('#c-shop').ready(function(){
+							$('#c-shop-item_display-Helmets').hide();
+							$('#c-shop-item_display-Chest_Plates').hide();
+							$('#c-shop-item_display-Legs').hide();
+							$('#c-shop-item_display-Arms').hide();
+							$('#c-shop-item_display-Weapons').hide();
 
-					// when click on helmet, show helmet tab and hide the rest
-					$('#c-shop-button_group-Helmets').click(function(){
-						$('#c-shop-item_display-Helmets').show();
-						$('#c-shop-item_display-Chest_Plates').hide();
-						$('#c-shop-item_display-Legs').hide();
-						$('#c-shop-item_display-Arms').hide();
-						$('#c-shop-item_display-Weapons').hide();
+							// when click on helmet, show helmet tab and hide the rest
+							$('#c-shop-button_group-Helmets').click(function(){
+								$('#c-shop-item_display-Helmets').show();
+								$('#c-shop-item_display-Chest_Plates').hide();
+								$('#c-shop-item_display-Legs').hide();
+								$('#c-shop-item_display-Arms').hide();
+								$('#c-shop-item_display-Weapons').hide();
+							});
+
+							// when click on chest plate, show chest plate tab and hide the rest
+							$('#c-shop-button_group-Chest_Plates').click(function(){
+								$('#c-shop-item_display-Helmets').hide();
+								$('#c-shop-item_display-Chest_Plates').show();
+								$('#c-shop-item_display-Legs').hide();
+								$('#c-shop-item_display-Arms').hide();
+								$('#c-shop-item_display-Weapons').hide();
+							});
+
+							// when click on legs, show legs tab and hide the rest
+							$('#c-shop-button_group-Legs').click(function(){
+								$('#c-shop-item_display-Helmets').hide();
+								$('#c-shop-item_display-Chest_Plates').hide();
+								$('#c-shop-item_display-Legs').show();
+								$('#c-shop-item_display-Arms').hide();
+								$('#c-shop-item_display-Weapons').hide();
+							});
+
+							// when click on arms, show arms tab and hide the rest
+							$('#c-shop-button_group-Arms').click(function(){
+								$('#c-shop-item_display-Helmets').hide();
+								$('#c-shop-item_display-Chest_Plates').hide();
+								$('#c-shop-item_display-Legs').hide();
+								$('#c-shop-item_display-Arms').show();
+								$('#c-shop-item_display-Weapons').hide();
+							});
+
+							// when click on weapon, show weapon tab and hide the rest
+							$('#c-shop-button_group-Weapons').click(function(){
+								$('#c-shop-item_display-Helmets').hide();
+								$('#c-shop-item_display-Chest_Plates').hide();
+								$('#c-shop-item_display-Legs').hide();
+								$('#c-shop-item_display-Arms').hide();
+								$('#c-shop-item_display-Weapons').show();
+							});
+						});
+					</script>
+				</div>	
+
+		</div>
+
+		<div id='c-game' class="col-lg-12">
+			<!-- the following is close button -->
+			<div  class="col-lg-offset-12">
+				<button><img src="../images/gamePage/closeButton.png"  id="c-game-closeButton"></button>
+				<script type="text/javascript">
+					$('#c-game').ready(function(){
+						// the following is the functionality specific to the close button
+						$('#c-game-closeButton').hover(function(){
+							// when hover
+							$('#c-game-closeButton').animate(
+								{	'height':'40px','left':'87%','top':'9.5%',},'fast');
+							$('#c-game-closeButton').click(function(){
+								$('#c-game').hide();
+							});
+						},
+							// when unhover
+							function(){
+								$('#c-game-closeButton').animate(
+								{	'height':'30px','left':'87.7%','top':'10.5%',},'fast');
+							}
+						);
 					});
+				</script>
+			</div>
 
-					// when click on chest plate, show chest plate tab and hide the rest
-					$('#c-shop-button_group-Chest_Plates').click(function(){
-						$('#c-shop-item_display-Helmets').hide();
-						$('#c-shop-item_display-Chest_Plates').show();
-						$('#c-shop-item_display-Legs').hide();
-						$('#c-shop-item_display-Arms').hide();
-						$('#c-shop-item_display-Weapons').hide();
-					});
-
-					// when click on legs, show legs tab and hide the rest
-					$('#c-shop-button_group-Legs').click(function(){
-						$('#c-shop-item_display-Helmets').hide();
-						$('#c-shop-item_display-Chest_Plates').hide();
-						$('#c-shop-item_display-Legs').show();
-						$('#c-shop-item_display-Arms').hide();
-						$('#c-shop-item_display-Weapons').hide();
-					});
-
-					// when click on arms, show arms tab and hide the rest
-					$('#c-shop-button_group-Arms').click(function(){
-						$('#c-shop-item_display-Helmets').hide();
-						$('#c-shop-item_display-Chest_Plates').hide();
-						$('#c-shop-item_display-Legs').hide();
-						$('#c-shop-item_display-Arms').show();
-						$('#c-shop-item_display-Weapons').hide();
-					});
-
-					// when click on weapon, show weapon tab and hide the rest
-					$('#c-shop-button_group-Weapons').click(function(){
-						$('#c-shop-item_display-Helmets').hide();
-						$('#c-shop-item_display-Chest_Plates').hide();
-						$('#c-shop-item_display-Legs').hide();
-						$('#c-shop-item_display-Arms').hide();
-						$('#c-shop-item_display-Weapons').show();
-					});
-				});
-			</script>
-
+			<!-- Game Canvas -->
+			<div id="c-game-game_canvas">
+			</div>
 		</div>
 
 

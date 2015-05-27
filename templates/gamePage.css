@@ -68,6 +68,11 @@ body{
 	top:48%;
 	left:0%;
 }
+#b6{
+	position: absolute;
+	top:55%;
+	left:0%;
+}
 
 
 /* This part below is for styling of the button*/
@@ -126,11 +131,11 @@ body{
 }
 
 /*kingdom center preview division*/
-#c-kingdom,#c-Rules,#c-Tower_Type,#c-Allies,#c-shop{
+#c-kingdom,#c-Rules,#c-Tower_Type,#c-Allies,#c-shop,#c-game{
 	position: absolute;
 	background-color: #CC6600;
 	/*rgba function generates semi-transparent background*/
-	background-color: rgba(48, 75, 91, 0.7); 
+	background-color: rgba(48, 75, 91, 0.7);
 	border: ridge #522900;
 	left:0%;
 	top:0%;
@@ -173,12 +178,16 @@ body{
 #c-Rules-closeButton,
 #c-Tower_Type-closeButton,
 #c-Allies-closeButton,
-#c-shop-closeButton{
+#c-shop-closeButton,
+#c-game-closeButton{
 	position: fixed;
 	height: 30px;
 	left:87.7%;
 	top:10.5%;
+	z-index: 10;
 }
+
+
 
 /*live and armour div*/
 #c-kingdom-LiveArmour{
@@ -235,4 +244,19 @@ body{
 	overflow-y:auto;
 	overflow-x: hidden;
 
+}
+
+#c-game{
+	overflow-x: auto;
+	overflow-y:auto;
+}
+
+#c-game-game_canvas{
+	position: absolute;
+	height:608px;
+	width: 1216px;
+	background-color: red;
+	top:0%;
+	left: 0%;
+	z-index: 1;
 }
