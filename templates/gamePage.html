@@ -19,10 +19,11 @@
 	<!-- top nav bar-->
 		<nav class="navbar navbar-inverse navbar-fixed-top" >
 	  		<div class="container">
-	  			<ul class="nav nav-pills col-lg-offset-4">
+	  			<ul class="nav nav-pills col-lg-offset-3">
 				  <li role="presentation" ><a href="firstPage.html">Home</a></li>
 				  <li role="presentation"><a href="#">Record</a></li>
 				  <li role="presentation"><a href="#">Restart</a></li>
+				  <li role="presentation"><a href="albumPage.html">Album</a></li>
 				  <li role="presentation"><a href="#">Feedback</a></li>
 				  <li role="presentation"><a href="#">Q&A</a></li>
 				  <li role="presentation"><a href="signIn.html">Sign In</a></li>
@@ -327,6 +328,98 @@
 			</div>
 
 			<div><h1 style="color:yellow">Shop</h1></div>
+
+			<!-- the following is the shop options -->
+
+			<!-- button group -->
+			<div id="c-shop-button_group"  class="btn-group">
+				<button id='c-shop-button_group-Helmets'      type="button" class="btn btn-primary">Helmets</button>
+				<button id='c-shop-button_group-Chest_Plates' type="button" class="btn btn-primary">Chest Plates</button>
+				<button id="c-shop-button_group-Legs"         type="button" class="btn btn-primary">Legs</button>
+				<button id='c-shop-button_group-Arms'         type="button" class="btn btn-primary">Arms</button>
+				<button id='c-shop-button_group-Weapons'      type="button" class="btn btn-primary">Weapons</button>
+			</div>
+
+			<!-- item display tab -->
+			<!-- tab for helmet -->
+			<div id="c-shop-item_display-Helmets" class="col-lg-12">		
+				<ul>
+					<li><h1>helmet</h1></li>
+					<li role="presentation" class="divider"></li>
+				</ul>
+			</div>
+			<!-- tab for chest plate -->
+			<div id="c-shop-item_display-Chest_Plates" class="col-lg-12">
+				<h1>chest plate</h1>
+			</div>
+			<!-- tab for legs -->
+			<div id="c-shop-item_display-Legs" class="col-lg-12">
+				<h1>legs</h1>
+			</div>
+			<!-- tab for arms -->
+			<div id="c-shop-item_display-Arms" class="col-lg-12">
+				<h1>arms</h1>
+			</div>
+			<!-- tab for weapons -->
+			<div id="c-shop-item_display-Weapons" class="col-lg-12">
+				<h1>weapons</h1>
+			</div>
+
+			<!-- the following script is to display item display tab -->
+			<script type="text/javascript">
+				$('#c-shop').ready(function(){
+					$('#c-shop-item_display-Helmets').hide();
+					$('#c-shop-item_display-Chest_Plates').hide();
+					$('#c-shop-item_display-Legs').hide();
+					$('#c-shop-item_display-Arms').hide();
+					$('#c-shop-item_display-Weapons').hide();
+
+					// when click on helmet, show helmet tab and hide the rest
+					$('#c-shop-button_group-Helmets').click(function(){
+						$('#c-shop-item_display-Helmets').show();
+						$('#c-shop-item_display-Chest_Plates').hide();
+						$('#c-shop-item_display-Legs').hide();
+						$('#c-shop-item_display-Arms').hide();
+						$('#c-shop-item_display-Weapons').hide();
+					});
+
+					// when click on chest plate, show chest plate tab and hide the rest
+					$('#c-shop-button_group-Chest_Plates').click(function(){
+						$('#c-shop-item_display-Helmets').hide();
+						$('#c-shop-item_display-Chest_Plates').show();
+						$('#c-shop-item_display-Legs').hide();
+						$('#c-shop-item_display-Arms').hide();
+						$('#c-shop-item_display-Weapons').hide();
+					});
+
+					// when click on legs, show legs tab and hide the rest
+					$('#c-shop-button_group-Legs').click(function(){
+						$('#c-shop-item_display-Helmets').hide();
+						$('#c-shop-item_display-Chest_Plates').hide();
+						$('#c-shop-item_display-Legs').show();
+						$('#c-shop-item_display-Arms').hide();
+						$('#c-shop-item_display-Weapons').hide();
+					});
+
+					// when click on arms, show arms tab and hide the rest
+					$('#c-shop-button_group-Arms').click(function(){
+						$('#c-shop-item_display-Helmets').hide();
+						$('#c-shop-item_display-Chest_Plates').hide();
+						$('#c-shop-item_display-Legs').hide();
+						$('#c-shop-item_display-Arms').show();
+						$('#c-shop-item_display-Weapons').hide();
+					});
+
+					// when click on weapon, show weapon tab and hide the rest
+					$('#c-shop-button_group-Weapons').click(function(){
+						$('#c-shop-item_display-Helmets').hide();
+						$('#c-shop-item_display-Chest_Plates').hide();
+						$('#c-shop-item_display-Legs').hide();
+						$('#c-shop-item_display-Arms').hide();
+						$('#c-shop-item_display-Weapons').show();
+					});
+				});
+			</script>
 
 		</div>
 
