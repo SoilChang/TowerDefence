@@ -5,6 +5,17 @@
 	<script src="../jQuery/jquery-2.1.4.min.js"></script>
 	<script src="../jQuery/jquery-ui.min.js"></script>
 
+	<!-- scrollable enabler script from external library -->
+	<script src='../jQuery/modernizr-v2.8.3.js'></script>
+	<script src='../jQuery/jquery-scrollable.js'></script>
+	<script type="text/javascript">
+	    jQuery(function($) {
+	      if (!Modernizr.touch) { // if not a smartphone
+	        debiki.Utterscroll.enable();
+	      }
+	    });
+	</script>
+
 	<title>Game Page</title>
 
 	<!--User Scripts-->
@@ -14,10 +25,20 @@
 
 </head>
 <body background="../images/gamePage/background.jpg">
+		<!-- scrollable script that has to be put inside body tag -->
+		<script src='../jQuery/debiki-utterscroll.js'></script>
 
 
-	<!-- top nav bar-->
+		<!-- top nav bar-->
 		<nav class="navbar navbar-inverse navbar-fixed-top" >
+			<!-- <div class="container-fluid" >
+			    <div id="navbr-logo" class="navbar-header" >
+			      <a class="navbar-brand" href="#" >
+			        <img  alt="Brand" src="../images/gamePage/Logo.png" width="70px;">
+			      </a>
+			    </div>
+			</div> -->
+			
 	  		<div class="container">
 	  			<ul class="nav nav-pills col-lg-offset-3">
 				  <li role="presentation" ><a href="firstPage.html">Home</a></li>
@@ -434,7 +455,7 @@
 
 		</div>
 
-		<div id='c-game' class="col-lg-12">
+		<div id='c-game'>
 			<!-- the following is close button -->
 			<div  class="col-lg-offset-12">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-game-closeButton"></button>
@@ -444,7 +465,7 @@
 						$('#c-game-closeButton').hover(function(){
 							// when hover
 							$('#c-game-closeButton').animate(
-								{	'height':'40px','left':'87%','top':'9.5%',},'fast');
+								{	'height':'40px','left':'93%','top':'9.5%',},'fast');
 							$('#c-game-closeButton').click(function(){
 								$('#c-game').hide();
 							});
@@ -452,15 +473,35 @@
 							// when unhover
 							function(){
 								$('#c-game-closeButton').animate(
-								{	'height':'30px','left':'87.7%','top':'10.5%',},'fast');
+								{	'height':'30px','left':'93.5%','top':'10.5%',},'fast');
 							}
 						);
 					});
 				</script>
 			</div>
 
+			<!-- Option bar on the left for Game Canvas -->
+			<div id="c-game-left_hand_menu">
+
+				<!-- animate this bar in and out -->
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$('#b6').click(function(){
+							$('#c-game-left_hand_menu').animate(
+								{'left':'20.5%'},'slow'
+							);
+						});
+						$('#b1,#b2,#b3,#b4,#b5,#c-game-closeButton').click(function(){
+							$('#c-game-left_hand_menu').animate(
+								{'left':'29%'},'fast'
+							);
+						});
+					});
+				</script>
+
+			</div>
 			<!-- Game Canvas -->
-			<div id="c-game-game_canvas">
+			<div id="c-game-game_canvas">				
 			</div>
 		</div>
 
