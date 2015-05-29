@@ -1,3 +1,9 @@
+html {
+    /* Size of largest container or bigger */
+    min-width: 1200px;
+}
+
+
 /* styling of the back ground. also, it regulates the nav bar at the top*/
 body{
     background-repeat: no-repeat;
@@ -145,33 +151,61 @@ body{
 	overflow-x:hidden;
 }
 
-/*user profile picture*/
-#c-kingdom-profilePicture{
-	position: absolute;
-	background-color:;
+#c-kingdom-profile_pic{
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 2%;
+	width: 100px;
 	height: 100px;
-	top:3%;
+	border:;
 }
 
-/*user profile name*/
-#c-kingdom-name{
-	position:absolute;
-	background-color: ;
-	color:#8AE62E;
-	font-family: cursive;
-	top:-2%;
-}
-/*the follow two are for status input*/
-#c-kingdom-status{
-	position: absolute;
-	background-color: ;
-	top:10%;
+#c-kingdom-Name_and_Status{
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 2%;
+	margin-left: 7%;
+	width: 650px;
+	height: 100px;
+	border:;
 }
 
-#c-kingdom-status-display{
+#c-kingdom-status_box{
+	display: inline-block;
+	width: 590px;
+}
+#c-kingdom-status_button{
+	display: inline-block;
+	width: 50px;
+}
+#c-kingdom-status_p{
 	font-size: 20px;
+	color: yellow;
+}
+
+/*live and armour div*/
+#c-kingdom-LiveArmour{
+	background-color: ;
+	height: 140px;	
 	font-family: cursive;
-	color: red;
+	color: #00FF00;
+}
+
+/*equipment obtained*/
+#c-kingdom-equipment{
+	margin-top: 7%;
+	background-color: ;
+	height: 250px;
+}
+
+/*for the positioning of equipment items*/
+#c-kingdom-equipment-item{
+	display: inline-block;
+	height:150px;
+	background-color:;
+	border:;
+	font-family: cursive;
+	color:#99FF33;
 }
 
 /*close button*/
@@ -195,36 +229,6 @@ body{
 
 
 
-/*live and armour div*/
-#c-kingdom-LiveArmour{
-	position: absolute;
-	background-color: ;
-	height: 140px;
-	top:20%;
-	font-family: cursive;
-	color: #00FF00;
-
-}
-
-/*equipment obtained*/
-#c-kingdom-equipment{
-	position: absolute;
-	background-color: ;
-	height: 250px;
-	top:50%;
-}
-
-/*for the positioning of equipment items*/
-#c-kingdom-equipment-item{
-	display: inline-block;
-	margin-top: 5%;
-	height:150px;
-	background-color:;
-	border:;
-	font-family: cursive;
-	color:#99FF33;
-}
-
 /*text styling for the rules*/
 #c-Rules-h1,
 #c-Tower_Type-h1{
@@ -236,20 +240,54 @@ body{
 }
 #c-Rules-p,
 #c-Tower_Type-p{
-	text-shadow:1px 1px 0 rgba(255,255,0,1);font-weight:normal;color:#2D8C73;letter-spacing:0pt;word-spacing:1pt;font-size:14px;text-align:left;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;line-height:2;
+	text-shadow:1px 1px 0 rgba(255,255,0,1);font-weight:normal;color:#2D8C73;letter-spacing:0pt;word-spacing:1pt;font-size:20px;text-align:left;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;line-height:2;
 }
 
 #c-shop-item_display-Helmets,
 #c-shop-item_display-Chest_Plates,
 #c-shop-item_display-Legs,
 #c-shop-item_display-Arms,
-#c-shop-item_display-Weapons{
+#c-shop-item_display-Weapons,
+#c-shop-item_display-Mystical_Relic{
 	height:370px;
-	background-color:brown;
+	background-color:#969E96;
 	border-radius-bottom: 5%;
 	overflow-y:auto;
 	overflow-x: hidden;
+	border-radius:5px;
+}
 
+/*styling for the word in item display tab*/
+.c-shop-item_display-name{
+	text-shadow:1px 3px 5px rgba(248,255,36,1);font-weight:bold;color:#342EE6;letter-spacing:1pt;word-spacing:2pt;font-size:15px;text-align:left;font-family:verdana, sans-serif;line-height:0;
+}
+
+.c-shop-item_display-image{
+	width: 100px;
+	height:100px;
+	border: ;
+	display: inline-block;
+	margin-top: 10px;	
+	vertical-align: top;
+	
+}
+
+.c-shop-item_display-description{
+	display: inline-block;
+	border:;
+	/*margin-left: 150px;*/
+	height: 100px;
+	width:600px;
+	margin-top: 10px;	
+	vertical-align: top;
+	
+	/*from text style generator v*/
+	font-weight:bold;color:#243524;font-size:16px;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+}
+
+.c-shop-item_display-buy_button{
+	display: inline-block;
+	margin-top:10%;
 }
 
 /*game tab customisation*/
@@ -288,3 +326,5 @@ body{
 	left: 0%;
 	z-index: 1;
 }
+
+

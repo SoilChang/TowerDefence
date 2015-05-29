@@ -40,7 +40,7 @@
 			</div> -->
 			
 	  		<div class="container">
-	  			<ul class="nav nav-pills col-lg-offset-3">
+	  			<ul class="nav nav-pills col-lg-offset-3 col-md-offset-3 col-ms-offset-3">
 				  <li role="presentation" ><a href="firstPage.html">Home</a></li>
 				  <li role="presentation"><a href="#">Record</a></li>
 				  <li role="presentation"><a href="#">Restart</a></li>
@@ -55,7 +55,7 @@
 
 
 	<!--Left hand floating nav bar-->
-	<div id="leftHandBar" class="col-lg-2">
+	<div id="leftHandBar" class="col-lg-2 col-md-2 col-sm-2">
 		<!--this will be the profile pic-->
 		<div id="profilePic" >
 			<img style="height:70px; width:70px;" src="../images/gamePage/scaredDog.jpg">
@@ -67,43 +67,43 @@
 		</div>
 
 		<!-- Single button 1 -->
-		<div class="btn-group col-lg-12" id="b1">
-			<button type="button" class="btn col-lg-12 ">
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b1">
+			<button type="button" class="btn col-lg-12 col-md-12 col-sm-12 ">
 		    	Kingdom
 		  	</button>
 	  	</div>
 
 	  	<!-- Single button 2-->
-		<div class="btn-group col-lg-12" id="b2">
-		  <button type="button" class="btn   col-lg-12" >
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b2">
+		  <button type="button" class="btn   col-lg-12 col-md-12 col-sm-12" >
 		    Rules
 		  </button>
 		</div>
 
 		<!-- Single button 3-->
-		<div class="btn-group col-lg-12" id="b3">
-		  <button type="button" class="btn   col-lg-12" >
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b3">
+		  <button type="button" class="btn   col-lg-12 col-md-12 col-sm-12" >
 		    Tower Type
 		  </button>
 		</div>
 
 		<!-- Single button 4-->
-		<div class="btn-group col-lg-12" id="b4">
-		  <button type="button" class="btn   col-lg-12" >
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b4">
+		  <button type="button" class="btn   col-lg-12 col-md-12 col-sm-12" >
 		    Allies
 		  </button>
 		</div>
 
 		<!-- Single button 5-->
-		<div class="btn-group col-lg-12" id="b5">
-		  <button type="button" class="btn  col-lg-12" >
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b5">
+		  <button type="button" class="btn  col-lg-12 col-md-12 col-sm-12" >
 		    Shop
 		  </button>
 		</div>
 
 		<!-- single button 6 -->
-		<div class="btn-group col-lg-12" id="b6">
-		  <button type="button" class="btn  col-lg-12" >
+		<div class="btn-group col-lg-12 col-md-12 col-sm-12" id="b6">
+		  <button type="button" class="btn  col-lg-12 col-md-12 col-sm-12" >
 		    Game
 		  </button>
 		</div>
@@ -112,42 +112,39 @@
 
 
 	<!--center preview windown-->
-	<div class="col-lg-8 col-lg-offset-3" id="c-centerSpace">
+	<div class="col-lg-8 col-md-8 col-sm-8 col-lg-offset-3 col-md-offset-3 col-sm-offset-3" id="c-centerSpace">
 
 		<!-- this is for the first tab, kingdom.  -->
-		<div class="col-lg-12" id="c-kingdom">
+		<div class="col-lg-12 col-md-12 col-ms-12" id="c-kingdom">
 			<!-- user profile pic -->
 			<div>
-				<img src="../images/gamePage/scaredDog.jpg" id="c-kingdom-profilePicture" class="col-lg-2">
-			</div>
-			<!-- profile name -->
-			<div>
-				<h3 class="col-lg-offset-3" id="c-kingdom-name">name</h3>
-			</div>
-			<!-- the form to set status  -->
-			<div class="col-lg-offset-2 col-lg-10" id="c-kingdom-status">
-				<form class="form col-lg-12" >
-				  <div class="form col-lg-11 ">
-				    <input type="text" class="form-control" id="c-kingdom-status-input" placeholder="Set your status for your friends to see!!" name="inputText">
-				  </div>
-				  <button  class="btn btn-default" id="c-kingdom-status-button">Set</button>
-				</form>
-				<p id="c-kingdom-status-display"></p>
-				<script type="text/javascript">
-					$('#c-kingdom').ready(function(){
-						// the following code is to add input text status to the display message
-						$('#c-kingdom-status-button').click(function(e){
-							e.preventDefault();
-							e.stopPropagation();
-							var inputText = $('input[name=inputText]').val();
-							$('#c-kingdom-status-display').html(inputText);
-						});
-					});
-				</script>
+				<div id="c-kingdom-profile_pic">
+					<img src="../images/gamePage/scaredDog.jpg" height="100px;">
+				</div>		
+				<div id="c-kingdom-Name_and_Status">
+					<h4>Ho Huan</h4>
+					<form class="form ">
+					    <input id="c-kingdom-status_box" type="text" class="form-control" placeholder="Set your status for your friends to see!!" name="inputText">			  
+					  	<button id="c-kingdom-status_button"  class="btn btn-default" >Set</button>
+					</form>
+					<p id="c-kingdom-status_p"></p>
+						<script type="text/javascript">
+							$('#c-kingdom').ready(function(){
+								// the following code is to add input text status to the display message
+								$('#c-kingdom-status_button').click(function(e){
+									e.preventDefault();
+									e.stopPropagation();
+									var inputText = $('input[name=inputText]').val();
+									$('#c-kingdom-status_p').html(inputText);
+								});
+							});
+						</script>
+				</div>	
+
 			</div>
 
 			<!-- the following is kingdom tab close button -->
-			<div class="col-lg-offset-12">
+			<div class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12" >
 				<button><img src="../images/gamePage/closeButton.png"  id="c-kingdom-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-kingdom').ready(function(){
@@ -171,16 +168,16 @@
 			</div>
 
 			<!-- shows hp and armour value -->
-			<div class="col-lg-11" id="c-kingdom-LiveArmour">
+			<div class="col-lg-11 col-md-11 col-sm-11" id="c-kingdom-LiveArmour">
 				<h1>Maximum Live: <a href="#">5</a> </h1>
 				<h1>Armour: <a href="#">1</a></h1>
 				<h1>Equipment:</h1>
 			</div>
 
 			<!-- show equipment obtained -->
-			<div class= "col-lg-11" id="c-kingdom-equipment">
+			<div class= "col-lg-11 col-md-11 col-sm-11" id="c-kingdom-equipment">
 				<!-- first item -->
-				<div class="col-lg-2" id="c-kingdom-equipment-item" >
+				<div class="col-lg-2 col-md-2 col-sm-2" id="c-kingdom-equipment-item" >
 					<img id="c-kingdome-equipment-item1" src="../images/gamePage/armour_leg.png">
 					<p id="c-kingdome-equipment-item-p1">Live bonus: 2<br> Armour bonus: 3</p>
 					<script type="text/javascript" >
@@ -198,7 +195,7 @@
 
 
 				<!-- second item -->
-				<div id="c-kingdom-equipment-item" class="col-lg-2" >
+				<div id="c-kingdom-equipment-item" class="col-lg-2 col-md-2 col-sm-2" >
 					<img id="c-kingdome-equipment-item2" src="../images/gamePage/armour_head.png">
 					<p id="c-kingdome-equipment-item-p2">Live bonus: 1<br> Armour bonus: 2</p>
 					<script type="text/javascript">
@@ -217,9 +214,9 @@
 		</div>
 
 		<!-- this is the second Rule tab -->
-		<div id="c-Rules" class="col-lg-12">
+		<div id="c-Rules" class="col-lg-12 col-md-12 col-sm-12">
 			<!-- the following is close button -->
-			<div  class="col-lg-offset-12">
+			<div  class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-Rules-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-Rules').ready(function(){
@@ -260,9 +257,9 @@
 		</div>
 
 		<!-- this is the 3rd Tower type tab -->
-		<div id="c-Tower_Type" class="col-lg-12">
+		<div id="c-Tower_Type" class="col-lg-12 col-md-12 col-sm-12">
 			<!-- the following is close button -->
-			<div  class="col-lg-offset-12">
+			<div  class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-Tower_Type-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-Tower_Type').ready(function(){
@@ -303,9 +300,9 @@
 		</div>
 
 		<!-- this is the 4th Allies tab -->
-		<div id="c-Allies" class="col-lg-12">
+		<div id="c-Allies" class="col-lg-12 col-md-12 col-sm-12">
 			<!-- the following is close button -->
-			<div  class="col-lg-offset-12">
+			<div  class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-Allies-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-Allies').ready(function(){
@@ -332,9 +329,10 @@
 		</div>
 
 		<!-- this is the 5th shop tab -->
-		<div id="c-shop" class="col-lg-12">
+		<div id="c-shop" class="col-lg-12 col-md-12 col-sm-12">
+
 			<!-- the following is close button -->
-			<div  class="col-lg-offset-12">
+			<div  class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-shop-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-shop').ready(function(){
@@ -357,43 +355,234 @@
 				</script>
 			</div>
 
-			<div><h1 style="color:yellow">Shop</h1></div>
+			<!-- shop title -->
+			<div>
+				<h1 style="text-shadow:6px 4px 8px rgba(154,72,217,1);font-weight:normal;color:#4CC234;letter-spacing:1pt;word-spacing:2pt;font-size:42px;text-align:center;font-family:arial black, sans-serif;line-height:1;">
+					Shop
+				</h1>
+			</div>
 
 			<!-- the following is the shop options -->
 
 			<!-- button group -->
 			<div id="c-shop-button_group"  class="btn-group">
-				<button id='c-shop-button_group-Helmets'      type="button" class="btn btn-primary">Helmets</button>
-				<button id='c-shop-button_group-Chest_Plates' type="button" class="btn btn-primary">Chest Plates</button>
-				<button id="c-shop-button_group-Legs"         type="button" class="btn btn-primary">Legs</button>
-				<button id='c-shop-button_group-Arms'         type="button" class="btn btn-primary">Arms</button>
-				<button id='c-shop-button_group-Weapons'      type="button" class="btn btn-primary">Weapons</button>
+				<button id='c-shop-button_group-Helmets'        type="button" class="btn btn-primary">Helmets</button>
+				<button id='c-shop-button_group-Chest_Plates'   type="button" class="btn btn-primary">Chest Plates</button>
+				<button id="c-shop-button_group-Legs"           type="button" class="btn btn-primary">Legs</button>
+				<button id='c-shop-button_group-Arms'           type="button" class="btn btn-primary">Arms</button>
+				<button id='c-shop-button_group-Weapons'        type="button" class="btn btn-primary">Weapons</button>
+				<button id='c-shop-button_group-Mystical_Relic' type="button" class="btn btn-primary">Mystical Chest</button>
 			</div>
 
 			<!-- item display tab -->			
 				<div>
 					<!-- tab for helmet -->
-					<div id="c-shop-item_display-Helmets" class="col-lg-12">
-						<ul>
-							<li><h1>helmet</h1></li>
-							<li role="presentation" class="divider"></li>
-						</ul>
+					<div id="c-shop-item_display-Helmets" class="col-lg-12 col-md-12 col-sm-12">
+						<!-- helmet 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Golden Crown</h4>
+							<img src="../images/gamePage/armour_head.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 5 <br> Armour Bonus: 2 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+						<!-- helmet 2 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Zhi Jiang's Fierce Face</h4>
+							<img src="../images/gamePage/armour_head2.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 6 <br> Armour Bonus: 3 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
 					</div>
 					<!-- tab for chest plate -->
-					<div id="c-shop-item_display-Chest_Plates" class="col-lg-12">
-						<h1>chest plate</h1>
+					<div id="c-shop-item_display-Chest_Plates" class="col-lg-12 col-md-12 col-sm-12">
+						<!-- chest plate 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Zhi Jiang's Pajamas</h4>
+							<img src="../images/gamePage/chest_plate1.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 2 <br> Armour Bonus: 5 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
+						<!-- chest plate 2 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Black Widow's Disguise</h4>
+							<img src="../images/gamePage/chest_plate2.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 3 <br> Armour Bonus: 2 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
 					</div>
 					<!-- tab for legs -->
-					<div id="c-shop-item_display-Legs" class="col-lg-12">
-						<h1>legs</h1>
+					<div id="c-shop-item_display-Legs" class="col-lg-12 col-md-12 col-sm-12">
+
+						<!-- leg 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Crystal Greave</h4>
+							<img src="../images/gamePage/armour_leg.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 2 <br> Armour Bonus: 1 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+						<!-- leg 2 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Gold-Plated Greave</h4>
+							<img src="../images/gamePage/armour_leg2.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 2 <br> Armour Bonus: 1 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
+						<!-- leg 3 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Zhi Jiang's Legs</h4>
+							<img src="../images/gamePage/armour_leg3.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 10 <br> Armour Bonus: 10 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
 					</div>
 					<!-- tab for arms -->
-					<div id="c-shop-item_display-Arms" class="col-lg-12">
-						<h1>arms</h1>
+					<div id="c-shop-item_display-Arms" class="col-lg-12 col-md-12 col-sm-12">
+						<!-- arm 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Snow Breaker</h4>
+							<img src="../images/gamePage/arm1.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 5 <br> Armour Bonus: 2 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+						
 					</div>
 					<!-- tab for weapons -->
-					<div id="c-shop-item_display-Weapons" class="col-lg-12">
-						<h1>weapons</h1>
+					<div id="c-shop-item_display-Weapons" class="col-lg-12 col-md-12 col-sm-12">
+						<!-- weapon 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Mystical Staff</h4>
+							<img src="../images/gamePage/armour_weapon1.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 10 <br> Armour Bonus: 1 <br> Attack Bonus: 1.2% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+						<!-- weapon 2 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Holy Spear</h4>
+							<img src="../images/gamePage/armour_weapon2.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 5 <br> Armour Bonus: 4 <br> Attack Bonus: 0.2% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+						<!-- weapon 3 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Common Sword</h4>
+							<img src="../images/gamePage/armour_weapon3.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 0 <br> Armour Bonus: 0 <br> Attack Bonus: 0.5% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
+						<!-- weapon 3 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Abyssal Blade</h4>
+							<img src="../images/gamePage/armour_weapon4.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 0 <br> Armour Bonus: 0 <br> Attack Bonus: 4.5% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+					</div>
+
+					<!-- tab for mystical chest -->
+					<div id="c-shop-item_display-Mystical_Relic" class="col-lg-12 col-md-12 col-sm-12">
+						<!-- chest 1 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Green Mystical Chest</h4>
+							<img src="../images/gamePage/mystical_chest_1.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 0 <br> Armour Bonus: 0 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
+						<!-- chest 2 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Red Mystical Chest</h4>
+							<img src="../images/gamePage/mystical_chest_2.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 0 <br> Armour Bonus: 0 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
+
+						<!-- chest 3 -->
+						<div>
+							<h4 class="c-shop-item_display-name">Blue Mystical Chest</h4>
+							<img src="../images/gamePage/mystical_chest_3.png" class="c-shop-item_display-image">
+							<div class="c-shop-item_display-description">
+								<p> Live Bonus: 0 <br> Armour Bonus: 0 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
+							</div>
+							<div class="c-shop-item_display-buy_button">
+								<a class="btn btn-default" href="#" role="button">Buy</a>
+							</div>
+						</div>
+						<hr>
 					</div>
 
 					<!-- the following script is to display item display tab -->
@@ -404,6 +593,7 @@
 							$('#c-shop-item_display-Legs').hide();
 							$('#c-shop-item_display-Arms').hide();
 							$('#c-shop-item_display-Weapons').hide();
+							$('#c-shop-item_display-Mystical_Relic').hide();
 
 							// when click on helmet, show helmet tab and hide the rest
 							$('#c-shop-button_group-Helmets').click(function(){
@@ -412,6 +602,7 @@
 								$('#c-shop-item_display-Legs').hide();
 								$('#c-shop-item_display-Arms').hide();
 								$('#c-shop-item_display-Weapons').hide();
+								$('#c-shop-item_display-Mystical_Relic').hide();
 							});
 
 							// when click on chest plate, show chest plate tab and hide the rest
@@ -421,6 +612,7 @@
 								$('#c-shop-item_display-Legs').hide();
 								$('#c-shop-item_display-Arms').hide();
 								$('#c-shop-item_display-Weapons').hide();
+								$('#c-shop-item_display-Mystical_Relic').hide();
 							});
 
 							// when click on legs, show legs tab and hide the rest
@@ -430,6 +622,7 @@
 								$('#c-shop-item_display-Legs').show();
 								$('#c-shop-item_display-Arms').hide();
 								$('#c-shop-item_display-Weapons').hide();
+								$('#c-shop-item_display-Mystical_Relic').hide();
 							});
 
 							// when click on arms, show arms tab and hide the rest
@@ -439,6 +632,7 @@
 								$('#c-shop-item_display-Legs').hide();
 								$('#c-shop-item_display-Arms').show();
 								$('#c-shop-item_display-Weapons').hide();
+								$('#c-shop-item_display-Mystical_Relic').hide();
 							});
 
 							// when click on weapon, show weapon tab and hide the rest
@@ -448,6 +642,17 @@
 								$('#c-shop-item_display-Legs').hide();
 								$('#c-shop-item_display-Arms').hide();
 								$('#c-shop-item_display-Weapons').show();
+								$('#c-shop-item_display-Mystical_Relic').hide();
+							});
+
+							// when click on mystical chest, show mystical chest tab and hide the rest
+							$('#c-shop-button_group-Mystical_Relic').click(function(){
+								$('#c-shop-item_display-Helmets').hide();
+								$('#c-shop-item_display-Chest_Plates').hide();
+								$('#c-shop-item_display-Legs').hide();
+								$('#c-shop-item_display-Arms').hide();
+								$('#c-shop-item_display-Weapons').hide();
+								$('#c-shop-item_display-Mystical_Relic').show();
 							});
 						});
 					</script>
@@ -455,9 +660,10 @@
 
 		</div>
 
+		<!-- the is the 6th game tab -->
 		<div id='c-game'>
 			<!-- the following is close button -->
-			<div  class="col-lg-offset-12">
+			<div  class="col-lg-offset-12 col-md-offset-12 col-sm-offset-12 ">
 				<button><img src="../images/gamePage/closeButton.png"  id="c-game-closeButton"></button>
 				<script type="text/javascript">
 					$('#c-game').ready(function(){

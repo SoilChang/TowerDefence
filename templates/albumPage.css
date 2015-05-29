@@ -1,3 +1,9 @@
+html {
+    /* Size of largest container or bigger */
+    min-width: 1200px;
+}
+
+
 #banner{
 	position: relative;
 	height: 90px;

@@ -1,3 +1,32 @@
-#object1, #object2{ position: absolute; left: -200px; top: 0px;}
-#object1 { background-color: #ff0000; z-index:10; height: 20px; width: 100px; }
-#object2 { background-color: #000099; z-index:10; height: 20px; width: 100px;}
+#item_display{
+	height: 300px;
+	width: 700px;
+	background-color:;
+}
+
+.c-shop-item_display-name{
+	text-shadow:1px 3px 5px rgba(248,255,36,1);font-weight:bold;color:#342EE6;letter-spacing:1pt;word-spacing:2pt;font-size:15px;text-align:left;font-family:verdana, sans-serif;line-height:0;
+}
+
+.c-shop-item_display-image{
+	width: 100px;
+	height:100px;
+	border: ;
+	display: inline-block;
+	margin-top: 10px;	
+	vertical-align: top;
+	
+}
+
+.c-shop-item_display-description{
+	display: inline-block;
+	border:;
+	/*margin-left: 150px;*/
+	height: 100px;
+	width:600px;
+	margin-top: 10px;	
+	vertical-align: top;
+	
+	/*from text style generator v*/
+	font-weight:bold;color:#253D39;font-size:16px;font-family:comic sans, comic sans ms, cursive, verdana, arial, sans-serif;
+}
