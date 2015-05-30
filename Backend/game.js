@@ -1,5 +1,7 @@
 
-var stage, mapData, tileset, output, cash, life, heroI, hero,
+var stage, mapData, tileset, output, cash, life, 
+castleI, castle,
+heroI, hero,
 monsterI, monster1, monster2;
 
 //initialized
@@ -12,11 +14,15 @@ function init() {
 
 	//coordinates of creep movement
 	var coordinates = [
-	[50, 0],
-	[50, 50],
-	[400, 50],
-	[400, 200],
-	[0,200]
+	[96, 0],
+	[96, 480],
+	[800, 480],
+	[800, 96],
+	[224, 96],
+    [224, 352],
+    [672, 352],
+    [672, 224],
+    [384, 224]
 	];
 	//show on map the path of creep
     var line = new createjs.Shape();
@@ -30,6 +36,11 @@ function init() {
     .lineTo(point2[0],point2[1]);
     stage.addChild(line);
 	};
+
+    //castle image
+    castleI = new Image();
+    castleI.src = "images/castle64.png"
+    castleI.onload = handleImageLoad;
 
 	//hero image
 	heroI = new Image();
@@ -64,6 +75,11 @@ function init() {
 
 //handle image load
 function handleImageLoad(event) {
+    //load castle
+    castle = new createjs.Bitmap(castleI);
+    castle.x = 320;
+    castle.y = 192;
+
 	//load hero
     hero = new createjs.Bitmap(heroI);
     hero.alpha = .5;//opacity
@@ -76,21 +92,22 @@ function handleImageLoad(event) {
     	obj.hp -= this.damage;
     };
 
-    //load monster
-    monster1 = new createjs.Bitmap(monsterI);
-    monster1.x = 50;
-    monster1.y = -32;
-    monster1.hp = 5;
-    monster1.cash = 5;
+    var monsters = [];
+    var monstersAmt = 2;
 
-    monster2 = new createjs.Bitmap(monsterI);
-    monster2.x = 50;
-    monster2.y = -32;
+    for (var i=0; i<monstersAmt; i++) {
+        monsters[i] = new createjs.Bitmap(monsterI);
+        monsters[i].x = 50 ;
+        monsters[i].y = -32 - i*64;
+    };
+
+    for (var i=0; i<monstersAmt; i++) {
+        stage.addChild(monsters[i]);
+    };
 
     //add to stage
+    stage.addChild(castle);
     stage.addChild(hero);
-    stage.addChild(monster1);
-    stage.addChild(monster2);
     stage.update();
 };
 
@@ -125,62 +142,7 @@ function tick(event) {
 		hero.alpha = .5;
 	}
     if (!createjs.Ticker.getPaused()) {
-    	var c1x=c1y=c2x=c2y=0
-    	if (monster1.y<50 && monster1.x===50) {
-    		c1y=5;
-    	};
-    	if (monster1.y>=50 && monster1.x<=400) {
-    		c1x=5;
-    		c1y=0;
-    	};
-    	if (monster1.x>400) {
-    		c1y=5;
-    		c1x=0;
-    	};
-    	if (monster1.y>120) {
-    		c1y=0;
-    		c1x=-5;
-    	};
-    	if (monster1.x<0 && monster1.x>-10 && monster1.hp>0) {
-    		life-=1;
-    	}
-
-    	//monster2
-    	if (monster1.y>45 ) {
-    		c2y=5;
-    	};
-    	if (monster2.y>=50 && monster2.x<=400) {
-    		c2x=5;
-    		c2y=0;
-    	};
-    	if (monster2.x>400) {
-    		c2y=5;
-    		c2x=0;
-    	};
-    	if (monster2.y>120) {
-    		c2y=0;
-    		c2x=-5;
-    	}        
-    	if (monster2.x<0 && monster2.x>-10) {
-    		life-=1;
-    	}
-
-		monster1.x+=c1x
-		monster1.y+=c1y
-
-		monster2.x+=c2x
-		monster2.y+=c2y
-
-		//tower atacks
-		if (
-			(hero.x + hero.range) >= (monster1.x)
-			&& (hero.x - hero.range) <= (monster1.x)
-			&& (hero.y + hero.range) >= (monster1.y)
-			&& (hero.y - hero.range) <= (monster1.y)
-		) {
-			hero.attack(monster1);
-			isdead(monster1);
-		};
+        
 
     };
 	
@@ -195,11 +157,6 @@ function tick(event) {
 function restart() {
 	cash = 100;
 	life = 10;
-	hero.x = 
-    monster1.x = 50;
-    monster1.y = -32;
-    monster2.x = 50;
-    monster2.y = -32;
 }
 
 //toggle pause
