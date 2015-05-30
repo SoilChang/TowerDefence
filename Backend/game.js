@@ -1,8 +1,8 @@
 
-var stage, mapData, tileset, output, cash, life, 
+var stage, mapData, tileset, output, cash, life, coordinates, 
 castleI, castle,
 heroI, hero,
-monsterI, monster1, monster2;
+monsterI,monsters, monstersAmt, monster1, monster2;
 
 //initialized
 function init() {
@@ -13,7 +13,7 @@ function init() {
 
 
 	//coordinates of creep movement
-	var coordinates = [
+	coordinates = [
 	[96, 0],
 	[96, 480],
 	[800, 480],
@@ -62,7 +62,7 @@ function init() {
 	// and register our main listener
 	createjs.Ticker.on("tick", tick);
 	createjs.Ticker.setPaused(true);
-	createjs.Ticker.setFPS(100);
+    createjs.Ticker.setFPS(100);
 
 	// UI code:
 	output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
@@ -84,21 +84,22 @@ function handleImageLoad(event) {
     hero = new createjs.Bitmap(heroI);
     hero.alpha = .5;//opacity
     hero.cost = 100;
-    hero.x = 200;
-    hero.y = stage.canvas.height-40;
+    hero.x = 0;
+    hero.y = 0;
     hero.damage = 5;
     hero.range = 20;
     hero.attack = function(obj) {
     	obj.hp -= this.damage;
     };
 
-    var monsters = [];
-    var monstersAmt = 2;
+    monsters = [];
+    monstersAmt = 8;
 
     for (var i=0; i<monstersAmt; i++) {
         monsters[i] = new createjs.Bitmap(monsterI);
-        monsters[i].x = 50 ;
+        monsters[i].x = 80;
         monsters[i].y = -32 - i*64;
+        monsters[i].speed = 4;
     };
 
     for (var i=0; i<monstersAmt; i++) {
@@ -142,13 +143,54 @@ function tick(event) {
 		hero.alpha = .5;
 	}
     if (!createjs.Ticker.getPaused()) {
-        
+        //creep path
+        for (var i=0;i<monsters.length;i++) {
+            if (monsters[i].y<=coordinates[1][1]-16 &&
+                monsters[i].x<=coordinates[1][0]) {
+                monsters[i].y+=monsters[i].speed;
+            }
+            else if (monsters[i].x<=coordinates[2][0]-16 &&
+                monsters[i].y>=coordinates[2][1]-16) {
+                monsters[i].x+=monsters[i].speed;
+            }
+            else if (monsters[i].y>=coordinates[3][1]-16 &&
+                monsters[i].x>=coordinates[3][0]-16) {
+                monsters[i].y-=monsters[i].speed;
+            }
+            else if (monsters[i].x>=coordinates[4][0]-16 &&
+                monsters[i].y<=coordinates[4][1]-16) {
+                monsters[i].x-=monsters[i].speed;
+            }
+            else if (monsters[i].y<=coordinates[5][1]-16 &&
+                monsters[i].x<=coordinates[5][0]-16) {
+                monsters[i].y+=monsters[i].speed;
+            }
+            else if (monsters[i].x<=coordinates[6][0]-16 &&
+                monsters[i].y>=coordinates[6][1]-16) {
+                monsters[i].x+=monsters[i].speed;
+            }
+            else if (monsters[i].y>=coordinates[7][1]-16) {
+                monsters[i].y-=monsters[i].speed;
+            }
+            else if (monsters[i].x>=coordinates[8][0]-32) {
+                monsters[i].x-=monsters[i].speed;
+            };
+        };
 
+        //lose life 
+        for (var i=0;i<monsters.length;i++) {
+            if (monsters[i].x<362 &&
+                monsters[i].x>358 &&
+                monsters[i].y==204) {
+                life-=1;
+            };
+        };
     };
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ Math.round(createjs.Ticker.getTime(true))+"\n"
+		"Time = "+ Math.round(createjs.Ticker.getTime(true))+
+        "mob1=" +monsters[0].x+','+monsters[0].y+" life:" +life
 	
 	stage.update(event); // important!!
 };
