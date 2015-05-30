@@ -2,7 +2,8 @@
 var stage, mapData, tileset, output, cash, life, coordinates, 
 castleI, castle,
 heroI, hero,
-monsterI,monsters, monstersAmt, monster1, monster2;
+monsterI,monsters, monstersAmt, monster1, monster2,
+dist
 
 //initialized
 function init() {
@@ -47,6 +48,9 @@ function init() {
 	heroI.src = "images/hero.png";
 	heroI.onload = handleImageLoad;
 
+    //bullet image
+    bulletI = new Image();
+
 	//monster image
 	monsterI = new Image();
 	monsterI.src = "images/monster.png";
@@ -62,7 +66,7 @@ function init() {
 	// and register our main listener
 	createjs.Ticker.on("tick", tick);
 	createjs.Ticker.setPaused(true);
-    createjs.Ticker.setFPS(100);
+    createjs.Ticker.setFPS(60);
 
 	// UI code:
 	output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
@@ -84,10 +88,10 @@ function handleImageLoad(event) {
     hero = new createjs.Bitmap(heroI);
     hero.alpha = .5;//opacity
     hero.cost = 100;
-    hero.x = 0;
-    hero.y = 0;
+    hero.x = 300;
+    hero.y = stage.canvas.height-36;
     hero.damage = 5;
-    hero.range = 20;
+    hero.range = 100;
     hero.attack = function(obj) {
     	obj.hp -= this.damage;
     };
@@ -100,6 +104,8 @@ function handleImageLoad(event) {
         monsters[i].x = 80;
         monsters[i].y = -32 - i*64;
         monsters[i].speed = 4;
+        monsters[i].hp = 50;
+        monsters[i].cash = 2;
     };
 
     for (var i=0; i<monstersAmt; i++) {
@@ -112,26 +118,17 @@ function handleImageLoad(event) {
     stage.update();
 };
 
-//functions in-game
-function isdead(obj) {
-	if (obj.hp <= 0) {
-		cash+=obj.cash;
-		stage.removeChild(obj);
-		obj.cash=0;
-	}
-};
-function inRange(tower,mon) {
-	dx=Math.abs(tower.x-mon.x);
-	xy=Math.abs(tower.y-mon.y);
+//check range
+function inRange(tower,monx,mony) {
+	var dx=Math.abs(tower.x-monx);
+	var dy=Math.abs(tower.y-mony);
 	dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
 	if (dist<=tower.range) {
-		mon.hp-=tower.damage;
-	};
-	if (mon.hp<=0) {
-		cash+=mon.cash;
-		stage.removeChild(mon);
-		mon.cash=0;
+		return true
 	}
+    else {
+        return false
+    }
 };
 //ticker events
 function tick(event) {
@@ -183,14 +180,26 @@ function tick(event) {
                 monsters[i].x>358 &&
                 monsters[i].y==204) {
                 life-=1;
+                document.getElementById("life").value = life;
             };
         };
+        /*for (var i=0;i<monsters.length;i++) {
+            if (inRange(hero, monsters[i].x,monsters[i].y)) {
+                monsters[i].hp-=hero.damage;
+                if (monsters[i].hp<=0) {
+                    cash+=monsters[i].hp;
+                    monsters[i].hp=0;
+                    monsters[i].x=350;
+                    monsters[i].y=204;
+                }
+            }
+        }*/
     };
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
 		"Time = "+ Math.round(createjs.Ticker.getTime(true))+
-        "mob1=" +monsters[0].x+','+monsters[0].y+" life:" +life
+        "mob1=" +monsters[0].x+','+monsters[0].y
 	
 	stage.update(event); // important!!
 };
@@ -207,16 +216,6 @@ function togglePause() {
 	createjs.Ticker.setPaused(!paused);
 	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
 	//allow tower dragging
-	if (paused) {
-		var drag =hero.on('pressmove', function(evt) {
-			evt.currentTarget.x = evt.stageX;
-			evt.currentTarget.y = evt.stageY;
-			stage.update();
-		});
-	}
-	if (!paused) {
-		hero.on('pressmove', function() {});
-	}
 
 }
 
