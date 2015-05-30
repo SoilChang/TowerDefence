@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="magecity_0" tilewidth="32" tileheight="32" spacing="1">
+  <image source="../Downloads/magecity_0.png" width="256" height="1450"/>
+ </tileset>
+ <layer name="TowerTile" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjZIAARiIwKerwAWrbRaq9g9m/ADmYAEY=
+  </data>
+ </layer>
+ <layer name="CreepPath" width="10" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYGBgYGIgDpCiDh+mtl2k2juY/QsAL1AAPw==
+  </data>
+ </layer>
+</map>

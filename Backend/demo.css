@@ -1,0 +1,24 @@
+#dimension {
+    height:340px;
+    width:550px;
+    border: solid 3px black;
+}
+
+#status {
+    background-color:#eeeeee;
+    height:340px;
+    width:80px;
+    float:left;
+}
+
+#game {
+	height: 340px;
+    width: 450px;
+    float: left;
+    border: solid 1px black; 
+}
+
+p {
+	font-size: 14px;
+	padding-left: 5px; 
+}

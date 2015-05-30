@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>td</title>
+	<link href="demo.css" rel="stylesheet" type="text/css">
+	<script src="http://code.createjs.com/easeljs-0.8.1.min.js"></script>
+	<script src="game.js"> </script>
+
+</head>
+<body onload="init()">
+	<!--<div id="dimension">-->
+		<div id="status">
+			<input type="button" size="20" value="start" id="pauseBtn" onclick="togglePause();">
+			<input type="button" value="restart" id="restartBtn" onclick="restart();">
+			cash:<input type="text" id="cash" style="width:25px">
+			life:<input type="text" id="life" style="width:25px">
+		</div>
+		<div id="game">
+			<canvas id="demoCanvas" width="450" height="340"> <!--896/544-->
+			alternate content
+			</canvas>
+		</div>
+	<!--</div>-->
+</body>
+</html>

@@ -1,8 +1,8 @@
 // Create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width = 400; //actual 870
-canvas.height = 400; //870
+canvas.width = 550; //actual 870
+canvas.height = 550; //870
 document.body.appendChild(canvas);
 
 // Background image
@@ -47,7 +47,7 @@ var monstersKills=0;
 
 function dead(obj) {
 	if (obj.hp<=0) {
-		monstersKills++;
+		monstersKills+=2;
 		reset();
 	}
 }
@@ -145,7 +145,7 @@ var main = function () {
 	var now = Date.now();
 	var delta = now - then;
 
-	update(delta / 1000);
+	update(delta / 1000*2);
 	render();
 
 	then = now;
@@ -162,3 +162,4 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 var then = Date.now();
 reset();
 main();
+
