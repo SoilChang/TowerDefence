@@ -1,16 +1,56 @@
 
-var stage, mapData, tileset, output, cash, life, coordinates, 
+var stage, mapData, hitsT, hit1, hit2, hit3, hit4, hit5,
+tileset, output, cash, life, coordinates, 
 castleI, castle,
-heroI, hero,
-monsterI,monsters, monstersAmt, monster1, monster2,
-dist
+heroI, hero, towerCost, towerI, towerSelection,
+monsterI, monsters, monstersAmt, monster1, monster2
 
 //initialized
 function init() {
 	stage = new createjs.Stage("demoCanvas");
-	stage.mouseEventsEnabled = true;
+    stage.enableMouseOver();
 	//background image
 	mapData = level1;
+
+    //hitarea of map
+    hitsT=[]
+    hitsT[0] = []
+    hit1=[2, stage.canvas.height/32]
+
+    for (var i=0;i<hit1[0];i++) {
+        hitsT[0][i] = [];
+    };
+
+    for (var i=0;i<hit1[0];i++) {
+        for (var j=0;j<hit1[1];j++) {
+            hitsT[0][i][j] = new createjs.Shape();
+            hitsT[0][i][j].graphics.beginFill("#f00").drawRect(32*i,32*j,32,32);
+            hitsT[0][i][j].alpha=0.1;
+            hitsT[0][i][j].on("mouseover", handleMouse);
+            hitsT[0][i][j].on("mouseout", handleMouse);
+            hitsT[0][i][j].on("click", handleMouse); 
+            stage.addChild(hitsT[0][i][j]);
+        };
+    };
+
+    /*hitsT[1] = []
+    hit2=[(stage.canvas.width/32)-2,1]
+
+    for (var i=0;i<hit2[0];i++) {
+        hitsT[1][i] = [];
+    };
+
+    for (var i=0;i<hit2[0];i++) {
+        for (var j=0;j<hit2[1];j++) {
+            hitsT[1][i][j] = new createjs.Shape();
+            hitsT[1][i][j].graphics.beginFill("#f00").drawRect(64+32*i,
+                (stage.canvas.height-32),32,32);
+            hitsT[1][i][j].alpha=0.1;
+            hitsT[1][i][j].on("mouseover", handleMouse);
+            hitsT[1][i][j].on("mouseout", handleMouse);
+            stage.addChild(hitsT[1][i][j]);
+        };
+    };*/
 
 
 	//coordinates of creep movement
@@ -56,12 +96,17 @@ function init() {
 	monsterI.src = "images/monster.png";
 	monsterI.onload = handleImageLoad;
 
+    towerI = [heroI]
+    towerCost=[10]
+    towerSelection = false
 	cash = 120;
 	life = 10;
 	document.getElementById("pauseBtn").value = "start";
 	document.getElementById("cash").value = cash;
 	document.getElementById("life").value = life;
 	//drag tower
+
+
 
 	// and register our main listener
 	createjs.Ticker.on("tick", tick);
@@ -75,6 +120,27 @@ function init() {
 	output.x = 10;
 	output.y = stage.canvas.height-output.lineHeight*2-10;
 };
+
+//buying tower
+function tower1() {
+    towerSelection = towerI[0];
+
+}
+
+//hit area
+function handleMouse(event) {
+    event.target.alpha = (event.type == "mouseover") ? .4 : 0.01;
+    if (event.type == "click") {
+        tower = new createjs.Bitmap(towerSelection);
+        tower.x = event.stageX;
+        tower.y = event.stageY;
+        stage.addChild(tower);
+        stage.update();
+    }
+    
+    // to save CPU, we're only updating when we need to, instead of on a tick:1
+    stage.update();
+}
 
 
 //handle image load
@@ -117,6 +183,8 @@ function handleImageLoad(event) {
     stage.addChild(hero);
     stage.update();
 };
+
+
 
 //check range
 function inRange(tower,monx,mony) {
@@ -199,7 +267,7 @@ function tick(event) {
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
 		"Time = "+ Math.round(createjs.Ticker.getTime(true))+
-        "mob1=" +monsters[0].x+','+monsters[0].y
+        "mob1=" +towerSelection
 	
 	stage.update(event); // important!!
 };
@@ -215,7 +283,6 @@ function togglePause() {
 	var paused = createjs.Ticker.getPaused();
 	createjs.Ticker.setPaused(!paused);
 	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
-	//allow tower dragging
 
 }
 

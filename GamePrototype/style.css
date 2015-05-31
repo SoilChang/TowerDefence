@@ -1,8 +1,4 @@
-#dimension {
-    height:340px;
-    width:550px;
-    border: solid 3px black;
-}
+
 
 #status {
     background-color:#eeeeee;
@@ -18,7 +14,6 @@
     border: solid 1px black; 
 }
 
-p {
+.tower {
 	font-size: 14px;
-	padding-left: 5px; 
 }
