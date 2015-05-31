@@ -2,7 +2,7 @@
 var stage, mapData, hitsT, hit1, hit2, hit3, hit4, hit5,
 tileset, output, cash, life, coordinates, 
 castleI, castle,
-heroI, hero, towerCost, towerI, towerSelection,
+heroI, hero, tower, towerCost, towerI, towerSelection,
 monsterI, monsters, monstersAmt, monster1, monster2
 
 //initialized
@@ -26,6 +26,7 @@ function init() {
             hitsT[0][i][j] = new createjs.Shape();
             hitsT[0][i][j].graphics.beginFill("#f00").drawRect(32*i,32*j,32,32);
             hitsT[0][i][j].alpha=0.1;
+            hitsT[0][i][j].coord=[32*i,32*j]
             hitsT[0][i][j].on("mouseover", handleMouse);
             hitsT[0][i][j].on("mouseout", handleMouse);
             hitsT[0][i][j].on("click", handleMouse); 
@@ -99,7 +100,7 @@ function init() {
     towerI = [heroI]
     towerCost=[10]
     towerSelection = false
-	cash = 120;
+	cash = 20;
 	life = 10;
 	document.getElementById("pauseBtn").value = "start";
 	document.getElementById("cash").value = cash;
@@ -122,25 +123,33 @@ function init() {
 };
 
 //buying tower
-function tower1() {
-    towerSelection = towerI[0];
-
-}
+function tower(index) {
+    if (createjs.Ticker.getPaused()) {
+        if (towerCost[index]<cash) {
+            towerSelection = [towerI[index],index];
+        };
+    };
+};
 
 //hit area
 function handleMouse(event) {
     event.target.alpha = (event.type == "mouseover") ? .4 : 0.01;
     if (event.type == "click") {
-        tower = new createjs.Bitmap(towerSelection);
-        tower.x = event.stageX;
-        tower.y = event.stageY;
-        stage.addChild(tower);
-        stage.update();
-    }
+        if (towerSelection) {
+            tower = new createjs.Bitmap(towerSelection[0]);
+            tower.x = event.target.coord[0];
+            tower.y = event.target.coord[1];
+            cash-=towerCost[towerSelection[1]];
+            document.getElementById("cash").value=cash;
+            towerSelection = false;
+            stage.addChild(tower);
+            stage.update();
+        };
+    };
     
     // to save CPU, we're only updating when we need to, instead of on a tick:1
     stage.update();
-}
+};
 
 
 //handle image load
@@ -151,7 +160,7 @@ function handleImageLoad(event) {
     castle.y = 192;
 
 	//load hero
-    hero = new createjs.Bitmap(heroI);
+    /*hero = new createjs.Bitmap(heroI);
     hero.alpha = .5;//opacity
     hero.cost = 100;
     hero.x = 300;
@@ -160,7 +169,7 @@ function handleImageLoad(event) {
     hero.range = 100;
     hero.attack = function(obj) {
     	obj.hp -= this.damage;
-    };
+    };*/
 
     monsters = [];
     monstersAmt = 8;
@@ -200,13 +209,6 @@ function inRange(tower,monx,mony) {
 };
 //ticker events
 function tick(event) {
-	if (hero.cost<=cash) {
-		hero.alpha = 1;
-	};
-
-	if (hero.cost>cash) {
-		hero.alpha = .5;
-	}
     if (!createjs.Ticker.getPaused()) {
         //creep path
         for (var i=0;i<monsters.length;i++) {
