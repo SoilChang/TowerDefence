@@ -1,6 +1,6 @@
 "use strict";
 
-var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9
+var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 tileset, output, cash, life, coordinates, 
 castleI, castle,
 heroI, hero, tower, towerCost, towerI, towerSelection,
@@ -264,9 +264,6 @@ function init() {
 	heroI.src = "images/hero.png";
 	heroI.onload = handleImageLoad;
 
-    //bullet image
-    bulletI = new Image();
-
 	//monster image
 	monsterI = new Image();
 	monsterI.src = "images/monster.png";
@@ -275,7 +272,7 @@ function init() {
     towerI = [heroI]
     towerCost=[10]
     towerSelection = false
-	cash = 20;
+	cash = 60;
 	life = 10;
 	document.getElementById("pauseBtn").value = "start";
 	document.getElementById("cash").value = cash;
@@ -300,7 +297,7 @@ function init() {
 //buying tower
 function tower(index) {
     if (createjs.Ticker.getPaused()) {
-        if (towerCost[index]<cash) {
+        if (towerCost[index]<=cash) {
             towerSelection = [towerI[index],index];
         };
     };
