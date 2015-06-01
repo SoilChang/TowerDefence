@@ -3,9 +3,19 @@
 var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 tileset, output, cash, life, coordinates, controlSpeed, time,
 castleI, castle, 
-heroI, hero, towers, towerCost, towerI, towerSelection, dist,
-monsterI, monsters, monstersAmt, newMonster
+heroI, towers, towerCost, towerI, towerSelection, dist,
+monsterI, monsters, monstersAmt, newMonster,
+wave, checking
 
+//game stats
+monsters=[]
+towers=[]
+towerI = []
+towerCost=[]
+towerSelection = false
+cash = 60;
+life = 10;
+wave = 1;
 
 //initialized
 function init() {
@@ -18,16 +28,11 @@ function init() {
     path();//line of creep path
     imageurl();//direct image src
 
-    //tower arrays
-    towers=[]
-    towerI = [heroI]
-    towerCost=[10]
-    towerSelection = false
-    cash = 60;
-    life = 10;
+    //editing non canvas buttons
     document.getElementById("pauseBtn").value = "start";
     document.getElementById("cash").value = cash;
     document.getElementById("life").value = life;
+    document.getElementById("wave").value = wave;
 
     // and register our main listener
     createjs.Ticker.on("tick", tick);
@@ -80,6 +85,8 @@ function imageurl() {
     heroI = new Image();
     heroI.src = "images/hero.png";
     heroI.onload = handleImageLoad;
+    towerI.push(heroI);
+    towerCost.push(10);
 
     //monster image
     monsterI = new Image();
@@ -108,6 +115,18 @@ function handleMouse(event) {
     stage.update();
 };
 //create monsters
+function cMonster(speed,hp,cash,amt) {
+    for (var i=0; i<amt; i++) {
+        newMonster = new createjs.Bitmap(monsterI);
+        newMonster.x = 80;
+        newMonster.y = -32 - i*64;
+        newMonster.speed = speed;
+        newMonster.hp = hp;
+        newMonster.cash = cash;
+        stage.addChild(newMonster);
+        monsters.push(newMonster);
+    }
+}
 
 //handle image load
 function handleImageLoad(event) {
@@ -116,26 +135,10 @@ function handleImageLoad(event) {
     castle.x = 320;
     castle.y = 192;
 
-    monsters = [];
-    monstersAmt = 8;
-
-    for (var i=0; i<monstersAmt; i++) {
-        newMonster = new createjs.Bitmap(monsterI);
-        newMonster.x = 80;
-        newMonster.y = -32 - i*64;
-        newMonster.speed = 4;
-        newMonster.hp = 5;
-        newMonster.cash = 2;
-        monsters.push(newMonster);
-    };
-
-    for (var i=0; i<monstersAmt; i++) {
-        stage.addChild(monsters[i]);
-    };
+    cMonster(4,3,2,2);
 
     //add to stage
     stage.addChild(castle);
-    stage.addChild(hero);
     stage.update();
 };
 
@@ -224,7 +227,7 @@ function tick(event) {
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time
+		"Time = "+ time +"c"+checking
 	
 	stage.update(event); // important!!
 };
@@ -236,7 +239,9 @@ function buyTower(index) {
 
 //next wave
 function nextWave() {
-
+    cMonster(4,5,2,2)
+    wave++
+    document.getElementById("wave").value = wave;
 }
 
 //restart
@@ -255,7 +260,13 @@ function togglePause() {
 
 };
 
-
+//game over
+/*function over() {
+    if (life<=0) {
+        checking="nice"
+        stage.update();
+    }
+}*/
 
 //map datas
 var level1 = { "height":10,

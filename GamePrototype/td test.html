@@ -14,9 +14,11 @@
 	<!--<div id="dimension">-->
 		<div id="status">
 			<input type="button" value="start" id="pauseBtn" onclick="togglePause()"><br>
-			cash:<input type="text" id="cash" style="width:25px">
-			life:<input type="text" id="life" style="width:25px">
-			
+			<input type="button" value="next wave" id="nextBtn" onclick="nextWave()">
+			cash:<input type="text" id="cash" style="width:25px"><br>
+			life:<input type="text" id="life" style="width:25px"><br>
+			wave:<input type="text" id="wave" style="width:25px"><br>
+
 			<button type="submit" onclick="buyTower(0)">
 				<img src="images/hero.png" height="20" width="20">
 				cost:10
