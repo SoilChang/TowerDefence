@@ -4,7 +4,7 @@ var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8,
 tileset, output, cash, life, coordinates, controlSpeed, time,
 castleI, castle, 
 heroI, hero, towers, towerCost, towerI, towerSelection, dist,
-monsterI, monsters, monstersAmt
+monsterI, monsters, monstersAmt, newMonster
 
 
 //initialized
@@ -107,7 +107,7 @@ function handleMouse(event) {
     // to save CPU, we're only updating when we need to, instead of on a tick:1
     stage.update();
 };
-
+//create monsters
 
 //handle image load
 function handleImageLoad(event) {
@@ -120,12 +120,13 @@ function handleImageLoad(event) {
     monstersAmt = 8;
 
     for (var i=0; i<monstersAmt; i++) {
-        monsters[i] = new createjs.Bitmap(monsterI);
-        monsters[i].x = 80;
-        monsters[i].y = -32 - i*64;
-        monsters[i].speed = 4;
-        monsters[i].hp = 5;
-        monsters[i].cash = 2;
+        newMonster = new createjs.Bitmap(monsterI);
+        newMonster.x = 80;
+        newMonster.y = -32 - i*64;
+        newMonster.speed = 4;
+        newMonster.hp = 5;
+        newMonster.cash = 2;
+        monsters.push(newMonster);
     };
 
     for (var i=0; i<monstersAmt; i++) {
@@ -159,18 +160,17 @@ function inRange(tower,mon) {
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
     controlSpeed = time % .5
-    if (towers.length!=0) {
-        if (controlSpeed==0) {
-            for (var i=0;i<monsters.length;i++) {
-                for (var j=0;j<towers.length;j++) {
-                    if (inRange(towers[j],monsters[i])) {
-                        monsters[i].hp-=5
-                        if (monsters[i].hp<=0) {
-                            monsters[i].x=370
-                            monsters[i].y=224
-                            stage.removeChild(monsters[i]);
-                        }
-                    }
+    if (towers.length!=0 && controlSpeed==0) {
+        for (var i=0;i<monsters.length;i++) {
+            for (var j=0;j<towers.length;j++) {
+                if (inRange(towers[j],monsters[i]) && monsters[i].y>=0) {
+                    monsters[i].hp-=5
+                }
+                if (monsters[i].hp<=0) {
+                    stage.removeChild(monsters[i]);
+                    cash+=monsters[i].cash;
+                    monsters.splice(i,1);
+                    document.getElementById("cash").value=cash;
                 }
             }
         }
@@ -233,6 +233,11 @@ function tick(event) {
 function buyTower(index) {
     towerSelection = [towerI[index],index];
 };
+
+//next wave
+function nextWave() {
+
+}
 
 //restart
 function restart() {
