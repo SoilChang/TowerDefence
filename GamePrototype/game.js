@@ -1,3 +1,4 @@
+"use strict";
 
 var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9
 tileset, output, cash, life, coordinates, 
