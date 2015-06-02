@@ -1,0 +1,45 @@
+/*this style sheet is particular for the center game preview window*/
+#c-game-left_hand_menu{
+	position: fixed;
+	background-color: black;
+	height: 550px;
+	width: 133px;
+	left: 29%;
+	top:10%;
+	z-index: 100;
+	border-radius:5%;
+
+	/*from border generator*/
+	border-style: solid;
+	border-width: 5px 5px 6px;
+	-moz-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
+	-webkit-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
+	-o-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
+	border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
+}
+
+#c-game-game_canvas{
+	position: absolute;
+	height:608px;
+	width: 1216px;
+	background-color: white;
+	top:0%;
+	left: 0%;
+	z-index: 1;
+}
+
+#c-game-left_hand_menu-lupper_section-words{
+	color: red;
+}
+#c-game-left_hand_menu-lupper_section{
+	display: block;
+	width:120px;
+	border: ;
+}
+#c-game-left_hand_menu-lower_section{
+	display: block;
+	width: 120px;
+	border: ;
+	text-align: center;
+
+}

@@ -1,18 +1,22 @@
 "use strict";
-
-// global constants
+/*
+ * Global constants
+ */
 var constants = {
 	ticks: 25,
 	money : 5,
 	hitpoints : 10,
 	mediPackCost : 5,
-	mediPackFactor : 1.2,
+	mediPackFactor : 1.5,
 	mediPackHealth : 1,
 	towerBuildCost : 5,
+	towerBuildFactor : 1.85,
 	towerBuildNumber : 4,
 };
 
-// list of possible events
+/*
+ * A list of possible events
+ */
 var events = {
 	click: 'click',
 	mousemove: 'mousemove',
@@ -31,11 +35,13 @@ var events = {
 	healthChanged : 'healthChanged',
 	unitSpawned : 'unitSpawned',
 	towerNumberChanged : 'towerNumberChanged',
+	towerBuildCostChanged : 'towerBuildCostChanged',
 	mediPackCostChanged : 'mediPackCostChanged',
 };
 
-
-// images to load
+/*
+ * The images to load
+ */
 var resources = {
 	images : [
 		{ name : 'background', value : 'Content/background.jpg' },
@@ -66,4 +72,19 @@ var resources = {
 		{ name : 'zelda', value : 'Content/sprites/zelda.png' },
 		{ name : 'sonic', value : 'Content/sprites/sonic.png' },
 	],
-}
+	sounds : [
+		{ name : 'burn_them_down', value : { ogg : 'Content/music/burn_them_down.ogg', mp3 : 'Content/music/burn_them_down.mp3' }},
+		{ name : 'ak47-1', value : { ogg : 'Content/effects/ak47-1.ogg', mp3 : 'Content/effects/ak47-1.mp3' }},
+		{ name : 'artillery', value : { ogg : 'Content/effects/artillery.ogg', mp3 : 'Content/effects/artillery.mp3' }},
+		{ name : 'explosion', value : { ogg : 'Content/effects/explosion.ogg', mp3 : 'Content/effects/explosion.mp3' }},
+		{ name : 'flak', value : { ogg : 'Content/effects/flak.ogg', mp3 : 'Content/effects/flak.mp3' }},
+		{ name : 'flames', value : { ogg : 'Content/effects/flames.ogg', mp3 : 'Content/effects/flames.mp3' }},
+		{ name : 'hellshot', value : { ogg : 'Content/effects/hellshot.ogg', mp3 : 'Content/effects/hellshot.mp3' }},
+		{ name : 'humm', value : { ogg : 'Content/effects/humm.ogg', mp3 : 'Content/effects/humm.mp3' }},
+		{ name : 'icy', value : { ogg : 'Content/effects/icy.ogg', mp3 : 'Content/effects/icy.mp3' }},
+		{ name : 'laser', value : { ogg : 'Content/effects/laser.ogg', mp3 : 'Content/effects/laser.mp3' }},
+		{ name : 'laugh', value : { ogg : 'Content/effects/laugh.ogg', mp3 : 'Content/effects/laugh.mp3' }},
+		{ name : 'mgnest', value : { ogg : 'Content/effects/mgnest.ogg', mp3 : 'Content/effects/mgnest.mp3' }},
+		{ name : 'wowpulse', value : { ogg : 'Content/effects/wowpulse.ogg', mp3 : 'Content/effects/wowpulse.mp3' }},
+	],
+};

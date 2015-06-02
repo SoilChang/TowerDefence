@@ -8,37 +8,23 @@
 	<title>test</title>
 
 	<link rel="stylesheet" type="text/css" href="testpage.css">
+	<link rel="stylesheet" type="text/css" href="testpage2.css">
 	<script type="text/javascript" src="testpage.js"></script>
 
 
 </head>
 
 <body>
-	<script type="text/javascript">
-		var item_database = [
-			['Mystical Staff','../images/gamePage/armour_weapon1.png','Live Bonus: 10 <br> Armour Bonus: 1 <br> Attack Bonus: 1.2%'],
-			['Holy Spear','../images/gamePage/armour_weapon2.png','Live Bonus: 4 <br> Armour Bonus: 4 <br> Attack Bonus: 1.0%'],
-		]
+	<div id="left_blcok">
+		<div>
+			<p id="text">left block</p>
+		</div>
+	</div>
 
-		for( i in item_database){
-			$(document).ready(function(){
-				$('#item_display').html(
-					'<div>
-						<h4 class="c-shop-item_display-name">Mystical Staff</h4>
-						<img src="../images/gamePage/armour_weapon1.png" class="c-shop-item_display-image">
-						<div class="c-shop-item_display-description">
-							<p> Live Bonus: 10 <br> Armour Bonus: 1 <br> Attack Bonus: 1.2%</p>
-						</div>
-					</div>
-					<hr>'
-				);
-			});
-		}
-
-	</script>
-
-	<div id="item_display">
-
+	<div id="right_block">
+		<div>
+			<p id="text">rigth blcok</p>
+		</div>
 	</div>
 
 </body>

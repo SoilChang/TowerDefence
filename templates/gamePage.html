@@ -21,7 +21,7 @@
 	<!--User Scripts-->
 	<script type="text/javascript" src="gamePage.js"></script>
 	<link rel="stylesheet" type="text/css" href="gamePage.css"></link>
-
+	<link rel="stylesheet" type="text/css" href="gamePage2.css"></link>
 
 </head>
 <body background="../images/gamePage/page.jpg">
@@ -688,13 +688,30 @@
 
 			<!-- Option bar on the left for Game Canvas -->
 			<div id="c-game-left_hand_menu">
-
+				<div>
+					<!-- upper section( bar section ) -->
+					<div id="c-game-left_hand_menu-lupper_section">
+						<div id="c-game-left_hand_menu-lupper_section-words">	
+							<p>HP:</p>
+							<p>Armour:</p>
+							<p>Gold:</p>
+							<p>Gem:</p>
+						</div>
+					</div>
+					<!-- lower section( button section) -->
+					<div id="c-game-left_hand_menu-lower_section">
+						<div class="btn-group-vertical" role="group">
+						  	<button class="btn btn-default">Start wave</button>
+						  	<button class="btn btn-default">Next wave</button>
+						</div>
+					</div>
+				</div>
 				<!-- animate this bar in and out -->
 				<script type="text/javascript">
 					$(document).ready(function(){
 						$('#b6').click(function(){
 							$('#c-game-left_hand_menu').animate(
-								{'left':'20.5%'},'slow'
+								{'left':'18%'},'slow'
 							);
 						});
 						$('#b1,#b2,#b3,#b4,#b5,#c-game-closeButton').click(function(){
@@ -708,7 +725,7 @@
 			</div>
 			<!-- Game Canvas -->
 			<div id="c-game-game_canvas">
-				<!-- code input from Zhi Jiang -->
+				<!-- code from zhi jiang -->
 			</div>
 		</div>
 
@@ -721,4 +738,5 @@
 	<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css"></link>
 	<link rel="stylesheet" href="../bootstrap/bootstrap-theme.min.css"></link>
 	<script src="../bootstrap/bootstrap.min.js"></script>
+
 </html>

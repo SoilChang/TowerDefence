@@ -37,9 +37,9 @@ button:hover:not(:disabled) {
 	width: 100%;
 	height: 550px;
 	margin: auto;
-	background: rgba(255, 255, 255, 0.9);
+	background: rgba(255, 255, 255, 0.7);
 	padding: 8px;
-	border: 1px solid black;
+	border: 1px solid #ccc;
 	box-shadow: 0 0 20px #def;
 }
 
@@ -50,7 +50,7 @@ button:hover:not(:disabled) {
 	top: 0;
 	width: 100%;
 	height: 100%;
-	background: black url(icons/loading.gif) no-repeat center center;
+	background: #ccc url(icons/loading.gif) no-repeat center center;
 	-o-transition: all 1s ease;
 	-webkit-transition: all 1s ease;
 	-moz-transition: all 1s ease;
@@ -60,25 +60,24 @@ button:hover:not(:disabled) {
 
 #wait-message {
 	position: absolute;
-	top: 80%;
+	top: 50%;
 	padding-top: 20px;
 	width: 100%;
 	left: 0;
-	color: white;
 	text-align: center;
 	font-weight: bold;
 }
 
-/*.hidden {
+.hidden {
 	display: none !important;
     visibility: hidden;
-}*/
+}
 
 #nextwave {
 	position: absolute;
 	width: 32px;
 	margin: 8px;
-	height: 450px;	
+	height: 450px;
 	overflow: none;
 }
 
@@ -135,7 +134,11 @@ button:hover:not(:disabled) {
 	left: 0;
 }
 
-
+#tower-info {
+	background: url(icons/tower.png) no-repeat left center;
+	padding-left: 28px;
+	left: 100px;
+}
 
 #health-info {
 	background: url(icons/health.png) no-repeat left center;
@@ -143,6 +146,22 @@ button:hover:not(:disabled) {
 	left: 200px;
 }
 
+#sound-info {
+	background: no-repeat right center;
+	padding-right: 28px;
+	right: 0;
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+#sound-info.on {
+	background-image: url(icons/sound.png);
+}
+
+#sound-info.off {
+	background-image: url(icons/nosound.png);
+}
 
 #towers {
 	background: #fefefe;
