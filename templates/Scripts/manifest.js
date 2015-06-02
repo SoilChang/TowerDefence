@@ -9,7 +9,6 @@ var constants = {
 	mediPackFactor : 1.2,
 	mediPackHealth : 1,
 	towerBuildCost : 5,
-	towerBuildFactor : 1,
 	towerBuildNumber : 4,
 };
 
@@ -32,8 +31,6 @@ var events = {
 	healthChanged : 'healthChanged',
 	unitSpawned : 'unitSpawned',
 	towerNumberChanged : 'towerNumberChanged',
-	// towerBuildCostChanged is going to be removed
-	towerBuildCostChanged : 'towerBuildCostChanged',
 	mediPackCostChanged : 'mediPackCostChanged',
 };
 
