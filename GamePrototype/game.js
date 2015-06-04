@@ -2,11 +2,12 @@
 
 var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 tileset, output, cash, life, coordinates, controlSpeed, time,
-castleI, castle, 
-heroI, towers, towerCost, towerI, towerSelection, dist,
-monsterI, monsters, monstersAmt, newMonster, monsterstats, 
-healthbarI, healthbar,
-wave, check
+castleI, heroI, monsterI, healthbarI,
+castle,
+towers, towerCost, towerI, towerSelection, dist,
+monsters, monstersAmt, newMonster, monsterstats, 
+healthbar,
+wave, checkGG, gOver
 
 //game stats
 monsterstats = [4,3,2,2]//speed,hp,cash,amt
@@ -17,8 +18,9 @@ towerCost=[]
 towerSelection = false
 cash = 60;
 life = 10;
-wave = 1;
-check = 0;
+wave = 0;
+checkGG = 0;
+gOver = false
 
 //initialized
 function init() {
@@ -238,11 +240,11 @@ function tick(event) {
             };
         };
 
-        if (life==0) {
-            check++;
-            if (check==1) {
+        if (document.getElementById("life").value==0) {
+            checkGG++;
+            if (checkGG==1) {
                 over();
-                check++;
+                checkGG++;
             }
         }
     };
@@ -261,6 +263,7 @@ function buyTower(index) {
 
 //next wave
 function nextWave() {
+    monsterstats[2] += 1
     monsterstats[1] *= 1.2
     cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
     wave++;
@@ -271,9 +274,7 @@ function nextWave() {
 
 //restart
 function restart() {
-	cash = 100;
-	life = 10;
-    createjs.Ticker.setFPS(100);
+    document.location.reload();
 
 }
 
@@ -287,11 +288,8 @@ function togglePause() {
 
 //game over
 function over() {
-    var gOver
     if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
-        h = "You pressed OK!";
-    } else {
-        h = "You pressed Cancel!";
+        restart();
     }
 }
 
