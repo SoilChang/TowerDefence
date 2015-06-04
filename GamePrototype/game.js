@@ -1,13 +1,13 @@
 "use strict";
 
-var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
-tileset, output, cash, life, coordinates, controlSpeed, time,
+var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
+output, cash, life, coordinates, controlSpeed, time,
 backgroundI, castleI, heroI, monsterI, healthbarI,
 background, castle,
-towers, towerCost, towerI, towerSelection, dist,
+towers, towerCost, towerI, towerR, towerSelection, dist,
 monsters, monstersAmt, newMonster, monsterstats, 
 healthbar,
-wave, checkGG
+wave, checkGG, ffCount, ffCounter,nticks=0
 
 //game stats
 monsterstats = [4,3,2,2]//speed,hp,cash,amt
@@ -15,20 +15,30 @@ monsters=[]
 towers=[]
 towerI = []
 towerCost=[]
+towerR=[]
 towerSelection = false
 cash = 60;
 life = 10;
 wave = 0;
 checkGG = 0;
+ffCount = [40,80,180]
+ffCounter = 1
+coordinates = [
+[96, 0],
+[96, 480],
+[800, 480],
+[800, 96],
+[224, 96],
+[224, 352],
+[672, 352],
+[672, 224],
+[384, 224]
+];
 
 //initialized
 function init() {
     stage = new createjs.Stage("demoCanvas");
-
     stage.enableMouseOver();
-    //background image
-    mapData = level1;
-
 
     imageurl();//direct image src
     grid();//grid of map
@@ -43,7 +53,7 @@ function init() {
     // and register our main listener
     createjs.Ticker.on("tick", tick);
     createjs.Ticker.setPaused(true);
-    createjs.Ticker.setFPS(100);
+    createjs.Ticker.setFPS(60);
 
     // UI code:
     output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
@@ -55,18 +65,6 @@ function init() {
 
 
 function path() {
-    //coordinates of creep movement
-    coordinates = [
-    [96, 0],
-    [96, 480],
-    [800, 480],
-    [800, 96],
-    [224, 96],
-    [224, 352],
-    [672, 352],
-    [672, 224],
-    [384, 224]
-    ];
     //show on map the path of creep
     var line = new createjs.Shape();
 
@@ -98,6 +96,7 @@ function imageurl() {
     heroI = new Image();
     heroI.src = "images/hero.png";
     towerI.push(heroI);
+    towerR.push(112);
     towerCost.push(10);
 
     //hp image
@@ -123,16 +122,23 @@ function handleImageLoad(event) {
     stage.update();
 };
 
+//buying tower
+function buyTower(index) {
+    towerSelection = [towerI[index],towerR[index],index];
+};
+
 //hit area
 function handleMouse(event) {
     event.target.alpha = (event.type == "mouseover") ? .3 : 0.01;
     if (event.type == "click") {
         if (towerSelection) {
             var newTower = new createjs.Bitmap(towerSelection[0]);
+            newTower.cd = 0
+            newTower.range = towerSelection[1];
             newTower.x = event.target.coord[0];
             newTower.y = event.target.coord[1];
             towers.push(newTower);
-            cash-=towerCost[towerSelection[1]];
+            cash-=towerCost[towerSelection[2]];
             document.getElementById("cash").value=cash;
             towerSelection = false;
             stage.addChild(towers[towers.length-1]);
@@ -166,10 +172,10 @@ function cMonster(speed,hp,cash,amt) {
 
 //check range
 function inRange(tower,mon) {
-	var dx=Math.abs(tower.x-mon.x);
-	var dy=Math.abs(tower.y-mon.y);
+	var dx=Math.abs(tower.x+16-mon.x);
+	var dy=Math.abs(tower.y+16-mon.y);
 	dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-	if (dist<=64) {
+	if (dist<=tower.range) {
 		return true
 	}
     else {
@@ -181,29 +187,36 @@ function inRange(tower,mon) {
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
-    controlSpeed = time % .5
-    if (towers.length!=0 && controlSpeed==0) {
-        for (var i=0;i<towers.length;i++) {
-            for (var j=0;j<monsters.length;j++) {
-                if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
-                    monsters[j].currentHp-=5;
-                    monsters[j].getChildAt(0).sourceRect = 
-                    new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
-                        .maxHp*32,3);
+    controlSpeed = time % 1
 
-                    if (monsters[j].currentHp<=0) {
-                        stage.removeChild(monsters[j]);
-                        cash+=monsters[j].cash;
-                        monsters.splice(j,1);
-                        document.getElementById("cash").value=cash;
-                    }
+
+    if (!createjs.Ticker.getPaused()) {
+        if (towers.length!=0) {
+            for (var i=0;i<towers.length;i++) {
+                if (towers[i].cd>0) {
+                    towers[i].cd--;
                     break;
+                }
+                for (var j=0;j<monsters.length;j++) {
+                    if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
+                        monsters[j].currentHp-=5;
+                        monsters[j].getChildAt(0).sourceRect = 
+                        new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
+                            .maxHp*32,3);
+                        towers[i].cd=57;
+
+                        if (monsters[j].currentHp<=0) {
+                            stage.removeChild(monsters[j]);
+                            cash+=monsters[j].cash;
+                            monsters.splice(j,1);
+                            document.getElementById("cash").value=cash;
+                        }
+                    }
                 }
             }
         }
-    }
 
-    if (!createjs.Ticker.getPaused()) {
+
         //creep path
         for (var i=0;i<monsters.length;i++) {
             if (monsters[i].y<=coordinates[1][1]-16 &&
@@ -250,7 +263,7 @@ function tick(event) {
         if (life==0) {
             checkGG++;
             if (checkGG==1) {
-                over();
+                isOver();
                 checkGG++;
             }
         }
@@ -258,31 +271,45 @@ function tick(event) {
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time +"c"
+		"Time = "+ time +"ticks"+ nticks
 	
 	stage.update(event); // important!!
 };
 
-//buying tower
-function buyTower(index) {
-    towerSelection = [towerI[index],index];
-};
+
+// fast forward
+function ff() {
+    createjs.Ticker.setFPS(ffCount[ffCounter]);
+    switch(ffCounter) {
+        case 1:
+            ffCounter++;
+            document.getElementById("ffBtn").value="2x";
+            break;
+        case 2:
+            ffCounter=0;
+            document.getElementById("ffBtn").value="4x";
+            break;
+        case 0:
+            ffCounter++;
+            document.getElementById("ffBtn").value="1x";
+            break;
+    }
+}
 
 //next wave
 function nextWave() {
-    monsterstats[2] += 1
-    monsterstats[1] *= 1.2
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-    wave++;
-    document.getElementById("wave").value = wave;
-    stage.removeChild(castle);
-    stage.addChild(castle);
-}
+    if (!createjs.Ticker.getPaused()) {
+        wave++;
+        document.getElementById("wave").value = wave;
+        if (wave%10) {
+           monsterstats[2] += 1 
+        }
+        monsterstats[1] *= 1.2
+        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
 
-//restart
-function restart() {
-    document.location.reload();
-
+        stage.removeChild(castle);
+        stage.addChild(castle);
+    }
 }
 
 //toggle pause
@@ -293,66 +320,27 @@ function togglePause() {
 
 };
 
+//restart
+function restart() {
+    document.location.reload();
+}
+
 //game over
-function over() {
+function isOver() {
     if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
         restart();
     }
 }
 
-//map datas
-var level1 = { "height":10,
- "layers":[
-        {
-         "data":[1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-         "height":10,
-         "name":"TowerTile",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":10,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "data":[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
-         "height":10,
-         "name":"CreepPath",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":10,
-         "x":0,
-         "y":0
-        }],
- "nextobjectid":1,
- "orientation":"orthogonal",
- "properties":
-    {
-
-    },
- "renderorder":"right-down",
- "tileheight":32,
- "tilesets":[
-        {
-         "firstgid":1,
-         "image":"images/magecity_0.png",
-         "imageheight":1450,
-         "imagewidth":256,
-         "margin":0,
-         "name":"magecity_0",
-         "properties":
-            {
-
-            },
-         "spacing":1,
-         "tileheight":32,
-         "tilewidth":32
-        }],
- "tilewidth":32,
- "version":1,
- "width":10
-}
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
+//###############################################################################
 
 //grid
 function grid() {
