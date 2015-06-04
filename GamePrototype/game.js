@@ -2,12 +2,12 @@
 
 var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 tileset, output, cash, life, coordinates, controlSpeed, time,
-castleI, heroI, monsterI, healthbarI,
-castle,
+backgroundI, castleI, heroI, monsterI, healthbarI,
+background, castle,
 towers, towerCost, towerI, towerSelection, dist,
 monsters, monstersAmt, newMonster, monsterstats, 
 healthbar,
-wave, checkGG, gOver
+wave, checkGG
 
 //game stats
 monsterstats = [4,3,2,2]//speed,hp,cash,amt
@@ -20,18 +20,19 @@ cash = 60;
 life = 10;
 wave = 0;
 checkGG = 0;
-gOver = false
 
 //initialized
 function init() {
     stage = new createjs.Stage("demoCanvas");
+
     stage.enableMouseOver();
     //background image
     mapData = level1;
 
-    grid();//grid of map
-    path();//line of creep path
+
     imageurl();//direct image src
+    grid();//grid of map
+    //path();//line of creep path
 
     //editing non canvas buttons
     document.getElementById("pauseBtn").value = "start";
@@ -81,6 +82,13 @@ function path() {
 }
 
 function imageurl() {
+    //background image
+    backgroundI = new Image();
+    backgroundI.src = "images/firstStage.png"
+    //load background
+    background = new createjs.Bitmap(backgroundI);
+    stage.addChild(background);
+
     //castle image
     castleI = new Image();
     castleI.src = "images/castle64.png"
@@ -99,7 +107,21 @@ function imageurl() {
     //monster image
     monsterI = new Image();
     monsterI.src = "images/monster.png";
-}
+};
+
+//handle image load
+function handleImageLoad(event) {
+    //load castle
+    castle = new createjs.Bitmap(castleI);
+    castle.x = 320;
+    castle.y = 192;
+
+    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+
+    //add to stage
+    stage.addChild(castle);
+    stage.update();
+};
 
 //hit area
 function handleMouse(event) {
@@ -139,21 +161,6 @@ function cMonster(speed,hp,cash,amt) {
         stage.addChild(newMonster);
     }
 }
-
-//handle image load
-function handleImageLoad(event) {
-    //load castle
-    castle = new createjs.Bitmap(castleI);
-    castle.x = 320;
-    castle.y = 192;
-
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-
-    //add to stage
-    stage.addChild(castle);
-    stage.update();
-};
-
 
 
 
@@ -240,7 +247,7 @@ function tick(event) {
             };
         };
 
-        if (document.getElementById("life").value==0) {
+        if (life==0) {
             checkGG++;
             if (checkGG==1) {
                 over();
