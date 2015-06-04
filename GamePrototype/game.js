@@ -5,7 +5,7 @@ tileset, output, cash, life, coordinates, controlSpeed, time,
 castleI, castle, 
 heroI, towers, towerCost, towerI, towerSelection, dist,
 monsterI, monsters, monstersAmt, newMonster, monsterstats, 
-healthbarI, healthbar, t1,
+healthbarI, healthbar,
 wave, check
 
 //game stats
@@ -36,19 +36,6 @@ function init() {
     document.getElementById("cash").value = cash;
     document.getElementById("life").value = life;
     document.getElementById("wave").value = wave;
-
-    healthbar = new createjs.Bitmap(healthbarI);
-    healthbar.y = -5;
-    var t0 = new createjs.Bitmap(monsterI);
-    t1 = new createjs.Container()
-    t1.x=50
-    t1.y=50
-    t1.hp1=20
-    t1.hp2=40
-    t1.addChild(healthbar,t0);
-    stage.addChild(t1)
-
-    t1.getChildAt(0).sourceRect = new createjs.Rectangle(0,0,t1.hp1/t1.hp2*32,3);
 
     // and register our main listener
     createjs.Ticker.on("tick", tick);
