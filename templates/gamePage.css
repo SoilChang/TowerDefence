@@ -294,7 +294,6 @@ body{
 #c-game{
 	overflow-x: auto;
 	overflow-y:auto;
-	height: 540px;
 	width: 900px;
 	left:5%;
 }

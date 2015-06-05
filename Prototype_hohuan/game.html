@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="processing.min.js"></script>
+	<!--jQeury library-->
+	<script src="../jQuery/jquery-2.1.4.min.js"></script>
+	<script src="../jQuery/jquery-ui.min.js"></script>
+
+	<!-- scrollable enabler script from external library -->
+	<script src='../jQuery/modernizr-v2.8.3.js'></script>
+	<script src='../jQuery/jquery-scrollable.js'></script>
+	<script type="text/javascript">
+	    jQuery(function($) {
+	      if (!Modernizr.touch) { // if not a smartphone
+	        debiki.Utterscroll.enable();
+	      }
+	    });
+	</script>
+
+	<title>Tower Defence</title>
+
+	<!--User Scripts-->
+	<script type="text/javascript" src="game.js"></script>
+	<link rel="stylesheet" type="text/css" href="game.css"></link>
+
+	<!-- easy js lib -->
+	<script type="text/javascript" src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+
 </head>
 <body>
+	<canvas id="gameCanvas" width="600" height="100"></canvas>
 
-	<canvas id="canvas1" width="200" height="200"></canvas>
-
-	<script id="script1" type="text/javascript">
-
-	// Attaching js code to the canvas by using a sketch object
-
-	var rect = new Processing.rect();
-	
-
-	var canvas = document.getElementById("canvas1");
-	// attaching the sketch to the canvas
-	var p = new Processing(canvas, sketch);
-
-	</script>
 </body>
+
+	<!-- bootstrap file-->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="../bootstrap/bootstrap-theme.min.css"></link>
+	<script src="../bootstrap/bootstrap.min.js"></script>
+
 </html>
