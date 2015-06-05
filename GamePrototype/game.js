@@ -10,6 +10,8 @@ monsters, monstersAmt, newMonster, monsterstats,
 healthbar,
 wave, checkGG, ffCount, ffCounter,nticks=0
 
+
+
 //game stats
 monsterstats = [10,4,2,2]//hp,speed,cash,amt
 monsters = []
