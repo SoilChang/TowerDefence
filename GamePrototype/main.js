@@ -1,74 +1,49 @@
 "use strict";
 
+// declaration of variables
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
-output, cash, life, coordinates, controlSpeed, time,
-backgroundI, castleI, heroI, monsterI, healthbarI,
-background, castle,
-towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
-dist,
-monsters, monstersAmt, newMonster, monsterstats,
+output,  controlSpeed, time;
+
+// game variables
+var backgroundI;
+var castleI;
+var heroI;
+var monsterI;
+var healthbarI;
+var background; 
+var castle;
+var dist, monstersAmt, newMonster, 
 healthbar,
-wave, checkGG, ffCount, ffCounter,nticks=0
+,nticks=0;
 
 
-
-//game stats
-monsterstats = [10,4,2,2]//hp,speed,cash,amt
-monsters = []
-towers = []
-towerI = []
-towerCost = []
-towerR = []
-towerCd = []
-towerDamage = []
-towerSelection = false
-aoeT = []
-cash = 60;
-life = 10;
-wave = 1;
-checkGG = 0;
-ffCount = [20,40,80]
-ffCounter = 1
-coordinates = [
-[96, 0],
-[96, 480],
-[800, 480],
-[800, 96],
-[224, 96],
-[224, 352],
-[672, 352],
-[672, 224],
-[384, 224]
+var monster_stats = [10,4,2,2]; //hp,speed,worth,amt
+var monster_array = [];
+var tower_array = [];
+var tower_image = [];
+var tower_cost = [];
+var tower_range = [];
+var tower_reloadTime = [];
+var tower_damage = [];
+var towerSelection = [];
+var aoeT = []
+var player_cash = 60;
+var player_life = 10;
+var wave_number = 1;
+var player_defeated = 0;
+var fast_forward = [20,40,80]
+var fast_forwarder = 1
+var coordinates = [
+    [96, 0],
+    [96, 480],
+    [800, 480],
+    [800, 96],
+    [224, 96],
+    [224, 352],
+    [672, 352],
+    [672, 224],
+    [384, 224]
 ];
-
-//initialized
-function init() {
-    stage = new createjs.Stage("demoCanvas");
-    stage.enableMouseOver();
-
-    imageurl();//direct image src
-    grid();//grid of map
-    //path();//line of creep path
-
-    //editing non canvas buttons
-    document.getElementById("pauseBtn").value = "start";
-    document.getElementById("cash").value = cash;
-    document.getElementById("life").value = life;
-    document.getElementById("wave").value = wave;
-
-
-    // and register our main listener
-    createjs.Ticker.on("tick", tick);
-    createjs.Ticker.setPaused(true);
-    createjs.Ticker.setFPS(20);
-
-    // UI code:
-    output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
-    output.lineHeight = 15;
-    output.textBaseline = "top";
-    output.x = 10;
-    output.y = stage.canvas.height-output.lineHeight*4-10;
-};
 
 
 function path() {
@@ -78,103 +53,28 @@ function path() {
     for (var i=1;i<coordinates.length;i++) {
         var point1=coordinates[i-1];
         var point2=coordinates[i];
-    //start drawing 
-    line.graphics.setStrokeStyle(1).beginStroke("#000")
-    .moveTo(point1[0],point1[1])
-    .lineTo(point2[0],point2[1]);
-    stage.addChild(line);
+        //start drawing 
+        line.graphics.setStrokeStyle(1).beginStroke("#000")
+        .moveTo(point1[0],point1[1])
+        .lineTo(point2[0],point2[1]);
+        stage.addChild(line);
     };
 }
 
-function imageurl() {
-    //background image
-    backgroundI = new Image();
-    backgroundI.src = "images/firstStage.png"
-    //load background
-    background = new createjs.Bitmap(backgroundI);
-    stage.addChild(background);
-
-    //castle image
-    castleI = new Image();
-    castleI.src = "images/castle64.png"
-    castleI.onload = handleImageLoad;
-
-    //hero image
-    heroI = new Image();
-    heroI.src = "images/hero.png";
-    towerI.push(heroI);
-    towerR.push(112);
-    towerCd.push(19);//1APS
-    towerDamage.push(5);
-    towerCost.push(10);
 
 
-    //hp image
-    healthbarI = new Image();
-    healthbarI.src = "images/lifebar.png";
-
-    //monster image
-    monsterI = new Image();
-    monsterI.src = "images/monster.png";
-};
-
-//handle image load
-function handleImageLoad(event) {
-    //load castle
-    castle = new createjs.Bitmap(castleI);
-    castle.x = 320;
-    castle.y = 192;
-
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-
-    //add to stage
-    stage.addChild(castle);
-    stage.update();
-};
 
 //buying tower
 function buyTower(index) {
-    towerSelection = [towerI[index],towerR[index],
-    towerCd[index],towerDamage[index],towerCost[index]];
+    towerSelection = [tower_image[index],tower_range[index],
+    tower_reloadTime[index],tower_damage[index],tower_cost[index]];
 };
 
-//hit area
-function handleMouse(event) {
-    event.target.alpha = (event.type == "mouseover") ? .3 : 0.01;
-    if (event.type == "click") {
-        if (towerSelection) {
-            var newTower = new createjs.Bitmap(towerSelection[0]);
-            newTower.range = towerSelection[1];
-            newTower.maxCd = towerSelection[2]
-            newTower.cd = 0
-            newTower.damage = towerSelection[3]
-            newTower.x = event.target.coord[0];
-            newTower.y = event.target.coord[1];
-            newTower.on("click", handleTower); 
-            towers.push(newTower);
-            var aoe = new createjs.Shape();
-            aoe.graphics.beginStroke("#000").drawCircle(
-                newTower.x+14,newTower.y+16,newTower.range);
-            aoe.alpha = .5; 
-            aoeT.push(aoe)
-            cash-=towerSelection[4];
-            document.getElementById("cash").value=cash;
-            towerSelection = false;
-            stage.addChild(towers[towers.length-1]);
-        };
-    };
-    
-    // to save CPU, we're only updating when we need to, instead of on a tick:1
-    stage.update();
-};
 
-//handle tower upgrades
-function handleTower(event) {
-    event.target
-}
 
-//create monsters
-function cMonster(hp,speed,cash,amt) {
+
+//create monster_array
+function creatMonster(hp,speed,worth,amt) {
     for (var i=0; i<amt; i++) {
         healthbar = new createjs.Bitmap(healthbarI);
         healthbar.y= -5;
@@ -186,8 +86,8 @@ function cMonster(hp,speed,cash,amt) {
         newMonster.speed = speed;
         newMonster.currentHp = hp;
         newMonster.maxHp = hp;
-        newMonster.cash = cash;
-        monsters.push(newMonster);
+        newMonster.worth = worth;
+        monster_array.push(newMonster);
         stage.addChild(newMonster);
     }
 }
@@ -216,25 +116,25 @@ function tick(event) {
 
     if (!createjs.Ticker.getPaused()) {
         nticks++
-        if (towers.length!=0) {
-            for (var i=0;i<towers.length;i++) {
-                if (towers[i].cd>0) {
-                    towers[i].cd--;
+        if (tower_array.length!=0) {
+            for (var i=0;i<tower_array.length;i++) {
+                if (tower_array[i].cd>0) {
+                    tower_array[i].cd--;
                     break;
                 }
-                for (var j=0;j<monsters.length;j++) {
-                    if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
-                        monsters[j].currentHp-=towers[i].damage;
-                        monsters[j].getChildAt(0).sourceRect = 
-                        new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
+                for (var j=0;j<monster_array.length;j++) {
+                    if (inRange(tower_array[i],monster_array[j]) && monster_array[j].y>=0) {
+                        monster_array[j].currentHp-=tower_array[i].damage;
+                        monster_array[j].getChildAt(0).sourceRect = 
+                        new createjs.Rectangle(0,0,monster_array[j].currentHp/monster_array[j]
                             .maxHp*32,3);
-                        towers[i].cd=towers[i].maxCd;
+                        tower_array[i].cd=tower_array[i].maxCd;
 
-                        if (monsters[j].currentHp<=0) {
-                            stage.removeChild(monsters[j]);
-                            cash+=monsters[j].cash;
-                            monsters.splice(j,1);
-                            document.getElementById("cash").value=cash;
+                        if (monster_array[j].currentHp<=0) {
+                            stage.removeChild(monster_array[j]);
+                            player_cash+=monster_array[j].player_cash;
+                            monster_array.splice(j,1);
+                            document.getElementById("player_cash").value=player_cash;
                         }
                     }
                 }
@@ -243,53 +143,53 @@ function tick(event) {
 
 
         //creep path
-        for (var i=0;i<monsters.length;i++) {
-            if (monsters[i].y<=coordinates[1][1]-16 &&
-                monsters[i].x<=coordinates[1][0]) {
-                monsters[i].y+=monsters[i].speed;
+        for (var i=0;i<monster_array.length;i++) {
+            if (monster_array[i].y<=coordinates[1][1]-16 &&
+                monster_array[i].x<=coordinates[1][0]) {
+                monster_array[i].y+=monster_array[i].speed;
             }
-            else if (monsters[i].x<=coordinates[2][0]-16 &&
-                monsters[i].y>=coordinates[2][1]-16) {
-                monsters[i].x+=monsters[i].speed;
+            else if (monster_array[i].x<=coordinates[2][0]-16 &&
+                monster_array[i].y>=coordinates[2][1]-16) {
+                monster_array[i].x+=monster_array[i].speed;
             }
-            else if (monsters[i].y>=coordinates[3][1]-16 &&
-                monsters[i].x>=coordinates[3][0]-16) {
-                monsters[i].y-=monsters[i].speed;
+            else if (monster_array[i].y>=coordinates[3][1]-16 &&
+                monster_array[i].x>=coordinates[3][0]-16) {
+                monster_array[i].y-=monster_array[i].speed;
             }
-            else if (monsters[i].x>=coordinates[4][0]-16 &&
-                monsters[i].y<=coordinates[4][1]-16) {
-                monsters[i].x-=monsters[i].speed;
+            else if (monster_array[i].x>=coordinates[4][0]-16 &&
+                monster_array[i].y<=coordinates[4][1]-16) {
+                monster_array[i].x-=monster_array[i].speed;
             }
-            else if (monsters[i].y<=coordinates[5][1]-16 &&
-                monsters[i].x<=coordinates[5][0]-16) {
-                monsters[i].y+=monsters[i].speed;
+            else if (monster_array[i].y<=coordinates[5][1]-16 &&
+                monster_array[i].x<=coordinates[5][0]-16) {
+                monster_array[i].y+=monster_array[i].speed;
             }
-            else if (monsters[i].x<=coordinates[6][0]-16 &&
-                monsters[i].y>=coordinates[6][1]-16) {
-                monsters[i].x+=monsters[i].speed;
+            else if (monster_array[i].x<=coordinates[6][0]-16 &&
+                monster_array[i].y>=coordinates[6][1]-16) {
+                monster_array[i].x+=monster_array[i].speed;
             }
-            else if (monsters[i].y>=coordinates[7][1]-16) {
-                monsters[i].y-=monsters[i].speed;
+            else if (monster_array[i].y>=coordinates[7][1]-16) {
+                monster_array[i].y-=monster_array[i].speed;
             }
-            else if (monsters[i].x>=coordinates[8][0]-32) {
-                monsters[i].x-=monsters[i].speed;
+            else if (monster_array[i].x>=coordinates[8][0]-32) {
+                monster_array[i].x-=monster_array[i].speed;
             };
         };
 
-        //lose life 
-        for (var i=0;i<monsters.length;i++) {
-            if (monsters[i].x==360 &&
-                monsters[i].y==204) {
-                life-=1;
-                document.getElementById("life").value = life;
+        //lose player_life 
+        for (var i=0;i<monster_array.length;i++) {
+            if (monster_array[i].x==360 &&
+                monster_array[i].y==204) {
+                player_life-=1;
+                document.getElementById("player_life").value = player_life;
             };
         };
 
-        if (life==0) {
-            checkGG++;
-            if (checkGG==1) {
+        if (player_life==0) {
+            player_defeated++;
+            if (player_defeated==1) {
                 isOver();
-                checkGG++;
+                player_defeated++;
             }
         }
     };
@@ -302,70 +202,22 @@ function tick(event) {
 };
 
 
-// fast forward
-function ff() {
-    createjs.Ticker.setFPS(ffCount[ffCounter]);
-    switch(ffCounter) {
-        case 1:
-            ffCounter++;
-            document.getElementById("ffBtn").value="2x";
-            break;
-        case 2:
-            ffCounter=0;
-            document.getElementById("ffBtn").value="4x";
-            break;
-        case 0:
-            ffCounter++;
-            document.getElementById("ffBtn").value="1x";
-            break;
-    }
-}
-
-//next wave
+//next wave_number
 function nextWave() {
     if (!createjs.Ticker.getPaused()) {
-        wave++;
-        document.getElementById("wave").value = wave;
-        if (wave%10) {
-           monsterstats[2] += 1 
+        wave_number++;
+        document.getElementById("wave_number").value = wave_number;
+        if (wave_number%10) {
+           monster_stats[2] += 1 
         }
-        monsterstats[0] *= 1.2
-        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+        monster_stats[0] *= 1.2
+        creatMonster(monster_stats[0],monster_stats[1],monster_stats[2],monster_stats[3]);
 
         stage.removeChild(castle);//making sure castle stays on the top layer
         stage.addChild(castle);
     }
 }
 
-//toggle pause
-function togglePause() {
-	var paused = createjs.Ticker.getPaused();
-	createjs.Ticker.setPaused(!paused);
-	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
-
-};
-
-//restart
-function restart() {
-    document.location.reload();
-}
-
-//game over
-function isOver() {
-    if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
-        restart();
-    }
-}
-
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
 
 //grid
 function grid() {
