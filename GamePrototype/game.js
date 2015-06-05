@@ -4,23 +4,26 @@ var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 output, cash, life, coordinates, controlSpeed, time,
 backgroundI, castleI, heroI, monsterI, healthbarI,
 background, castle,
-towers, towerCost, towerI, towerR, towerCd, towerSelection, dist,
-monsters, monstersAmt, newMonster, monsterstats, 
+towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
+dist,
+monsters, monstersAmt, newMonster, monsterstats,
 healthbar,
 wave, checkGG, ffCount, ffCounter,nticks=0
 
 //game stats
-monsterstats = [4,3,2,2]//speed,hp,cash,amt
-monsters=[]
-towers=[]
+monsterstats = [10,4,2,2]//hp,speed,cash,amt
+monsters = []
+towers = []
 towerI = []
-towerCost=[]
-towerR=[]
-towerCd=[]
+towerCost = []
+towerR = []
+towerCd = []
+towerDamage = []
 towerSelection = false
+aoeT = []
 cash = 60;
 life = 10;
-wave = 0;
+wave = 1;
 checkGG = 0;
 ffCount = [20,40,80]
 ffCounter = 1
@@ -50,6 +53,7 @@ function init() {
     document.getElementById("cash").value = cash;
     document.getElementById("life").value = life;
     document.getElementById("wave").value = wave;
+
 
     // and register our main listener
     createjs.Ticker.on("tick", tick);
@@ -99,6 +103,7 @@ function imageurl() {
     towerI.push(heroI);
     towerR.push(112);
     towerCd.push(19);//1APS
+    towerDamage.push(5);
     towerCost.push(10);
 
 
@@ -128,7 +133,7 @@ function handleImageLoad(event) {
 //buying tower
 function buyTower(index) {
     towerSelection = [towerI[index],towerR[index],
-    towerCd[index],towerCost[index]];
+    towerCd[index],towerDamage[index],towerCost[index]];
 };
 
 //hit area
@@ -140,14 +145,20 @@ function handleMouse(event) {
             newTower.range = towerSelection[1];
             newTower.maxCd = towerSelection[2]
             newTower.cd = 0
+            newTower.damage = towerSelection[3]
             newTower.x = event.target.coord[0];
             newTower.y = event.target.coord[1];
+            newTower.on("click", handleTower); 
             towers.push(newTower);
-            cash-=towerSelection[3];
+            var aoe = new createjs.Shape();
+            aoe.graphics.beginStroke("#000").drawCircle(
+                newTower.x+14,newTower.y+16,newTower.range);
+            aoe.alpha = .5; 
+            aoeT.push(aoe)
+            cash-=towerSelection[4];
             document.getElementById("cash").value=cash;
             towerSelection = false;
             stage.addChild(towers[towers.length-1]);
-            stage.update();
         };
     };
     
@@ -155,13 +166,13 @@ function handleMouse(event) {
     stage.update();
 };
 
-//handle towers
+//handle tower upgrades
 function handleTower(event) {
-
+    event.target
 }
 
 //create monsters
-function cMonster(speed,hp,cash,amt) {
+function cMonster(hp,speed,cash,amt) {
     for (var i=0; i<amt; i++) {
         healthbar = new createjs.Bitmap(healthbarI);
         healthbar.y= -5;
@@ -211,7 +222,7 @@ function tick(event) {
                 }
                 for (var j=0;j<monsters.length;j++) {
                     if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
-                        monsters[j].currentHp-=5;
+                        monsters[j].currentHp-=towers[i].damage;
                         monsters[j].getChildAt(0).sourceRect = 
                         new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
                             .maxHp*32,3);
@@ -316,7 +327,7 @@ function nextWave() {
         if (wave%10) {
            monsterstats[2] += 1 
         }
-        monsterstats[1] *= 1.2
+        monsterstats[0] *= 1.2
         cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
 
         stage.removeChild(castle);//making sure castle stays on the top layer
