@@ -1,5 +1,6 @@
 "use strict";
 
+<<<<<<< HEAD:GamePrototype/main.js
 // declaration of variables
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 output,  controlSpeed, time;
@@ -45,8 +46,84 @@ var coordinates = [
     [384, 224]
 ];
 
+=======
+var stage, mapData, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
+tileset, output, cash, life, coordinates, controlSpeed, time,
+backgroundI, castleI, heroI, monsterI, healthbarI,
+background, castle,
+<<<<<<< HEAD:GamePrototype/main.js
+towers, towerCost, towerI, towerSelection, dist,
+=======
+towers, towerCost, towerI, towerR, towerCd, towerSelection, dist,
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
+monsters, monstersAmt, newMonster, monsterstats, 
+healthbar,
+wave, checkGG
+
+//game stats
+monsterstats = [4,3,2,2]//speed,hp,cash,amt
+monsters=[]
+towers=[]
+towerI = []
+towerCost=[]
+<<<<<<< HEAD:GamePrototype/main.js
+=======
+towerR=[]
+towerCd=[]
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
+towerSelection = false
+cash = 60;
+life = 10;
+wave = 0;
+checkGG = 0;
+
+//initialized
+function init() {
+    stage = new createjs.Stage("demoCanvas");
+
+    stage.enableMouseOver();
+    //background image
+    mapData = level1;
+
+
+    imageurl();//direct image src
+    grid();//grid of map
+    //path();//line of creep path
+
+    //editing non canvas buttons
+    document.getElementById("pauseBtn").value = "start";
+    document.getElementById("cash").value = cash;
+    document.getElementById("life").value = life;
+    document.getElementById("wave").value = wave;
+
+    // and register our main listener
+    createjs.Ticker.on("tick", tick);
+    createjs.Ticker.setPaused(true);
+    createjs.Ticker.setFPS(100);
+
+    // UI code:
+    output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
+    output.lineHeight = 15;
+    output.textBaseline = "top";
+    output.x = 10;
+    output.y = stage.canvas.height-output.lineHeight*4-10;
+};
+
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
 
 function path() {
+    //coordinates of creep movement
+    coordinates = [
+    [96, 0],
+    [96, 480],
+    [800, 480],
+    [800, 96],
+    [224, 96],
+    [224, 352],
+    [672, 352],
+    [672, 224],
+    [384, 224]
+    ];
     //show on map the path of creep
     var line = new createjs.Shape();
 
@@ -61,13 +138,61 @@ function path() {
     };
 }
 
+<<<<<<< HEAD:GamePrototype/main.js
+=======
+function imageurl() {
+    //background image
+    backgroundI = new Image();
+    backgroundI.src = "images/firstStage.png"
+    //load background
+    background = new createjs.Bitmap(backgroundI);
+    stage.addChild(background);
+
+    //castle image
+    castleI = new Image();
+    castleI.src = "images/castle64.png"
+    castleI.onload = handleImageLoad;
+
+    //hero image
+    heroI = new Image();
+    heroI.src = "images/hero.png";
+    towerI.push(heroI);
+<<<<<<< HEAD:GamePrototype/main.js
+=======
+    towerR.push(112);
+    towerCd.push(19);//1APS
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
+    towerCost.push(10);
+
+    //hp image
+    healthbarI = new Image();
+    healthbarI.src = "images/lifebar.png";
+
+    //monster image
+    monsterI = new Image();
+    monsterI.src = "images/monster.png";
+};
+
+//handle image load
+function handleImageLoad(event) {
+    //load castle
+    castle = new createjs.Bitmap(castleI);
+    castle.x = 320;
+    castle.y = 192;
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
 
 
 
+<<<<<<< HEAD:GamePrototype/main.js
 //buying tower
 function buyTower(index) {
+<<<<<<< HEAD:GamePrototype/main.js
     towerSelection = [tower_image[index],tower_range[index],
     tower_reloadTime[index],tower_damage[index],tower_cost[index]];
+=======
+    towerSelection = [towerI[index],towerR[index],
+    towerCd[index],towerCost[index]];
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
 };
 
 
@@ -75,6 +200,51 @@ function buyTower(index) {
 
 //create monster_array
 function creatMonster(hp,speed,worth,amt) {
+=======
+//hit area
+function handleMouse(event) {
+    event.target.alpha = (event.type == "mouseover") ? .3 : 0.01;
+    if (event.type == "click") {
+        if (towerSelection) {
+            var newTower = new createjs.Bitmap(towerSelection[0]);
+<<<<<<< HEAD:GamePrototype/main.js
+            newTower.x = event.target.coord[0];
+            newTower.y = event.target.coord[1];
+            towers.push(newTower);
+            cash-=towerCost[towerSelection[1]];
+=======
+            newTower.range = towerSelection[1];
+            newTower.maxCd = towerSelection[2]
+            newTower.cd = 0
+            newTower.x = event.target.coord[0];
+            newTower.y = event.target.coord[1];
+            towers.push(newTower);
+            cash-=towerSelection[3];
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
+            document.getElementById("cash").value=cash;
+            towerSelection = false;
+            stage.addChild(towers[towers.length-1]);
+            stage.update();
+        };
+    };
+    
+    // to save CPU, we're only updating when we need to, instead of on a tick:1
+    stage.update();
+};
+<<<<<<< HEAD:GamePrototype/main.js
+//create monsters
+function cMonster(speed,hp,cash,amt) {
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
+=======
+
+//handle towers
+function handleTower(event) {
+
+}
+
+//create monsters
+function cMonster(speed,hp,cash,amt) {
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
     for (var i=0; i<amt; i++) {
         healthbar = new createjs.Bitmap(healthbarI);
         healthbar.y= -5;
@@ -96,10 +266,10 @@ function creatMonster(hp,speed,worth,amt) {
 
 //check range
 function inRange(tower,mon) {
-	var dx=Math.abs(tower.x+16-mon.x);
-	var dy=Math.abs(tower.y+16-mon.y);
+	var dx=Math.abs(tower.x-mon.x);
+	var dy=Math.abs(tower.y-mon.y);
 	dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-	if (dist<=tower.range) {
+	if (dist<=64) {
 		return true
 	}
     else {
@@ -111,6 +281,7 @@ function inRange(tower,mon) {
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
+<<<<<<< HEAD:GamePrototype/main.js
     controlSpeed = time % 1
 
 
@@ -122,11 +293,19 @@ function tick(event) {
                     tower_array[i].cd--;
                     break;
                 }
+<<<<<<< HEAD:GamePrototype/main.js
                 for (var j=0;j<monster_array.length;j++) {
                     if (inRange(tower_array[i],monster_array[j]) && monster_array[j].y>=0) {
                         monster_array[j].currentHp-=tower_array[i].damage;
                         monster_array[j].getChildAt(0).sourceRect = 
                         new createjs.Rectangle(0,0,monster_array[j].currentHp/monster_array[j]
+=======
+                for (var j=0;j<monsters.length;j++) {
+                    if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
+                        monsters[j].currentHp-=5;
+                        monsters[j].getChildAt(0).sourceRect = 
+                        new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
                             .maxHp*32,3);
                         tower_array[i].cd=tower_array[i].maxCd;
 
@@ -136,12 +315,31 @@ function tick(event) {
                             monster_array.splice(j,1);
                             document.getElementById("player_cash").value=player_cash;
                         }
+=======
+    controlSpeed = time % .5
+    if (towers.length!=0 && controlSpeed==0) {
+        for (var i=0;i<towers.length;i++) {
+            for (var j=0;j<monsters.length;j++) {
+                if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
+                    monsters[j].currentHp-=5;
+                    monsters[j].getChildAt(0).sourceRect = 
+                    new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
+                        .maxHp*32,3);
+
+                    if (monsters[j].currentHp<=0) {
+                        stage.removeChild(monsters[j]);
+                        cash+=monsters[j].cash;
+                        monsters.splice(j,1);
+                        document.getElementById("cash").value=cash;
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
                     }
+                    break;
                 }
             }
         }
+    }
 
-
+    if (!createjs.Ticker.getPaused()) {
         //creep path
         for (var i=0;i<monster_array.length;i++) {
             if (monster_array[i].y<=coordinates[1][1]-16 &&
@@ -185,22 +383,31 @@ function tick(event) {
             };
         };
 
+<<<<<<< HEAD:GamePrototype/main.js
         if (player_life==0) {
             player_defeated++;
             if (player_defeated==1) {
                 isOver();
                 player_defeated++;
+=======
+        if (life==0) {
+            checkGG++;
+            if (checkGG==1) {
+                over();
+                checkGG++;
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
             }
         }
     };
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time +"ticks"+ nticks
+		"Time = "+ time +"c"
 	
 	stage.update(event); // important!!
 };
 
+<<<<<<< HEAD:GamePrototype/main.js
 
 //next wave_number
 function nextWave() {
@@ -210,14 +417,111 @@ function nextWave() {
         if (wave_number%10) {
            monster_stats[2] += 1 
         }
+<<<<<<< HEAD:GamePrototype/main.js
         monster_stats[0] *= 1.2
         creatMonster(monster_stats[0],monster_stats[1],monster_stats[2],monster_stats[3]);
+=======
+        monsterstats[1] *= 1.2
+        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+>>>>>>> parent of 6948693... 5 Jun 550pm:GamePrototype/game.js
 
         stage.removeChild(castle);//making sure castle stays on the top layer
         stage.addChild(castle);
     }
 }
 
+=======
+//buying tower
+function buyTower(index) {
+    towerSelection = [towerI[index],index];
+};
+
+//next wave
+function nextWave() {
+    monsterstats[2] += 1
+    monsterstats[1] *= 1.2
+    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+    wave++;
+    document.getElementById("wave").value = wave;
+    stage.removeChild(castle);
+    stage.addChild(castle);
+}
+
+//restart
+function restart() {
+    document.location.reload();
+
+}
+
+//toggle pause
+function togglePause() {
+	var paused = createjs.Ticker.getPaused();
+	createjs.Ticker.setPaused(!paused);
+	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
+
+};
+
+//game over
+function over() {
+    if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
+        restart();
+    }
+}
+
+//map datas
+var level1 = { "height":10,
+ "layers":[
+        {
+         "data":[1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1],
+         "height":10,
+         "name":"TowerTile",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+         "height":10,
+         "name":"CreepPath",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "renderorder":"right-down",
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"images/magecity_0.png",
+         "imageheight":1450,
+         "imagewidth":256,
+         "margin":0,
+         "name":"magecity_0",
+         "properties":
+            {
+
+            },
+         "spacing":1,
+         "tileheight":32,
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":10
+}
+>>>>>>> parent of 0019067... 4 Jun 1130pm:GamePrototype/game.js
 
 //grid
 function grid() {
