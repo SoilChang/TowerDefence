@@ -12,10 +12,7 @@
 	/*from border generator*/
 	border-style: solid;
 	border-width: 5px 5px 6px;
-	-moz-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
-	-webkit-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
-	-o-border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
-	border-image: url(../images/gamePage/c-game-lefthandbar-border.png) 5 5 6 repeat;
+	border:green double;
 }
 
 #c-game-game_canvas{
