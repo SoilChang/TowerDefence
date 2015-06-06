@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Animating DOM with setInterval</title>
+    </head>
+    <body>
+    <div>
+        <img id="ohnoes" src="https://www.kasandbox.org/programming-images/creatures/OhNoes.png">
+        <h1>Oh noes, the world will end in
+            <span id="countdown">500</span>
+            seconds!
+        </h1>
+    </div>
+    
+  <script>
+  var tick;
+  // Step 1. What element do we want to animate?
+  var countdown = document.getElementById("countdown");
+  // Step 2. What function will change it each time?
+  var countItDown = function() {
+    countdown.textContent = parseFloat(countdown.textContent) - 1;  
+  };
+  // Step 3: Call that on an interval
+  tick = setInterval(countItDown, 1000);
+  clearInterval(tick);
+  </script>
+
+    </body>
+</html>

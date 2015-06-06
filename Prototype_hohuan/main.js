@@ -1,369 +1,319 @@
-"use strict";
 
-var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
-output, cash, life, coordinates, controlSpeed, time,
-backgroundI, castleI, heroI, monsterI, healthbarI,
-background, castle,
-towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
-dist,
-monsters, monstersAmt, newMonster, monsterstats,
-healthbar,
-wave, checkGG, ffCount, ffCounter,nticks=0
 
-//game stats
-monsterstats = [10,4,2,2]//hp,speed,cash,amt
-monsters = []
-towers = []
-towerI = []
-towerCost = []
-towerR = []
-towerCd = []
-towerDamage = []
-towerSelection = false
-aoeT = []
-cash = 60;
-life = 10;
-wave = 1;
-checkGG = 0;
-ffCount = [20,40,80]
-ffCounter = 1
-coordinates = [
-[96, 0],
-[96, 480],
-[800, 480],
-[800, 96],
-[224, 96],
-[224, 352],
-[672, 352],
-[672, 224],
-[384, 224]
-];
 
-//initialized
+/*global storage*/ 
+var monster_array=[];
+var tower_array = [];
+
+/*global variables*/
+/*----------------------------------------------------------------------------------------*/
+var coordinates = [  //this is the coordinates of the creep path
+	    [96, 0],
+	    [96, 480],
+	    [800, 480],
+	    [800, 96],
+	    [224, 96],
+	    [224, 352],
+	    [672, 352],
+	    [672, 224],
+	    [384, 224]
+    ];
+var lastEnemy = 0; //this is to track when previous monster was created, hence after a random delay, 
+                   //the next monster will be created
+var enemyLeft = 0;
+var cursorX, cursorY;  //two variables to record current cursor position for usage later
+
+/*player data*/
+var player ={
+	money: 50,
+	hp: 10,
+	defeated: false,
+	wave_number:0,
+	wave_active:false,
+	wave_countdown:2,
+	buying= null;  //buying null means buying nothing. null also will appear false in condition checking
+};
+
+
+var stage, castle ,background, backgroundI, healthbarI,castleI,towerI_fireTower, healthbar,
+ newMonster, monsterI,
+ hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9;
+/*--------------------------------------------------------------------------------------------*/
+
 function init() {
     stage = new createjs.Stage("demoCanvas");
     stage.enableMouseOver();
 
-    imageurl();//direct image src
-    grid();//grid of map
-    //path();//line of creep path
-
-    //editing non canvas buttons
-    document.getElementById("pauseBtn").value = "start";
-    document.getElementById("cash").value = cash;
-    document.getElementById("life").value = life;
-    document.getElementById("wave").value = wave;
-
-
-    // and register our main listener
-    createjs.Ticker.on("tick", tick);
-    createjs.Ticker.setPaused(true);
-    createjs.Ticker.setFPS(20);
-
-    // UI code:
-    output = stage.addChild(new createjs.Text("", "14px monospace", "#000"));
-    output.lineHeight = 15;
-    output.textBaseline = "top";
-    output.x = 10;
-    output.y = stage.canvas.height-output.lineHeight*4-10;
-};
-
-
-function path() {
-    //show on map the path of creep
-    var line = new createjs.Shape();
-
-    for (var i=1;i<coordinates.length;i++) {
-        var point1=coordinates[i-1];
-        var point2=coordinates[i];
-    //start drawing 
-    line.graphics.setStrokeStyle(1).beginStroke("#000")
-    .moveTo(point1[0],point1[1])
-    .lineTo(point2[0],point2[1]);
-    stage.addChild(line);
-    };
-}
-
-function imageurl() {
     //background image
     backgroundI = new Image();
     backgroundI.src = "images/firstStage.png"
-    //load background
+    //place background
     background = new createjs.Bitmap(backgroundI);
     stage.addChild(background);
 
     //castle image
     castleI = new Image();
     castleI.src = "images/castle64.png"
-    castleI.onload = handleImageLoad;
-
-    //hero image
-    heroI = new Image();
-    heroI.src = "images/hero.png";
-    towerI.push(heroI);
-    towerR.push(112);
-    towerCd.push(19);//1APS
-    towerDamage.push(5);
-    towerCost.push(10);
-
-
-    //hp image
-    healthbarI = new Image();
-    healthbarI.src = "images/lifebar.png";
-
-    //monster image
-    monsterI = new Image();
-    monsterI.src = "images/monster.png";
-};
-
-//handle image load
-function handleImageLoad(event) {
-    //load castle
+    //place castle
     castle = new createjs.Bitmap(castleI);
     castle.x = 320;
     castle.y = 192;
-
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-
-    //add to stage
     stage.addChild(castle);
+
+    // hp bar image
+    healthbarI = new Image();
+        healthbarI.src = "images/lifebar.png"
+
+    // grid();
+    // update stage
     stage.update();
+
+
+    //editing non canvas buttons
+    document.getElementById("pauseBtn").value = "start";
+    document.getElementById("cash").value = player.money;
+    document.getElementById("life").value = player.hp;
+    document.getElementById("wave").value = player.wave_number;
+    document.getElementById("countdown").value = player.wave_countdown;
+
 };
 
-//buying tower
-function buyTower(index) {
-    towerSelection = [towerI[index],towerR[index],
-    towerCd[index],towerDamage[index],towerCost[index]];
-};
-
-//hit area
-function handleMouse(event) {
-    event.target.alpha = (event.type == "mouseover") ? .3 : 0.01;
-    if (event.type == "click") {
-        if (towerSelection) {
-            var newTower = new createjs.Bitmap(towerSelection[0]);
-            newTower.range = towerSelection[1];
-            newTower.maxCd = towerSelection[2]
-            newTower.cd = 0
-            newTower.damage = towerSelection[3]
-            newTower.x = event.target.coord[0];
-            newTower.y = event.target.coord[1];
-            newTower.on("click", handleTower); 
-            towers.push(newTower);
-            var aoe = new createjs.Shape();
-            aoe.graphics.beginStroke("#000").drawCircle(
-                newTower.x+14,newTower.y+16,newTower.range);
-            aoe.alpha = .5; 
-            aoeT.push(aoe)
-            cash-=towerSelection[4];
-            document.getElementById("cash").value=cash;
-            towerSelection = false;
-            stage.addChild(towers[towers.length-1]);
-        };
-    };
-    
-    // to save CPU, we're only updating when we need to, instead of on a tick:1
-    stage.update();
-};
-
-//handle tower upgrades
-function handleTower(event) {
-    event.target
-}
-
-//create monsters
-function cMonster(hp,speed,cash,amt) {
-    for (var i=0; i<amt; i++) {
-        healthbar = new createjs.Bitmap(healthbarI);
-        healthbar.y= -5;
-        var m1 = new createjs.Bitmap(monsterI);
-        newMonster = new createjs.Container();
-        newMonster.addChild(healthbar, m1);
-        newMonster.x = 80;
-        newMonster.y = -32 - i*64;
-        newMonster.speed = speed;
-        newMonster.currentHp = hp;
-        newMonster.maxHp = hp;
-        newMonster.cash = cash;
-        monsters.push(newMonster);
-        stage.addChild(newMonster);
-    }
-}
 
 
+/*the following variables are to regulate game frames*/
+/*-------------------------------------------------------------------------------*/
+var frameRate=20;  //will be set to 20 times per second
+var frameCount= 0;   //every tick increment this count. it is used in some other function later on
+var pause = true;
+var tick; //tick is our ticker variable
+var ffCount = [20,40,80];  
+var ffCounter= 1;
 
-//check range
-function inRange(tower,mon) {
-	var dx=Math.abs(tower.x+16-mon.x);
-	var dy=Math.abs(tower.y+16-mon.y);
-	dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-	if (dist<=tower.range) {
-		return true
+function fastForward(){
+	frameRate = ffCount[ffCounter];
+	switch(ffCounter) {
+	    case 1:
+	        ffCounter++;
+	        document.getElementById("ffBtn").value="2x";
+	        break;
+	    case 2:
+	        ffCounter=0;
+	        document.getElementById("ffBtn").value="4x";
+	        break;
+	    case 0:
+	        ffCounter++;
+	        document.getElementById("ffBtn").value="1x";
+	        break;
 	}
-    else {
-        return false
-    }
 };
 
-
-//ticker events
-function tick(event) {
-    time = Math.round(createjs.Ticker.getTime(true)/100)/10
-    controlSpeed = time % 1
-
-
-    if (!createjs.Ticker.getPaused()) {
-        nticks++
-        if (towers.length!=0) {
-            for (var i=0;i<towers.length;i++) {
-                if (towers[i].cd>0) {
-                    towers[i].cd--;
-                    break;
-                }
-                for (var j=0;j<monsters.length;j++) {
-                    if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
-                        monsters[j].currentHp-=towers[i].damage;
-                        monsters[j].getChildAt(0).sourceRect = 
-                        new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
-                            .maxHp*32,3);
-                        towers[i].cd=towers[i].maxCd;
-
-                        if (monsters[j].currentHp<=0) {
-                            stage.removeChild(monsters[j]);
-                            cash+=monsters[j].cash;
-                            monsters.splice(j,1);
-                            document.getElementById("cash").value=cash;
-                        }
-                    }
-                }
-            }
-        }
-
-
-        //creep path
-        for (var i=0;i<monsters.length;i++) {
-            if (monsters[i].y<=coordinates[1][1]-16 &&
-                monsters[i].x<=coordinates[1][0]) {
-                monsters[i].y+=monsters[i].speed;
-            }
-            else if (monsters[i].x<=coordinates[2][0]-16 &&
-                monsters[i].y>=coordinates[2][1]-16) {
-                monsters[i].x+=monsters[i].speed;
-            }
-            else if (monsters[i].y>=coordinates[3][1]-16 &&
-                monsters[i].x>=coordinates[3][0]-16) {
-                monsters[i].y-=monsters[i].speed;
-            }
-            else if (monsters[i].x>=coordinates[4][0]-16 &&
-                monsters[i].y<=coordinates[4][1]-16) {
-                monsters[i].x-=monsters[i].speed;
-            }
-            else if (monsters[i].y<=coordinates[5][1]-16 &&
-                monsters[i].x<=coordinates[5][0]-16) {
-                monsters[i].y+=monsters[i].speed;
-            }
-            else if (monsters[i].x<=coordinates[6][0]-16 &&
-                monsters[i].y>=coordinates[6][1]-16) {
-                monsters[i].x+=monsters[i].speed;
-            }
-            else if (monsters[i].y>=coordinates[7][1]-16) {
-                monsters[i].y-=monsters[i].speed;
-            }
-            else if (monsters[i].x>=coordinates[8][0]-32) {
-                monsters[i].x-=monsters[i].speed;
-            };
-        };
-
-        //lose life 
-        for (var i=0;i<monsters.length;i++) {
-            if (monsters[i].x==360 &&
-                monsters[i].y==204) {
-                life-=1;
-                document.getElementById("life").value = life;
-            };
-        };
-
-        if (life==0) {
-            checkGG++;
-            if (checkGG==1) {
-                isOver();
-                checkGG++;
-            }
-        }
-    };
-	
-
-	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time +"ticks"+ nticks
-	
-	stage.update(event); // important!!
-};
-
-
-// fast forward
-function ff() {
-    createjs.Ticker.setFPS(ffCount[ffCounter]);
-    switch(ffCounter) {
-        case 1:
-            ffCounter++;
-            document.getElementById("ffBtn").value="2x";
-            break;
-        case 2:
-            ffCounter=0;
-            document.getElementById("ffBtn").value="4x";
-            break;
-        case 0:
-            ffCounter++;
-            document.getElementById("ffBtn").value="1x";
-            break;
-    }
-}
-
-//next wave
-function nextWave() {
-    if (!createjs.Ticker.getPaused()) {
-        wave++;
-        document.getElementById("wave").value = wave;
-        if (wave%10) {
-           monsterstats[2] += 1 
-        }
-        monsterstats[0] *= 1.2
-        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-
-        stage.removeChild(castle);//making sure castle stays on the top layer
-        stage.addChild(castle);
-    }
-}
-
-//toggle pause
-function togglePause() {
-	var paused = createjs.Ticker.getPaused();
-	createjs.Ticker.setPaused(!paused);
-	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
-
+// toggle pause the game
+function togglePause(){
+	if(pause){
+		tick = setInterval( update, 1000/frameRate );
+		pause = false;
+	}else{
+		clearInterval(tick);
+		pause = true;
+	}
 };
 
 //restart
 function restart() {
     document.location.reload();
-}
+};
 
-//game over
-function isOver() {
-    if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
-        restart();
+// this function handles a list of things that needs constant update. this function is called every interval
+var update = function(){
+	frameCount++;
+	updateGame();
+	moveCreep();
+	stage.update();
+	
+
+	document.getElementById("countdown").value = player.wave_countdown;
+	document.getElementById("wave").value = player.wave_number;
+};
+/*----------------------------------------------------------*/
+
+
+function updateGame() {
+    if (player.wave_active) {
+        if (enemyLeft <= 0) {
+            enemyLeft = 0;
+            player.wave_countdown = 10; // reset countdown
+            player.wave_active = false;  //reset wave_active state
+        } else {
+        	var delay = Math.floor((Math.random() * frameRate*3) + frameRate);  /*random delay bettwen 1 to 3 second. since frame
+        														 rate is 20, 20= 1 second*/
+            if (frameCount - lastEnemy >= delay) {
+                createEnemy();  /*here we call createEnemy function. in the function, we will create random
+                				monsters based on wave number. hp will be increased based on wave number*/
+
+                enemyLeft--;
+                lastEnemy = frameCount;
+            }
+        }
+    } else {
+        // countdown...
+        player.wave_countdown -= 1/frameRate;  /*every tick minus 1/20. over the duration of 10 second, we will minus away everything*/
+        document.getElementById("countdown").value = player.wave_countdown;
+        if (player.wave_countdown < 0) {
+            player.wave_number++;
+            player.wave_countdown = 0;
+            player.wave_active = true;
+            enemyLeft = 5 + player.wave_number;
+        }
     }
+};
+
+
+var hp_multiplier = 1.1;
+var bounty_multiplier = 1.01;
+
+var monsterData = [
+	{name: 'hulk',             speed: 3,   hp: 10,   bounty:2,    image: "images/hulk.png"},
+	{name: 'babyDragon',       speed: 4,   hp: 12,   bounty:3,    image: "images/babyDragon.png"},
+	{name: 'evilEye',          speed: 5,   hp: 10,   bounty:3,    image: "images/evilEye.png"},
+	{name: 'fireDragon',       speed: 3,   hp: 15,   bounty:5,    image: "images/fireDragon.png"},
+	{name: 'earthDragon',      speed: 2,   hp: 20,   bounty:7,    image: "images/earthDragon"}
+];
+
+function constructMonster(name){
+	for(var i=0; i<monsterData.length; i++){
+		if(name === monsterData[i].name){
+			healthbar = new createjs.Bitmap(healthbarI);
+		    healthbar.y= -5;
+
+		    monsterI = new Image();
+		    monsterI.src = monsterData[i].image;
+		    var m1 = new createjs.Bitmap(monsterI);
+		    newMonster = new createjs.Container();
+		    newMonster.addChild(healthbar, m1);
+		    newMonster.x = 80;
+		    newMonster.y = -32 -64;
+		    newMonster.speed = monsterData[i].speed;
+		    newMonster.currentHp = monsterData[i].hp*Math.pow(hp_multiplier,player.wave_number);
+		    newMonster.maxHp = monsterData[i].hp*Math.pow(hp_multiplier,player.wave_number);
+		    newMonster.bounty = monsterData[i].bounty*Math.pow(bounty_multiplier,player.wave_number);
+		    monster_array.push(newMonster);
+		    stage.addChild(newMonster);
+		    stage.update();
+		}
+	}
 }
 
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
-//###############################################################################
+var createEnemy = function(){
+	if(player.wave_number <= 10){  //wave number less than 10
+		var dice = Math.floor((Math.random() * 2) + 1); //random number between 1 and 2
+		switch(dice){
+			case 1:
+				constructMonster('hulk');
+				break;
+			case 2:
+				constructMonster('babyDragon');
+				break;
+		}
+				
+	}else if(player.wave_number <=20){  //wave number less than 20
+		var dice = Math.floor((Math.random() * 3) + 1); //random number between 1 and 2
+		switch(dice){
+			case 1:
+				constructMonster('hulk');
+				break;
+			case 2:
+				constructMonster('babyDragon');
+				break;
+			case 3:
+				constructMonster('evilEye')
+		}
+		
+	}else if(player.wave_number <=30){ // wave number less than 30
+		var dice = Math.floor((Math.random() * 4) + 1); //random number between 1 and 3
+		switch(dice){
+			case 1:
+				constructMonster('hulk');
+				break;
+			case 2:
+				constructMonster('babyDragon');
+				break;
+			case 3:
+				constructMonster('evilEye');
+				break;
+			case 4:
+				constructMonster('earthDragon');
+
+		}
+	}
+};
+
+function moveCreep(){
+	 //creep path
+        for (var i=0;i<monster_array.length;i++) {
+            if (monster_array[i].y<=coordinates[1][1]-16 &&
+                monster_array[i].x<=coordinates[1][0]) {
+                monster_array[i].y+=monster_array[i].speed;
+            }
+            else if (monster_array[i].x<=coordinates[2][0]-16 &&
+                monster_array[i].y>=coordinates[2][1]-16) {
+                monster_array[i].x+=monster_array[i].speed;
+            }
+            else if (monster_array[i].y>=coordinates[3][1]-16 &&
+                monster_array[i].x>=coordinates[3][0]-16) {
+                monster_array[i].y-=monster_array[i].speed;
+            }
+            else if (monster_array[i].x>=coordinates[4][0]-16 &&
+                monster_array[i].y<=coordinates[4][1]-16) {
+                monster_array[i].x-=monster_array[i].speed;
+            }
+            else if (monster_array[i].y<=coordinates[5][1]-16 &&
+                monster_array[i].x<=coordinates[5][0]-16) {
+                monster_array[i].y+=monster_array[i].speed;
+            }
+            else if (monster_array[i].x<=coordinates[6][0]-16 &&
+                monster_array[i].y>=coordinates[6][1]-16) {
+                monster_array[i].x+=monster_array[i].speed;
+            }
+            else if (monster_array[i].y>=coordinates[7][1]-16) {
+                monster_array[i].y-=monster_array[i].speed;
+            }
+            else if (monster_array[i].x>=coordinates[8][0]-32) {
+                monster_array[i].x-=monster_array[i].speed;
+            };
+        };
+
+}
+
+
+var towerData = [
+	{name:'fireTower',  damage: 5, cd:19, range:112, slow: 1,   cost: 10,  image:"images/fireTower"},
+	{name:'iceTower',   damage: 3, cd:19, range:112, slow: 0.5, cost: 20,  image:"images/iceTower"},
+];
+
+function buyTower(type){
+	if(player.buying === null)
+		player.buying = type;
+		
+	else{
+		player.buying = null;
+	}
+}
+
+function constructTower(name){
+	for(var i=0; i<towerData.length; i++){
+		if( name === towerData[i].name){
+
+		}
+	}
+}
+
+
+function getCursorPosition(){
+	var cursorX = event.clientX;
+	var cursorY = event.clientY; 
+}
+
+
 
 //grid
 function grid() {
@@ -579,6 +529,4 @@ function grid() {
         };
     };
 };
-
-
 
