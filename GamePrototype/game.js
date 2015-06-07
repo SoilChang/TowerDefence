@@ -1,7 +1,7 @@
 "use strict";
 
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
-output, cash, life, coordinates, controlSpeed, time,
+output, cash, life, coordinates, time,
 backgroundI, castleI, heroI, monsterI, healthbarI,
 background, castle,
 towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
@@ -209,7 +209,6 @@ function inRange(tower,mon) {
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
-    controlSpeed = time % 1
 
 
     if (!createjs.Ticker.getPaused()) {
