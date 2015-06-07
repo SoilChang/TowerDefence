@@ -134,6 +134,7 @@ function handleImageLoad(event) {
 function buyTower(index) {
     towerSelection = [towerI[index],towerR[index],
     towerCd[index],towerDamage[index],towerCost[index]];
+    toggleAoe();
 };
 
 //hit area
@@ -159,6 +160,7 @@ function handleMouse(event) {
             document.getElementById("cash").value=cash;
             towerSelection = false;
             stage.addChild(towers[towers.length-1]);
+            toggleAoe();
         };
     };
     
@@ -323,7 +325,7 @@ function nextWave() {
     if (!createjs.Ticker.getPaused()) {
         wave++;
         document.getElementById("wave").value = wave;
-        if (wave%10) {
+        if (wave%10==0) {
            monsterstats[2] += 1 
         }
         monsterstats[0] *= 1.2
@@ -332,6 +334,18 @@ function nextWave() {
         stage.removeChild(castle);//making sure castle stays on the top layer
         stage.addChild(castle);
     }
+}
+
+//toggle aoe
+function toggleAoe() {
+    for (var i=0;i<aoeT.length;i++) {
+        if (towerSelection) {
+            stage.addChild(aoeT[i]);
+        } else {
+            stage.removeChild(aoeT[i]);
+        }
+    }
+    stage.update();
 }
 
 //toggle pause
