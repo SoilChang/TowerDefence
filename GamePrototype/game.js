@@ -55,6 +55,14 @@ function init() {
     document.getElementById("wave").value = wave;
 
 
+    var test = new createjs.Bitmap(monsterI)
+    test.x=48
+    test.y=48
+    test.regY = 16;
+    test.regX = 16;
+    test.rotation = 90;
+    stage.addChild(test)
+
     // and register our main listener
     createjs.Ticker.on("tick", tick);
     createjs.Ticker.setPaused(true);
