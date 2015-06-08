@@ -44,48 +44,7 @@ function init() {
     stage = new createjs.Stage("demoCanvas");
     stage.enableMouseOver();
 
-     //background image
-    backgroundI = new Image();
-    backgroundI.src = "images/firstStage.png"
-    //load background
-    background = new createjs.Bitmap(backgroundI);
-    stage.addChild(background);
-
-    //castle image
-    castleI = new Image();
-    castleI.src = "images/castle64.png"
-    
-
-    //load castle
-    castle = new createjs.Bitmap(castleI);
-    castle.x = 320;
-    castle.y = 192;
-    stage.addChild(castle);
-
-    //hp image
-    healthbarI = new Image();
-    healthbarI.src = "images/lifebar.png";
-
-    //monster image
-    monsterI = new Image();
-    monsterI.src = "images/evilEye.png";
-
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
-
-    //add to stage
-    
-    stage.update();
-    /*------------------------*/
-    //hero image
-    heroI = new Image();
-    heroI.src = "images/fireTower.png";
-    towerI.push(heroI);
-    towerR.push(112);
-    towerCd.push(19);//1APS
-    towerDamage.push(5);
-    towerCost.push(10);
-
-
+    imageurl();//direct image src
     grid();//grid of map
     //path();//line of creep path
 
@@ -125,6 +84,51 @@ function path() {
     };
 }
 
+function imageurl() {
+    //background image
+    backgroundI = new Image();
+    backgroundI.src = "images/firstStage.png"
+    //load background
+    background = new createjs.Bitmap(backgroundI);
+    stage.addChild(background);
+
+    //castle image
+    castleI = new Image();
+    castleI.src = "images/castle64.png"
+    castleI.onload = handleImageLoad;
+
+    //hero image
+    heroI = new Image();
+    heroI.src = "images/fireTower.png";
+    towerI.push(heroI);
+    towerR.push(112);
+    towerCd.push(19);//1APS
+    towerDamage.push(5);
+    towerCost.push(10);
+
+
+    //hp image
+    healthbarI = new Image();
+    healthbarI.src = "images/lifebar.png";
+
+    //monster image
+    monsterI = new Image();
+    monsterI.src = "images/hulk.png";
+};
+
+//handle image load
+function handleImageLoad(event) {
+    //load castle
+    castle = new createjs.Bitmap(castleI);
+    castle.x = 320;
+    castle.y = 192;
+
+    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+
+    //add to stage
+    stage.addChild(castle);
+    stage.update();
+};
 
 //buying tower
 function buyTower(index) {

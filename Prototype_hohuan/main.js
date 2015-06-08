@@ -21,22 +21,26 @@ var coordinates = [  //this is the coordinates of the creep path
 var lastEnemy = 0; //this is to track when previous monster was created, hence after a random delay, 
                    //the next monster will be created
 var enemyLeft = 0;
-var cursorX, cursorY;  //two variables to record current cursor position for usage later
+var cursorX;
 
 /*player data*/
-var player ={
+var player = {
 	money: 50,
 	hp: 10,
 	defeated: false,
 	wave_number:0,
 	wave_active:false,
 	wave_countdown:2,
-	buying= null;  //buying null means buying nothing. null also will appear false in condition checking
+	buying: null  //buying null means buying nothing. null also will appear false in condition checking
 };
 
+var towerData = [
+	{name:'fireTower',  damage: 10, cd:19, range:112, slow: 1,   cost: 10,  image:"images/fireTower.png"},
+	{name:'iceTower',   damage: 7, cd:19, range:112, slow: 0.5, cost: 20,  image:"images/iceTower.png" }
+];
 
 var stage, castle ,background, backgroundI, healthbarI,castleI,towerI_fireTower, healthbar,
- newMonster, monsterI,
+ newMonster, monsterI, towerI, newTower,
  hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9;
 /*--------------------------------------------------------------------------------------------*/
 
@@ -62,9 +66,9 @@ function init() {
 
     // hp bar image
     healthbarI = new Image();
-        healthbarI.src = "images/lifebar.png"
+    healthbarI.src = "images/lifebar.png"
 
-    // grid();
+    grid();
     // update stage
     stage.update();
 
@@ -75,13 +79,16 @@ function init() {
     document.getElementById("life").value = player.hp;
     document.getElementById("wave").value = player.wave_number;
     document.getElementById("countdown").value = player.wave_countdown;
+    document.getElementById("tower_cost_1").value = towerData[0].cost;
+	document.getElementById("tower_cost_2").value = towerData[1].cost;
 
 };
 
 
 
+
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 /*the following variables are to regulate game frames*/
-/*-------------------------------------------------------------------------------*/
 var frameRate=20;  //will be set to 20 times per second
 var frameCount= 0;   //every tick increment this count. it is used in some other function later on
 var pause = true;
@@ -112,9 +119,11 @@ function togglePause(){
 	if(pause){
 		tick = setInterval( update, 1000/frameRate );
 		pause = false;
+		document.getElementById("pauseBtn").value = 'pause'
 	}else{
 		clearInterval(tick);
 		pause = true;
+		document.getElementById("pauseBtn").value = 'start'
 	}
 };
 
@@ -128,15 +137,26 @@ var update = function(){
 	frameCount++;
 	updateGame();
 	moveCreep();
+	loseLife();
+	checkDefeat();
+	towerAttack();
 	stage.update();
-	
-
-	document.getElementById("countdown").value = player.wave_countdown;
+	document.getElementById("countdown").value = Math.ceil(player.wave_countdown);
 	document.getElementById("wave").value = player.wave_number;
+	document.getElementById("cash").value = Math.ceil(player.money);
+	document.getElementById("tower_cost_1").value = towerData[0].cost;
+	document.getElementById("tower_cost_2").value = towerData[1].cost;
+	
 };
-/*----------------------------------------------------------*/
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 
+
+
+
+
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+/* game utility function*/
 function updateGame() {
     if (player.wave_active) {
         if (enemyLeft <= 0) {
@@ -167,16 +187,91 @@ function updateGame() {
     }
 };
 
+function checkDefeat(){
+	if (player.hp === 0) {
+        player.defeated = true;          
+    } 
+    if (player.defeated === true) {
+    	clearInterval(tick);
+		pause = true;
+		document.getElementById("pauseBtn").value = 'restart'
+		document.getElementById("pauseBtn").onclick = "restart()";
 
+        if (confirm("Game Over!!"+"\n"+"Do you want to restart?") == true) {
+            restart();
+        }
+    }      
+}
+
+function loseLife(){
+	for (var i=0;i<monster_array.length;i++) {
+        if (monster_array[i].x==360 && monster_array[i].y==204) {
+            player.hp -= monster_array[i].damage;
+            document.getElementById("life").value = player.hp;
+            stage.removeChild(monster_array[i]);
+            monster_array.splice(i,1);
+        }
+    }
+}
+
+function inRange(tower,mon) {
+	var dx=Math.abs(tower.x+16-mon.x);
+	var dy=Math.abs(tower.y+16-mon.y);
+	var dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
+	if (dist<=tower.range) {
+		return true;
+	}
+    else {
+        return false;
+    }
+};
+
+
+function towerAttack(){
+	if (tower_array.length!== 0 ) {
+	    for (var i=0; i<tower_array.length; i++){
+	        if (tower_array[i].cd > 0 ) {
+	            tower_array[i].cd--;
+	            break;
+	        }
+	        for (var j=0;j<monster_array.length;j++) {
+	            if (inRange (tower_array[i],monster_array[j] ) && monster_array[j].y>=0 ) {
+	                monster_array[j].currentHp -= tower_array[i].damage;
+	                monster_array[j].getChildAt(0).sourceRect = 
+	                new createjs.Rectangle(0,0,monster_array[j].currentHp/monster_array[j]
+	                    .maxHp*32,3);
+	                tower_array[i].cd=tower_array[i].maxCd;
+
+	                if (monster_array[j].currentHp<=0) {
+	                    stage.removeChild(monster_array[j]);
+	                    player.money += monster_array[j].bounty;
+	                    monster_array.splice(j,1);
+	                }
+	            }
+	        }
+	    }
+	}
+
+}
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+
+
+
+
+
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+/*  handle creation of monsters */
 var hp_multiplier = 1.1;
 var bounty_multiplier = 1.01;
 
 var monsterData = [
-	{name: 'hulk',             speed: 3,   hp: 10,   bounty:2,    image: "images/hulk.png"},
-	{name: 'babyDragon',       speed: 4,   hp: 12,   bounty:3,    image: "images/babyDragon.png"},
-	{name: 'evilEye',          speed: 5,   hp: 10,   bounty:3,    image: "images/evilEye.png"},
-	{name: 'fireDragon',       speed: 3,   hp: 15,   bounty:5,    image: "images/fireDragon.png"},
-	{name: 'earthDragon',      speed: 2,   hp: 20,   bounty:7,    image: "images/earthDragon"}
+	{name: 'hulk',          damage:2,   speed: 4,   hp: 10,   bounty:2,    image: "images/hulk.png"},
+	{name: 'babyDragon',    damage:1,   speed: 5,   hp: 12,   bounty:3,    image: "images/babyDragon.png"},
+	{name: 'evilEye',       damage:2,   speed: 5,   hp: 10,   bounty:3,    image: "images/evilEye.png"},
+	{name: 'fireDragon',    damage:5,   speed: 3,   hp: 15,   bounty:5,    image: "images/fireDragon.png"},
+	{name: 'earthDragon',   damage:4,   speed: 2,   hp: 20,   bounty:7,    image: "images/earthDragon.png"}
 ];
 
 function constructMonster(name){
@@ -192,6 +287,7 @@ function constructMonster(name){
 		    newMonster.addChild(healthbar, m1);
 		    newMonster.x = 80;
 		    newMonster.y = -32 -64;
+		    newMonster.damage = monsterData[i].damage;
 		    newMonster.speed = monsterData[i].speed;
 		    newMonster.currentHp = monsterData[i].hp*Math.pow(hp_multiplier,player.wave_number);
 		    newMonster.maxHp = monsterData[i].hp*Math.pow(hp_multiplier,player.wave_number);
@@ -199,23 +295,13 @@ function constructMonster(name){
 		    monster_array.push(newMonster);
 		    stage.addChild(newMonster);
 		    stage.update();
+		    break;
 		}
 	}
 }
 
 var createEnemy = function(){
-	if(player.wave_number <= 10){  //wave number less than 10
-		var dice = Math.floor((Math.random() * 2) + 1); //random number between 1 and 2
-		switch(dice){
-			case 1:
-				constructMonster('hulk');
-				break;
-			case 2:
-				constructMonster('babyDragon');
-				break;
-		}
-				
-	}else if(player.wave_number <=20){  //wave number less than 20
+	if(player.wave_number <= 5){  //wave number less than 10
 		var dice = Math.floor((Math.random() * 3) + 1); //random number between 1 and 2
 		switch(dice){
 			case 1:
@@ -225,10 +311,27 @@ var createEnemy = function(){
 				constructMonster('babyDragon');
 				break;
 			case 3:
-				constructMonster('evilEye')
+				constructMonster('evilEye');
+				break;
+		}
+				
+	}else if(player.wave_number <=10){  //wave number less than 20
+		var dice = Math.floor((Math.random() * 4) + 1); //random number between 1 and 2
+		switch(dice){
+			case 1:
+				constructMonster('hulk');
+				break;
+			case 2:
+				constructMonster('babyDragon');
+				break;
+			case 3:
+				constructMonster('evilEye');
+			case 4:
+				constructMonster('fireDrgaon')
+
 		}
 		
-	}else if(player.wave_number <=30){ // wave number less than 30
+	}else if(player.wave_number <=15){ // wave number less than 30
 		var dice = Math.floor((Math.random() * 4) + 1); //random number between 1 and 3
 		switch(dice){
 			case 1:
@@ -243,6 +346,23 @@ var createEnemy = function(){
 			case 4:
 				constructMonster('earthDragon');
 
+		}
+	}else{
+		var dice = Math.floor((Math.random() * 5) + 1); //random number between 1 and 3
+		switch(dice){
+			case 1:
+				constructMonster('hulk');
+				break;
+			case 2:
+				constructMonster('babyDragon');
+				break;
+			case 3:
+				constructMonster('evilEye');
+				break;
+			case 4:
+				constructMonster('earthDragon');
+			case 5:
+				constructMonster('fireDrgaon')
 		}
 	}
 };
@@ -283,34 +403,68 @@ function moveCreep(){
         };
 
 }
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 
-var towerData = [
-	{name:'fireTower',  damage: 5, cd:19, range:112, slow: 1,   cost: 10,  image:"images/fireTower"},
-	{name:'iceTower',   damage: 3, cd:19, range:112, slow: 0.5, cost: 20,  image:"images/iceTower"},
-];
 
-function buyTower(type){
-	if(player.buying === null)
-		player.buying = type;
-		
+
+/*vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
+/*handle tower creation*/
+
+var cost_multiplier = 5; //everytower is 5 dollar more ex than the previous
+
+/* this function is to toggle "buying" status, when the respective button is clicked 
+in the html, the name of the respective tower will be passed in and set to player.buying
+afterwards.  */
+function buyTower(name){    
+	if(player.buying === null){
+		player.buying = name;  //set buying to name, hence when user click the btn next time, the toggle will turn buying off		
+		document.getElementById('buying').value = "Yes";
+	}		
 	else{
 		player.buying = null;
+		document.getElementById('buying').value = "NO";
 	}
 }
 
-function constructTower(name){
-	for(var i=0; i<towerData.length; i++){
-		if( name === towerData[i].name){
 
+function handleMouse(event) {
+    event.target.alpha = (event.type == "mouseover") ? 0.3 : 0.01;
+    if (event.type == "click"){
+    	if(player.buying){ //checking if buying is activated
+    		/*tower creation*/
+			for(var i=0; i<towerData.length; i++){
+				if( player.buying === towerData[i].name){
+					if(player.money >= towerData[i].cost){
+						// create tower image & tower properties
+						towerI = new Image();
+						towerI.src = towerData[i].image; 
+						newTower = new createjs.Bitmap(towerI);
+			            newTower.range = towerData[i].range;
+			            newTower.maxCd = towerData[i].cd;
+			            newTower.cd = towerData[i].cd;
+			            newTower.damage = towerData[i].damage;
+			            newTower.slow = towerData[i].slow;
+			            newTower.x = event.target.coord[0];
+			            newTower.y = event.target.coord[1];
+			            tower_array.push(newTower);
+			            // deduct tower cost
+			            player.money -= towerData[i].cost;
+			            towerData[i].cost += cost_multiplier;//change the cost of the tower in the data base			            
+			            player.buying = null;
+			            // add to stage
+			            stage.addChild(newTower);
+			            stage.update();
+			            
+			        }
+			        player.buying = null;
+			        document.getElementById('buying').value = "NO";
+			        break;
+				}
+
+			}
 		}
-	}
-}
-
-
-function getCursorPosition(){
-	var cursorX = event.clientX;
-	var cursorY = event.clientY; 
+	} 
 }
 
 
@@ -529,4 +683,9 @@ function grid() {
         };
     };
 };
+
+/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+
+
+
 
