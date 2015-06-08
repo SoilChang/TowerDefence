@@ -2,7 +2,7 @@
 
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 output, cash, life, coordinates, time,
-backgroundI, castleI, heroI, healthbarI, canonI, marioI, mario,
+backgroundI, castleI, heroI, healthbarI, marioI, mario,
 background, castle,
 towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
 dist,
@@ -113,11 +113,6 @@ function imageurl() {
     towerCd.push(19);//1APS
     towerDamage.push(5);
     towerCost.push(10);
-
-    //tower - cannon image
-    canonI = new Image();
-    canonI.src = "images/canontower.png";
-    towerI.push(canonI)
 
 
     //hp image
@@ -266,11 +261,6 @@ function cAnimation() {
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
-    if (createjs.Ticker.getPaused()) {
-        for (var i=0;i<monsters.length;i++) {
-            monsters[i].getChildAt(1).gotoAndStop("down")
-        }
-    }
 
     if (!createjs.Ticker.getPaused()) {
         nticks++
@@ -466,6 +456,32 @@ function togglePause() {
 	var paused = createjs.Ticker.getPaused();
 	createjs.Ticker.setPaused(!paused);
 	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
+    for (var i=0;i<monsters.length;i++) {
+        for (var j=0;j<4;j++) {
+            if (!paused) {
+                if (monsters[i].pos[j]==2) {
+                    monsters[i].pos[j]=1;
+                    switch (j) {
+                        case 0:
+                            monsters[i].getChildAt(1).gotoAndStop("up");
+                            break;
+                        case 1:
+                            monsters[i].getChildAt(1).gotoAndStop("right");
+                            break;
+                        case 2:
+                            monsters[i].getChildAt(1).gotoAndStop("down");
+                            break;
+                        case 3:
+                            monsters[i].getChildAt(1).gotoAndStop("left");
+                            break;                            
+
+                    }
+                }
+            } else {
+                cAnimation();
+            }
+        }
+    }
 
 };
 
