@@ -2,19 +2,20 @@
 
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 output, cash, life, coordinates, time,
-backgroundI, castleI, heroI, monsterI, healthbarI,
+backgroundI, castleI, heroI, healthbarI, canonI, marioI, mario,
 background, castle,
 towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
 dist,
-monsters, monstersAmt, newMonster, monsterstats,
+monsters, monstersAmt, newMonster, monsterstats, monsterI,
 healthbar,
-wave, checkGG, ffCount, ffCounter,nticks=0
+wave, checkGG, ffCount, ffCounter,nticks=0, animation
 
 //game stats
-monsterstats = [10,4,2,2]//hp,speed,cash,amt
-monsters = []
-towers = []
-towerI = []
+monsterstats = [10,4,2,2] //hp,speed,cash,amt
+monsters = [] //monsters on map
+monsterI = [] //types of monster available 
+towers = []   //towers on map
+towerI = []   //types of tower available
 towerCost = []
 towerR = []
 towerCd = []
@@ -54,16 +55,15 @@ function init() {
     document.getElementById("life").value = life;
     document.getElementById("wave").value = wave;
 
-
-    var test = new createjs.Bitmap(monsterI)
+    /*var test = new createjs.Bitmap(canonI)
     test.x=48
     test.y=48
     test.regY = 16;
     test.regX = 16;
-    test.rotation = 90;
-    stage.addChild(test)
+    test.rotation = ;
+    stage.addChild(test)*/
 
-    // and register our main listener
+    // creates ticks
     createjs.Ticker.on("tick", tick);
     createjs.Ticker.setPaused(true);
     createjs.Ticker.setFPS(20);
@@ -105,7 +105,7 @@ function imageurl() {
     castleI.src = "images/castle64.png"
     castleI.onload = handleImageLoad;
 
-    //hero image
+    //tower-hero image
     heroI = new Image();
     heroI.src = "images/hero.png";
     towerI.push(heroI);
@@ -114,14 +114,29 @@ function imageurl() {
     towerDamage.push(5);
     towerCost.push(10);
 
+    //tower - cannon image
+    canonI = new Image();
+    canonI.src = "images/canontower.png";
+    towerI.push(canonI)
+
 
     //hp image
     healthbarI = new Image();
     healthbarI.src = "images/lifebar.png";
 
-    //monster image
-    monsterI = new Image();
-    monsterI.src = "images/monster.png";
+    //creep-mario
+    mario = {
+        images: ["images/mario.png"],
+        frames: {width:21, height:40, count:32, spacing:1},
+        animations: {
+            right:[0,7],
+            up:[8,15],
+            left:[16,23],
+            down:[24,31]
+        }
+    };
+    marioI = new createjs.SpriteSheet(mario);
+    monsterI.push(marioI)
 };
 
 //handle image load
@@ -131,7 +146,7 @@ function handleImageLoad(event) {
     castle.x = 320;
     castle.y = 192;
 
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3],0);
 
     //add to stage
     stage.addChild(castle);
@@ -182,15 +197,17 @@ function handleTower(event) {
 }
 
 //create monsters
-function cMonster(hp,speed,cash,amt) {
+function cMonster(hp,speed,cash,amt,type) {
     for (var i=0; i<amt; i++) {
         healthbar = new createjs.Bitmap(healthbarI);
         healthbar.y= -5;
-        var m1 = new createjs.Bitmap(monsterI);
+        var m1 = new createjs.Sprite(monsterI[type])
+        //createjs.Bitmap(monsterI);
         newMonster = new createjs.Container();
         newMonster.addChild(healthbar, m1);
-        newMonster.x = 80;
-        newMonster.y = -32 - i*64;
+        newMonster.pos = [0,0,1,0]
+        newMonster.x = 85;
+        newMonster.y = 50 - i*64;
         newMonster.speed = speed;
         newMonster.currentHp = hp;
         newMonster.maxHp = hp;
@@ -215,11 +232,45 @@ function inRange(tower,mon) {
     }
 };
 
+//check animation direction
+function cAnimation() {
+    for (var i=0;i<monsters.length;i++) {
+        for (var j=0;j<4;j++) {
+            var checkPos = monsters[i].pos[j]
+            //up
+            if (j==0) {
+                if (checkPos==1) {
+                    monsters[i].getChildAt(1).gotoAndPlay("up")
+                };
+            }
+            else if (j==1) {
+                if (checkPos==1) {
+                    monsters[i].getChildAt(1).gotoAndPlay("right")
+                };
+            }
+            else if (j==2) {
+                if (checkPos==1) {
+                    monsters[i].getChildAt(1).gotoAndPlay("down")
+                };
+            }
+            else if (j==3) {
+                if (checkPos==1) {
+                    monsters[i].getChildAt(1).gotoAndPlay("left")
+                };
+            }
+        }    
+    }
+}
+
 
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
-
+    if (createjs.Ticker.getPaused()) {
+        for (var i=0;i<monsters.length;i++) {
+            monsters[i].getChildAt(1).gotoAndStop("down")
+        }
+    }
 
     if (!createjs.Ticker.getPaused()) {
         nticks++
@@ -228,7 +279,8 @@ function tick(event) {
                 if (towers[i].cd>0) {
                     towers[i].cd--;
                     break;
-                }
+                };
+
                 for (var j=0;j<monsters.length;j++) {
                     if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
                         monsters[j].currentHp-=towers[i].damage;
@@ -237,6 +289,7 @@ function tick(event) {
                             .maxHp*32,3);
                         towers[i].cd=towers[i].maxCd;
 
+                        //remove monster from map
                         if (monsters[j].currentHp<=0) {
                             stage.removeChild(monsters[j]);
                             cash+=monsters[j].cash;
@@ -248,38 +301,90 @@ function tick(event) {
             }
         }
 
-
         //creep path
         for (var i=0;i<monsters.length;i++) {
             if (monsters[i].y<=coordinates[1][1]-16 &&
                 monsters[i].x<=coordinates[1][0]) {
                 monsters[i].y+=monsters[i].speed;
+                if (monsters[i].pos[2]==1) {
+                    cAnimation();
+                    monsters[i].pos[2]++;
+                }
             }
             else if (monsters[i].x<=coordinates[2][0]-16 &&
                 monsters[i].y>=coordinates[2][1]-16) {
                 monsters[i].x+=monsters[i].speed;
+                if (monsters[i].pos[1]==0) {
+                    monsters[i].pos=[0,1,0,0];
+                }
+                else if (monsters[i].pos[1]==1) {
+                    cAnimation();
+                    monsters[i].pos[1]++;
+                }
             }
             else if (monsters[i].y>=coordinates[3][1]-16 &&
                 monsters[i].x>=coordinates[3][0]-16) {
                 monsters[i].y-=monsters[i].speed;
+                if (monsters[i].pos[0]==0) {
+                    monsters[i].pos=[1,0,0,0];
+                }
+                else if (monsters[i].pos[0]==1) {
+                    cAnimation();
+                    monsters[i].pos[0]++;
+                }
             }
             else if (monsters[i].x>=coordinates[4][0]-16 &&
                 monsters[i].y<=coordinates[4][1]-16) {
                 monsters[i].x-=monsters[i].speed;
+                if (monsters[i].pos[3]==0) {
+                    monsters[i].pos=[0,0,0,1];
+                }
+                else if (monsters[i].pos[3]==1) {
+                    cAnimation();
+                    monsters[i].pos[3]++;
+                }
             }
             else if (monsters[i].y<=coordinates[5][1]-16 &&
                 monsters[i].x<=coordinates[5][0]-16) {
                 monsters[i].y+=monsters[i].speed;
+                if (monsters[i].pos[2]==0) {
+                    monsters[i].pos=[0,0,1,0];
+                }
+                else if (monsters[i].pos[2]==1) {
+                    cAnimation();
+                    monsters[i].pos[2]++;
+                }
             }
             else if (monsters[i].x<=coordinates[6][0]-16 &&
                 monsters[i].y>=coordinates[6][1]-16) {
                 monsters[i].x+=monsters[i].speed;
+                if (monsters[i].pos[1]==0) {
+                    monsters[i].pos=[0,1,0,0];
+                }
+                else if (monsters[i].pos[1]==1) {
+                    cAnimation();
+                    monsters[i].pos[1]++;
+                }
             }
             else if (monsters[i].y>=coordinates[7][1]-16) {
                 monsters[i].y-=monsters[i].speed;
+                if (monsters[i].pos[0]==0) {
+                    monsters[i].pos=[1,0,0,0];
+                }
+                else if (monsters[i].pos[0]==1) {
+                    cAnimation();
+                    monsters[i].pos[0]++;
+                }
             }
             else if (monsters[i].x>=coordinates[8][0]-32) {
                 monsters[i].x-=monsters[i].speed;
+                if (monsters[i].pos[3]==0) {
+                    monsters[i].pos=[0,0,0,1];
+                }
+                else if (monsters[i].pos[3]==1) {
+                    cAnimation();
+                    monsters[i].pos[3]++;
+                }
             };
         };
 
