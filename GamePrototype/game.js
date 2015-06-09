@@ -55,6 +55,11 @@ function init() {
     document.getElementById("life").value = life;
     document.getElementById("wave").value = wave;
 
+
+    var test = new createjs.Bitmap("images/hero.png")
+    test.x = 352
+    test.y = 224
+    stage.addChild(test)
     /*var test = new createjs.Bitmap(canonI)
     test.x=48
     test.y=48
@@ -202,11 +207,12 @@ function cMonster(hp,speed,cash,amt,type) {
         newMonster.addChild(healthbar, m1);
         newMonster.pos = [0,0,1,0]
         newMonster.x = 85;
-        newMonster.y = 50 - i*64;
+        newMonster.y = -40 - i*64;
         newMonster.speed = speed;
         newMonster.currentHp = hp;
         newMonster.maxHp = hp;
         newMonster.cash = cash;
+        newMonster.dead = 0;
         monsters.push(newMonster);
         stage.addChild(newMonster);
     }
@@ -375,13 +381,25 @@ function tick(event) {
                     cAnimation();
                     monsters[i].pos[3]++;
                 }
-            };
+            }
+            else if (monsters[i].x<=352) {
+                if (!monsters[i].dead) {
+                    life-=1;
+                    document.getElementById("life").value = life;
+                    monsters[i].dead++;
+                    stage.removeChild(monsters[i]);
+                    monsters.splice(i,1);
+
+                }
+            }
         };
 
         //lose life 
         for (var i=0;i<monsters.length;i++) {
             if (monsters[i].x==360 &&
                 monsters[i].y==204) {
+                monsters.splice(i,1);
+                stage.removeChild(monsters[i]);
                 life-=1;
                 document.getElementById("life").value = life;
             };
@@ -398,7 +416,8 @@ function tick(event) {
 	
 
 	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time +"ticks"+ nticks
+		"Time = "+ time +"ticks"+ nticks +"\n" +
+        monsters
 	
 	stage.update(event); // important!!
 };
@@ -432,7 +451,7 @@ function nextWave() {
            monsterstats[2] += 1 
         }
         monsterstats[0] *= 1.2
-        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3]);
+        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3],0);
 
         stage.removeChild(castle);//making sure castle stays on the top layer
         stage.addChild(castle);
