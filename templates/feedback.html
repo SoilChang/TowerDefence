@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--jQeury library-->
+	<script src="../jQuery/jquery-2.1.4.min.js"></script>
+	<script src="../jQuery/jquery-ui.min.js"></script>
+	
+	<!-- bootstrap file-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+	<title>  feedback  </title>
+</head>
+<body>
+	<div id="back_button" style="position:absolute;">
+		<a href="gamePage.html">
+			<div class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="display:inline-block; margin:auto; ">
+			</div>
+			<h1 style="display:inline-block; ">Back</h1>
+		</a>
+	</div>
+
+	<div id="page_banner" style=" height:200px; width: 700px; margin-left:300px; display:inline-block; background-color: red; border-radius:5px;">
+		<h1 style="font-size:100px; background-color:black; color:white;"> 
+			Welcome. 
+			<img style="height:100px; margin-left:100px;"src="../images/feedback/logo.png">
+		</h1>
+		<h1 style="margin-left:150px; color:white;" >We appreciate your feedback</h1>
+	</div>
+
+	<div id='page_content' style="height:1000px;width:1100px; margin-left:100px; background-color:;">
+		<div>
+			<h3>Nickname: <input style="margin-left:103px; width:700px;" type='text' placeholder='Jon Snow'></h3>
+		</div>
+		<div>
+			<h3>E-mail: <input style="margin-left:140px; width:700px; " type='text' placeholder='YouDontKnowAnything@jonsnow.com'>  </h3>
+		</div>
+		<div>
+			<h3>suggestion: 
+				<select style="margin-left:90px;">
+					<option value="0" selected="selected" >(start to know something)</option>
+					<option value="1">Game mechanism</option>
+					<option value="2">Game Graphics</option>
+					<option value="3">Bug Report</optgroup>
+					<option value="4">Personal Issue</option>
+					<option value="5">Feature suggestion</option>
+					<option value="6">Just wanna rant </option>
+					<option value="7">General feedback </option>
+				</select>
+			</h3>
+
+			<h3 style="display:block;">Details:</h3> 
+			<textarea style='height:300px; width:700px; display:block; margin-left:150px;'></textarea>
+
+			<input class="submit-button" type="submit" name="submit" value="Send the text fly" onclick="#';" style="margin-left:150px; margin-top:30px;">
+			
+		</div>
+	</div>
+</body>
+</html>
