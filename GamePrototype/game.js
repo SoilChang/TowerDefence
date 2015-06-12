@@ -2,18 +2,20 @@
 
 var stage, hitsT, hit0, hit1, hit2, hit3, hit4, hit5, hit6, hit7, hit8, hit9,
 output, cash, life, coordinates, time,
-backgroundI, castleI, heroI, healthbarI, marioI, mario,
+backgroundI, castleI, heroI, healthbarI, marioI, mario, warrior, warriorI,
 background, castle,
-towers, towerCost, towerI, towerR, towerCd, towerDamage, towerSelection, aoeT,
-dist,
-monsters, monstersAmt, newMonster, monsterstats, monsterI,
+towerI, towerCost, towerR, towerCd, towerDamage, towers, 
+towerSelection, aoeT, targetTower, tInfo,
+monsters, monstersAmt, newMonster, monsterstats, 
+monsterI,
 healthbar,
-wave, checkGG, ffCount, ffCounter,nticks=0, animation
+wave, checkGG, ffCount, ffCounter, errorCD, nticks=0
 
 //game stats
-monsterstats = [10,4,2,2] //hp,speed,cash,amt
+monsterstats = [[10,4,2],[15,6,2]] //hp,speed,cash,amt
 monsters = [] //monsters on map
-monsterI = [] //types of monster available 
+monsterI = [] //types of monster available
+targetTower = false 
 towers = []   //towers on map
 towerI = []   //types of tower available
 towerCost = []
@@ -22,12 +24,13 @@ towerCd = []
 towerDamage = []
 towerSelection = false
 aoeT = []
-cash = 60;
+cash = 20;
 life = 10;
 wave = 1;
 checkGG = 0;
 ffCount = [20,40,80]
 ffCounter = 1
+errorCD = 0
 coordinates = [
 [96, 0],
 [96, 480],
@@ -39,6 +42,8 @@ coordinates = [
 [672, 224],
 [384, 224]
 ];
+var targetGrid = new createjs.Shape();
+targetGrid.graphics.beginStroke("#fff").drawRect(0,0,32,32);
 
 //initialized
 function init() {
@@ -51,15 +56,10 @@ function init() {
 
     //editing non canvas buttons
     document.getElementById("pauseBtn").value = "start";
-    document.getElementById("cash").value = cash;
-    document.getElementById("life").value = life;
-    document.getElementById("wave").value = wave;
+    document.getElementById("cash").innerHTML += cash;
+    document.getElementById("life").innerHTML += life;
+    document.getElementById("wave").innerHTML += wave; 
 
-
-    var test = new createjs.Bitmap("images/hero.png")
-    test.x = 352
-    test.y = 224
-    stage.addChild(test)
     /*var test = new createjs.Bitmap(canonI)
     test.x=48
     test.y=48
@@ -127,7 +127,7 @@ function imageurl() {
     //creep-mario
     mario = {
         images: ["images/mario.png"],
-        frames: {width:21, height:40, count:32, spacing:1},
+        frames: {width:21, height:40, count:32},
         animations: {
             right:[0,7],
             up:[8,15],
@@ -137,6 +137,20 @@ function imageurl() {
     };
     marioI = new createjs.SpriteSheet(mario);
     monsterI.push(marioI)
+
+    //creep-mario
+    warrior = {
+        images: ["images/DarkNut.png"],
+        frames: {width:24, height:31, count:16},
+        animations: {
+            right:[0,3],
+            up:[4,7],
+            left:[8,11],
+            down:[12,15]
+        }
+    };
+    warriorI = new createjs.SpriteSheet(warrior);
+    monsterI.push(warriorI)
 };
 
 //handle image load
@@ -146,7 +160,7 @@ function handleImageLoad(event) {
     castle.x = 320;
     castle.y = 192;
 
-    cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3],0);
+    cMonster(monsterstats[0],2,0);
 
     //add to stage
     stage.addChild(castle);
@@ -158,32 +172,41 @@ function buyTower(index) {
     towerSelection = [towerI[index],towerR[index],
     towerCd[index],towerDamage[index],towerCost[index]];
     toggleAoe();
+    stage.removeChild(targetGrid);
+    document.getElementById("infoText").innerHTML = ""
 };
 
 //hit area
-function handleMouse(event) {
+function handleTower(event) {
     event.target.alpha = (event.type == "mouseover") ? .3 : 0.01;
     if (event.type == "click") {
         if (towerSelection) {
-            var newTower = new createjs.Bitmap(towerSelection[0]);
-            newTower.range = towerSelection[1];
-            newTower.maxCd = towerSelection[2]
-            newTower.cd = 0
-            newTower.damage = towerSelection[3]
-            newTower.x = event.target.coord[0];
-            newTower.y = event.target.coord[1];
-            newTower.on("click", handleTower); 
-            towers.push(newTower);
-            var aoe = new createjs.Shape();
-            aoe.graphics.beginStroke("#000").drawCircle(
-                newTower.x+14,newTower.y+16,newTower.range);
-            aoe.alpha = .5; 
-            aoeT.push(aoe)
-            cash-=towerSelection[4];
-            document.getElementById("cash").value=cash;
-            towerSelection = false;
-            stage.addChild(towers[towers.length-1]);
-            toggleAoe();
+            if (towerSelection[4]<=cash) {
+                var newTower = new createjs.Bitmap(towerSelection[0]);
+                newTower.level = 1;
+                newTower.range = towerSelection[1];
+                newTower.maxCd = towerSelection[2];
+                newTower.cd = 0;
+                newTower.damage = towerSelection[3];
+                newTower.upgradeCost = [25];
+                newTower.x = event.target.coord[0];
+                newTower.y = event.target.coord[1];
+                newTower.coord = event.target.coord
+                newTower.on("click", handleInfo); 
+                towers.push(newTower);
+                var aoe = new createjs.Shape();
+                aoe.graphics.beginStroke("#000").drawCircle(
+                    newTower.x+14,newTower.y+16,newTower.range);
+                aoe.alpha = .5; 
+                aoeT.push(aoe)
+                cash-=towerSelection[4];
+                document.getElementById("cash").innerHTML = "cash: " +cash;
+                towerSelection = false;
+                stage.addChild(newTower);
+                toggleAoe();
+            } else {
+                error("Insufficient cash")
+            }
         };
     };
     
@@ -192,29 +215,72 @@ function handleMouse(event) {
 };
 
 //handle tower upgrades
-function handleTower(event) {
-    event.target
+function handleInfo(event) {
+    if (event.type=="click") {
+        targetGrid.x=event.target.coord[0];
+        targetGrid.y=event.target.coord[1];
+        stage.addChild(targetGrid);
+        targetTower = event.target
+        updateInfo(targetTower);
+
+    }
+}
+
+//upgrade tower stats
+function upgradeT() {
+    var cost = targetTower.upgradeCost[targetTower.level-1]
+    if (cost<=cash) {
+        cash-=cost
+        document.getElementById("cash").innerHTML = "cash: " + cash
+        targetTower.level+=1
+        targetTower.damage+=5
+        updateInfo(targetTower);
+    } else {
+        error("Insufficient Cash!");
+    }
+
+}
+
+//update tower info
+function updateInfo(tower) {
+    var nextlvl = [tower.level+1,tower.damage+5]
+    //tower info
+    document.getElementById("infoText").innerHTML = 
+    (tower.upgradeCost[tower.level-1])?
+    "Lvl: " + tower.level +"-->" + nextlvl[0] + "<br>" +
+    "Dmg: " + tower.damage + "-->" + nextlvl[1] + "<br>" +
+    "Range: " + tower.range/32 +  "<br>" +
+    "Upgrade Cost: " +
+    tower.upgradeCost[tower.level-1] + "<br>" +
+    "<input type='button' value='upgrade' onclick='upgradeT()'>"
+    : "Lvl: " + tower.level + "<br>" +
+    "Dmg: " + tower.damage + "<br>" +
+    "Range: " + tower.range/32 +  "<br>" + 
+    "Max lvl"
 }
 
 //create monsters
-function cMonster(hp,speed,cash,amt,type) {
+function cMonster(stats,amt,type) {//hp,speed,cash
     for (var i=0; i<amt; i++) {
-        healthbar = new createjs.Bitmap(healthbarI);
-        healthbar.y= -5;
+        var mBounds = monsterI[type].getFrameBounds(0)
+        healthbar = new createjs.Bitmap(healthbarI)
+        healthbar.sourceRect = new createjs.Rectangle(0,0,mBounds.width,3);
+        healthbar.y= -5
         var m1 = new createjs.Sprite(monsterI[type])
         //createjs.Bitmap(monsterI);
-        newMonster = new createjs.Container();
-        newMonster.addChild(healthbar, m1);
+        newMonster = new createjs.Container()
+        newMonster.addChild(healthbar, m1)
         newMonster.pos = [0,0,1,0]
-        newMonster.x = 85;
-        newMonster.y = -40 - i*64;
-        newMonster.speed = speed;
-        newMonster.currentHp = hp;
-        newMonster.maxHp = hp;
-        newMonster.cash = cash;
-        newMonster.dead = 0;
-        monsters.push(newMonster);
-        stage.addChild(newMonster);
+        newMonster.area = mBounds 
+        newMonster.x = 96 - mBounds.width/2
+        newMonster.y = -mBounds.height - i*mBounds.height*1.5
+        newMonster.speed = stats[1]
+        newMonster.currentHp = stats[0]
+        newMonster.maxHp = stats[0]
+        newMonster.cash = stats[2]
+        newMonster.dead = 0
+        monsters.push(newMonster)
+        stage.addChild(newMonster)
     }
 }
 
@@ -222,12 +288,12 @@ function cMonster(hp,speed,cash,amt,type) {
 
 //check range
 function inRange(tower,mon) {
-	var dx=Math.abs(tower.x+16-mon.x);
-	var dy=Math.abs(tower.y+16-mon.y);
-	dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-	if (dist<=tower.range) {
-		return true
-	}
+    var dx=Math.abs(tower.x+16-mon.x);
+    var dy=Math.abs(tower.y+16-mon.y);
+    var dist=Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
+    if (dist<=tower.range) {
+        return true
+    }
     else {
         return false
     }
@@ -263,10 +329,15 @@ function cAnimation() {
     }
 }
 
-
 //ticker events
 function tick(event) {
     time = Math.round(createjs.Ticker.getTime(true)/100)/10
+    if (errorCD) {
+        if (errorCD==1) {
+            document.getElementById("errorText").innerHTML = ""
+        }
+        errorCD--;
+    }
 
     if (!createjs.Ticker.getPaused()) {
         nticks++
@@ -274,15 +345,14 @@ function tick(event) {
             for (var i=0;i<towers.length;i++) {
                 if (towers[i].cd>0) {
                     towers[i].cd--;
-                    break;
+                    continue;
                 };
-
                 for (var j=0;j<monsters.length;j++) {
                     if (inRange(towers[i],monsters[j]) && monsters[j].y>=0) {
                         monsters[j].currentHp-=towers[i].damage;
                         monsters[j].getChildAt(0).sourceRect = 
-                        new createjs.Rectangle(0,0,monsters[j].currentHp/monsters[j]
-                            .maxHp*32,3);
+                        new createjs.Rectangle(0,0,monsters[j]
+                            .currentHp/monsters[j].maxHp*monsters[j].area.width,3);
                         towers[i].cd=towers[i].maxCd;
 
                         //remove monster from map
@@ -290,8 +360,10 @@ function tick(event) {
                             stage.removeChild(monsters[j]);
                             cash+=monsters[j].cash;
                             monsters.splice(j,1);
-                            document.getElementById("cash").value=cash;
+                            document.getElementById("cash").innerHTML="cash: "+
+                            cash;
                         }
+                        break;
                     }
                 }
             }
@@ -299,95 +371,104 @@ function tick(event) {
 
         //creep path
         for (var i=0;i<monsters.length;i++) {
-            if (monsters[i].y<=coordinates[1][1]-16 &&
-                monsters[i].x<=coordinates[1][0]) {
-                monsters[i].y+=monsters[i].speed;
-                if (monsters[i].pos[2]==1) {
+            var mob = monsters[i]
+            //line 1
+            if (mob.y<=coordinates[1][1]-mob.area.height/2 &&
+                mob.x<=coordinates[1][0]) {
+                mob.y+=mob.speed;
+                if (mob.pos[2]==1) {
                     cAnimation();
-                    monsters[i].pos[2]++;
+                    mob.pos[2]++;
                 }
             }
-            else if (monsters[i].x<=coordinates[2][0]-16 &&
-                monsters[i].y>=coordinates[2][1]-16) {
-                monsters[i].x+=monsters[i].speed;
-                if (monsters[i].pos[1]==0) {
-                    monsters[i].pos=[0,1,0,0];
+            //line 2
+            else if (mob.x<=coordinates[2][0]-mob.area.width/2 &&
+                mob.y>=coordinates[2][1]-mob.area.height/2) {
+                mob.x+=mob.speed;
+                if (mob.pos[1]==0) {
+                    mob.pos=[0,1,0,0];
                 }
-                else if (monsters[i].pos[1]==1) {
+                else if (mob.pos[1]==1) {
                     cAnimation();
-                    monsters[i].pos[1]++;
+                    mob.pos[1]++;
                 }
             }
-            else if (monsters[i].y>=coordinates[3][1]-16 &&
-                monsters[i].x>=coordinates[3][0]-16) {
-                monsters[i].y-=monsters[i].speed;
-                if (monsters[i].pos[0]==0) {
-                    monsters[i].pos=[1,0,0,0];
+            //line 3
+            else if (mob.y>=coordinates[3][1]-mob.area.height/2 &&
+                mob.x>=coordinates[3][0]-mob.area.width/2) {
+                mob.y-=mob.speed;
+                if (mob.pos[0]==0) {
+                    mob.pos=[1,0,0,0];
                 }
-                else if (monsters[i].pos[0]==1) {
+                else if (mob.pos[0]==1) {
                     cAnimation();
-                    monsters[i].pos[0]++;
+                    mob.pos[0]++;
                 }
             }
-            else if (monsters[i].x>=coordinates[4][0]-16 &&
-                monsters[i].y<=coordinates[4][1]-16) {
-                monsters[i].x-=monsters[i].speed;
-                if (monsters[i].pos[3]==0) {
-                    monsters[i].pos=[0,0,0,1];
+            //line 4
+            else if (mob.x>=coordinates[4][0]-mob.area.width/2 &&
+                mob.y<=coordinates[4][1]-mob.area.height/2) {
+                mob.x-=mob.speed;
+                if (mob.pos[3]==0) {
+                    mob.pos=[0,0,0,1];
                 }
-                else if (monsters[i].pos[3]==1) {
+                else if (mob.pos[3]==1) {
                     cAnimation();
-                    monsters[i].pos[3]++;
+                    mob.pos[3]++;
                 }
             }
-            else if (monsters[i].y<=coordinates[5][1]-16 &&
-                monsters[i].x<=coordinates[5][0]-16) {
-                monsters[i].y+=monsters[i].speed;
-                if (monsters[i].pos[2]==0) {
-                    monsters[i].pos=[0,0,1,0];
+            //line 5
+            else if (mob.y<=coordinates[5][1]-mob.area.height/2 &&
+                mob.x<=coordinates[5][0]-mob.area.width/2) {
+                mob.y+=mob.speed;
+                if (mob.pos[2]==0) {
+                    mob.pos=[0,0,1,0];
                 }
-                else if (monsters[i].pos[2]==1) {
+                else if (mob.pos[2]==1) {
                     cAnimation();
-                    monsters[i].pos[2]++;
+                    mob.pos[2]++;
                 }
             }
-            else if (monsters[i].x<=coordinates[6][0]-16 &&
-                monsters[i].y>=coordinates[6][1]-16) {
-                monsters[i].x+=monsters[i].speed;
-                if (monsters[i].pos[1]==0) {
-                    monsters[i].pos=[0,1,0,0];
+            //line 6
+            else if (mob.x<=coordinates[6][0]-mob.area.width/2 &&
+                mob.y>=coordinates[6][1]-mob.area.height/2) {
+                mob.x+=mob.speed;
+                if (mob.pos[1]==0) {
+                    mob.pos=[0,1,0,0];
                 }
-                else if (monsters[i].pos[1]==1) {
+                else if (mob.pos[1]==1) {
                     cAnimation();
-                    monsters[i].pos[1]++;
+                    mob.pos[1]++;
                 }
             }
-            else if (monsters[i].y>=coordinates[7][1]-16) {
-                monsters[i].y-=monsters[i].speed;
-                if (monsters[i].pos[0]==0) {
-                    monsters[i].pos=[1,0,0,0];
+            //line 7
+            else if (mob.y>=coordinates[7][1]-mob.area.height/2) {
+                mob.y-=mob.speed;
+                if (mob.pos[0]==0) {
+                    mob.pos=[1,0,0,0];
                 }
-                else if (monsters[i].pos[0]==1) {
+                else if (mob.pos[0]==1) {
                     cAnimation();
-                    monsters[i].pos[0]++;
+                    mob.pos[0]++;
                 }
             }
-            else if (monsters[i].x>=coordinates[8][0]-32) {
-                monsters[i].x-=monsters[i].speed;
-                if (monsters[i].pos[3]==0) {
-                    monsters[i].pos=[0,0,0,1];
+            //line 8
+            else if (mob.x>=coordinates[8][0]-mob.area.width) {
+                mob.x-=mob.speed;
+                if (mob.pos[3]==0) {
+                    mob.pos=[0,0,0,1];
                 }
-                else if (monsters[i].pos[3]==1) {
+                else if (mob.pos[3]==1) {
                     cAnimation();
-                    monsters[i].pos[3]++;
+                    mob.pos[3]++;
                 }
             }
-            else if (monsters[i].x<=352) {
-                if (!monsters[i].dead) {
+            else if (mob.x<=352) {
+                if (!mob.dead) {
                     life-=1;
-                    document.getElementById("life").value = life;
-                    monsters[i].dead++;
-                    stage.removeChild(monsters[i]);
+                    document.getElementById("life").innerHTML ="life: " + life;
+                    mob.dead++;
+                    stage.removeChild(mob);
                     monsters.splice(i,1);
 
                 }
@@ -401,7 +482,7 @@ function tick(event) {
                 monsters.splice(i,1);
                 stage.removeChild(monsters[i]);
                 life-=1;
-                document.getElementById("life").value = life;
+                document.getElementById("life").innerHTML ="life: " + life;
             };
         };
 
@@ -413,15 +494,21 @@ function tick(event) {
             }
         }
     };
-	
 
-	output.text = "Paused = "+createjs.Ticker.getPaused()+"\n"+
-		"Time = "+ time +"ticks"+ nticks +"\n" +
-        monsters
-	
-	stage.update(event); // important!!
+    stage.update(event); // important!!
 };
 
+//toggle aoe
+function toggleAoe() {
+    for (var i=0;i<aoeT.length;i++) {
+        if (towerSelection) {
+            stage.addChild(aoeT[i]);
+        } else {
+            stage.removeChild(aoeT[i]);
+        }
+    }
+    stage.update();
+}
 
 // fast forward
 function ff() {
@@ -446,35 +533,27 @@ function ff() {
 function nextWave() {
     if (!createjs.Ticker.getPaused()) {
         wave++;
-        document.getElementById("wave").value = wave;
+        document.getElementById("wave").innerHTML ="wave: " + wave;
         if (wave%10==0) {
-           monsterstats[2] += 1 
+           monsterstats[0][2] += 1 
         }
-        monsterstats[0] *= 1.2
-        cMonster(monsterstats[0],monsterstats[1],monsterstats[2],monsterstats[3],0);
+        if (wave%2!=0) {
+            monsterstats[0][0] *= 1.2
+            cMonster(monsterstats[0],2,0);
+        } else {
+            cMonster(monsterstats[1],2,1);
 
+        }
         stage.removeChild(castle);//making sure castle stays on the top layer
         stage.addChild(castle);
     }
 }
 
-//toggle aoe
-function toggleAoe() {
-    for (var i=0;i<aoeT.length;i++) {
-        if (towerSelection) {
-            stage.addChild(aoeT[i]);
-        } else {
-            stage.removeChild(aoeT[i]);
-        }
-    }
-    stage.update();
-}
-
 //toggle pause
 function togglePause() {
-	var paused = createjs.Ticker.getPaused();
-	createjs.Ticker.setPaused(!paused);
-	document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
+    var paused = createjs.Ticker.getPaused();
+    createjs.Ticker.setPaused(!paused);
+    document.getElementById("pauseBtn").value = !paused ? "play" : "pause";
     for (var i=0;i<monsters.length;i++) {
         for (var j=0;j<4;j++) {
             if (!paused) {
@@ -503,6 +582,12 @@ function togglePause() {
     }
 
 };
+
+//error text
+function error(txt) {
+    document.getElementById("errorText").innerHTML = txt;
+    errorCD = 30;
+}
 
 //restart
 function restart() {
@@ -544,9 +629,9 @@ function grid() {
             hitsT[0][i][j].graphics.beginFill("#f00").drawRect(32*i,32*j,32,32);
             hitsT[0][i][j].alpha=0.01;
             hitsT[0][i][j].coord=[32*i,32*j]
-            hitsT[0][i][j].on("mouseover", handleMouse);
-            hitsT[0][i][j].on("mouseout", handleMouse);
-            hitsT[0][i][j].on("click", handleMouse); 
+            hitsT[0][i][j].on("mouseover", handleTower);
+            hitsT[0][i][j].on("mouseout", handleTower);
+            hitsT[0][i][j].on("click", handleTower); 
             stage.addChild(hitsT[0][i][j]);
         };
     };
@@ -565,9 +650,9 @@ function grid() {
                 (stage.canvas.height-32),32,32);
             hitsT[1][i][j].alpha=0.01;
             hitsT[1][i][j].coord=[64+32*i,stage.canvas.height-32];
-            hitsT[1][i][j].on("mouseover", handleMouse);
-            hitsT[1][i][j].on("mouseout", handleMouse);
-            hitsT[1][i][j].on("click", handleMouse); 
+            hitsT[1][i][j].on("mouseover", handleTower);
+            hitsT[1][i][j].on("mouseout", handleTower);
+            hitsT[1][i][j].on("click", handleTower); 
             stage.addChild(hitsT[1][i][j]);
         };
     };
@@ -586,9 +671,9 @@ function grid() {
                 32*j,32,32);
             hitsT[2][i][j].alpha=0.01;
             hitsT[2][i][j].coord=[128+32*i,32*j];
-            hitsT[2][i][j].on("mouseover", handleMouse);
-            hitsT[2][i][j].on("mouseout", handleMouse);
-            hitsT[2][i][j].on("click", handleMouse); 
+            hitsT[2][i][j].on("mouseover", handleTower);
+            hitsT[2][i][j].on("mouseout", handleTower);
+            hitsT[2][i][j].on("click", handleTower); 
             stage.addChild(hitsT[2][i][j]);
         };
     };
@@ -607,9 +692,9 @@ function grid() {
                 64+32*j,32,32);
             hitsT[3][i][j].alpha=0.01;
             hitsT[3][i][j].coord=[128+32*i,64+32*j];
-            hitsT[3][i][j].on("mouseover", handleMouse);
-            hitsT[3][i][j].on("mouseout", handleMouse);
-            hitsT[3][i][j].on("click", handleMouse); 
+            hitsT[3][i][j].on("mouseover", handleTower);
+            hitsT[3][i][j].on("mouseout", handleTower);
+            hitsT[3][i][j].on("click", handleTower); 
             stage.addChild(hitsT[3][i][j]);
         };
     };       
@@ -628,9 +713,9 @@ function grid() {
                 stage.canvas.height-160+32*j,32,32);
             hitsT[4][i][j].alpha=0.01;
             hitsT[4][i][j].coord=[192+32*i,stage.canvas.height-160+32*j];
-            hitsT[4][i][j].on("mouseover", handleMouse);
-            hitsT[4][i][j].on("mouseout", handleMouse);
-            hitsT[4][i][j].on("click", handleMouse); 
+            hitsT[4][i][j].on("mouseover", handleTower);
+            hitsT[4][i][j].on("mouseout", handleTower);
+            hitsT[4][i][j].on("click", handleTower); 
             stage.addChild(hitsT[4][i][j]);
         };
     };
@@ -649,9 +734,9 @@ function grid() {
                 128+32*j,32,32);
             hitsT[5][i][j].alpha=0.01;
             hitsT[5][i][j].coord=[256+32*i,128+32*j];
-            hitsT[5][i][j].on("mouseover", handleMouse);
-            hitsT[5][i][j].on("mouseout", handleMouse);
-            hitsT[5][i][j].on("click", handleMouse); 
+            hitsT[5][i][j].on("mouseover", handleTower);
+            hitsT[5][i][j].on("mouseout", handleTower);
+            hitsT[5][i][j].on("click", handleTower); 
             stage.addChild(hitsT[5][i][j]);
         };
     };
@@ -670,9 +755,9 @@ function grid() {
                 256+32*j,32,32);
             hitsT[6][i][j].alpha=0.01;
             hitsT[6][i][j].coord=[256+32*i,256+32*j];
-            hitsT[6][i][j].on("mouseover", handleMouse);
-            hitsT[6][i][j].on("mouseout", handleMouse);
-            hitsT[6][i][j].on("click", handleMouse); 
+            hitsT[6][i][j].on("mouseover", handleTower);
+            hitsT[6][i][j].on("mouseout", handleTower);
+            hitsT[6][i][j].on("click", handleTower); 
             stage.addChild(hitsT[6][i][j]);
         };
     };
@@ -691,9 +776,9 @@ function grid() {
                 192+32*j,32,32);
             hitsT[7][i][j].alpha=0.01;
             hitsT[7][i][j].coord=[256+32*i,192+32*j];
-            hitsT[7][i][j].on("mouseover", handleMouse);
-            hitsT[7][i][j].on("mouseout", handleMouse);
-            hitsT[7][i][j].on("click", handleMouse); 
+            hitsT[7][i][j].on("mouseover", handleTower);
+            hitsT[7][i][j].on("mouseout", handleTower);
+            hitsT[7][i][j].on("click", handleTower); 
             stage.addChild(hitsT[7][i][j]);
         };
     };
@@ -712,9 +797,9 @@ function grid() {
                 128+32*j,32,32);
             hitsT[8][i][j].alpha=0.01;
             hitsT[8][i][j].coord=[704+32*i,128+32*j];
-            hitsT[8][i][j].on("mouseover", handleMouse);
-            hitsT[8][i][j].on("mouseout", handleMouse);
-            hitsT[8][i][j].on("click", handleMouse); 
+            hitsT[8][i][j].on("mouseover", handleTower);
+            hitsT[8][i][j].on("mouseout", handleTower);
+            hitsT[8][i][j].on("click", handleTower); 
             stage.addChild(hitsT[8][i][j]);
         };
     };
@@ -733,9 +818,9 @@ function grid() {
                 32*j,32,32);
             hitsT[9][i][j].alpha=0.01;
             hitsT[9][i][j].coord=[704+32*i,128+32*j];
-            hitsT[9][i][j].on("mouseover", handleMouse);
-            hitsT[9][i][j].on("mouseout", handleMouse);
-            hitsT[9][i][j].on("click", handleMouse); 
+            hitsT[9][i][j].on("mouseover", handleTower);
+            hitsT[9][i][j].on("mouseout", handleTower);
+            hitsT[9][i][j].on("click", handleTower); 
             stage.addChild(hitsT[9][i][j]);
         };
     };
