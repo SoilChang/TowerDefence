@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!--createjs library && stylesheet for sidebar-->
+	<script src="../GamePrototype/easeljs-0.7.0.min.js"></script>
+	<link href="../GamePrototype/style.css" rel="stylesheet" type="text/css">
+
 	<!--jQeury library-->
 	<script src="../jQuery/jquery-2.1.4.min.js"></script>
 	<script src="../jQuery/jquery-ui.min.js"></script>
@@ -14,17 +18,23 @@
 	        debiki.Utterscroll.enable();
 	      }
 	    });
+
+	    //to add in sidebar for game
+	    $(function() {
+	    	$("#sideBar").load("../GamePrototype/sideBar.html");
+	    });
 	</script>
 
 	<title>Game Page</title>
 
 	<!--User Scripts-->
 	<script type="text/javascript" src="gamePage.js"></script>
+	<script type="text/javascript" src="../GamePrototype/game.js"></script>
 	<link rel="stylesheet" type="text/css" href="gamePage.css"></link>
 	<link rel="stylesheet" type="text/css" href="gamePage2.css"></link>
 
 </head>
-<body background="../images/gamePage/page.jpg">
+<body onload="init()" background="../images/gamePage/page.jpg">
 		<!-- scrollable script that has to be put inside body tag -->
 		<script src='../jQuery/debiki-utterscroll.js'></script>
 
@@ -688,23 +698,9 @@
 
 			<!-- Option bar on the left for Game Canvas -->
 			<div id="c-game-left_hand_menu">
-				<div>
-					<!-- upper section( bar section ) -->
-					<div id="c-game-left_hand_menu-lupper_section">
-						<div id="c-game-left_hand_menu-lupper_section-words">	
-							<p>HP:</p>
-							<p>Armour:</p>
-							<p>Gold:</p>
-							<p>Gem:</p>
-						</div>
-					</div>
-					<!-- lower section( button section) -->
-					<div id="c-game-left_hand_menu-lower_section">
-						<div class="btn-group-vertical" role="group">
-						  	<button class="btn btn-default">Start wave</button>
-						  	<button class="btn btn-default">Next wave</button>
-						</div>
-					</div>
+				<div id="sideBar">
+					<!-- side bar by zj -->
+
 				</div>
 				<!-- animate this bar in and out -->
 				<script type="text/javascript">
@@ -724,9 +720,12 @@
 
 			</div>
 			<!-- Game Canvas -->
-			<iframe src="http" id="c-game-game_canvas">
+			<div id="c-game-game_canvas">
+				<canvas id="demoCanvas" width="896" height="544"> <!--896/544-->
+				alternate content
+				</canvas>
 				<!-- code from zhi jiang -->
-			</iframe>
+			</div>
 		</div>
 
 
