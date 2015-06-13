@@ -108,7 +108,6 @@ function imageurl() {
     //castle image
     castleI = new Image();
     castleI.src = "images/castle64.png"
-    castleI.onload = handleImageLoad;
 
     //tower-hero image
     heroI = new Image();
@@ -151,6 +150,8 @@ function imageurl() {
     };
     warriorI = new createjs.SpriteSheet(warrior);
     monsterI.push(warriorI)
+
+    handleImageLoad;
 };
 
 //handle image load
