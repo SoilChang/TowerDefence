@@ -13,16 +13,13 @@
 	<script src='../jQuery/modernizr-v2.8.3.js'></script>
 	<script src='../jQuery/jquery-scrollable.js'></script>
 	<script type="text/javascript">
-	    jQuery(function($) {
-	      if (!Modernizr.touch) { // if not a smartphone
-	        debiki.Utterscroll.enable();
-	      }
-	    });
-
-	    //to add in sidebar for game
-	    $(function() {
-	    	$("#sideBar").load("../GamePrototype/sideBar.html");
-	    });
+	$(function() {
+		$('.towerBtn').click(
+			function(){
+			$('.towerBtn').removeClass('selected');
+			$(this).addClass('selected');
+		})
+	})
 	</script>
 
 	<title>Game Page</title>
@@ -35,8 +32,6 @@
 
 </head>
 <body onload="init()" background="../images/gamePage/page.jpg">
-		<!-- scrollable script that has to be put inside body tag -->
-		<script src='../jQuery/debiki-utterscroll.js'></script>
 
 
 		<!-- top nav bar-->
@@ -402,7 +397,7 @@
 						<hr>
 						<!-- helmet 2 -->
 						<div>
-							<h4 class="c-shop-item_display-name">Zhi Jiang's Dulan Face</h4>
+							<h4 class="c-shop-item_display-name">Bull's Face Mask</h4>
 							<img src="../images/gamePage/armour_head2.png" class="c-shop-item_display-image">
 							<div class="c-shop-item_display-description">
 								<p> Live Bonus: 6 <br> Armour Bonus: 3 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
@@ -418,7 +413,7 @@
 					<div id="c-shop-item_display-Chest_Plates" class="col-lg-12 col-md-12 col-sm-12">
 						<!-- chest plate 1 -->
 						<div>
-							<h4 class="c-shop-item_display-name">Zhi Jiang's Pajamas</h4>
+							<h4 class="c-shop-item_display-name">Pajamas</h4>
 							<img src="../images/gamePage/chest_plate1.png" class="c-shop-item_display-image">
 							<div class="c-shop-item_display-description">
 								<p> Live Bonus: 2 <br> Armour Bonus: 5 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
@@ -472,7 +467,7 @@
 
 						<!-- leg 3 -->
 						<div>
-							<h4 class="c-shop-item_display-name">Zhi Jiang's Legs</h4>
+							<h4 class="c-shop-item_display-name">Bull's Legs</h4>
 							<img src="../images/gamePage/armour_leg3.png" class="c-shop-item_display-image">
 							<div class="c-shop-item_display-description">
 								<p> Live Bonus: 10 <br> Armour Bonus: 10 <br> Attack Bonus: 0.0% <br> Price:100 Gems</p>
@@ -698,9 +693,38 @@
 
 			<!-- Option bar on the left for Game Canvas -->
 			<div id="c-game-left_hand_menu">
-				<div id="sideBar">
-					<!-- side bar by zj -->
+				<div id="gameStatus">
+					<p id="cash" class="gameInfo">Cash: </p>
+					<p id="wave" class="gameInfo">Wave: </p>
+					<div>
+						<p class="titles">Castle Info</p>
+						<p id="health" class="gameInfo">Health: </p>
+						<p id="castleText" class="gameInfo"></p>
+					</div>
+					<input type="button" value="start" id="pauseBtn" 
+					class="gameBtn" onclick="togglePause()"><br>
+					<input type="button" value="next wave" id="nextBtn" 
+					class="gameBtn" onclick="nextWave()"><br>
+					<input type="button" value="1x" id="ffBtn" 
+					class="gameBtn" onclick="ff()"><br>
+					<input type="button" value="Check Range" id="rangeBtn" 
+					class="gameBtn" onclick="towerType=(towerType)?false:true;toggleAoe()"><br>
+					<input type="button" value="restart" id="restartBtn" 
+					class="gameBtn" onclick="restart()"><br>
+					<button type="submit" class="towerBtn" onclick="buyTower('lightTower')">
+						<img src="images/light_tower.png" class="tower">
+						<p class="towerName">Light Tower</p>
+					</button>			
+					<button type="submit" class="towerBtn" onclick="buyTower('iceTower')">
+						<img src="images/ice_tower.png" class="tower">
+						<p class="towerName">Ice Tower</p>
+					</button>
 
+					<div> 
+						<p class="titles">Tower Info</p>
+						<p id="infoText"></p>
+						<p id="errorText"></p>
+					</div>
 				</div>
 				<!-- animate this bar in and out -->
 				<script type="text/javascript">
@@ -721,7 +745,7 @@
 			</div>
 			<!-- Game Canvas -->
 			<div id="c-game-game_canvas">
-				<canvas id="demoCanvas" width="896" height="544"> <!--896/544-->
+				<canvas id="playingField" width="896" height="544"> <!--896/544-->
 				alternate content
 				</canvas>
 				<!-- code from zhi jiang -->
