@@ -343,9 +343,9 @@ function updateInfo(tower) {
     towerData[tower.name]["cd"][tower.level]/20 + "<br>" +
     "Upgrade Cost: " + 
     towerData[tower.name]["cost"][tower.level] + "<br>" +
-    "<input type='button' value='Upgrade' onclick='upgradeTower()'>" + 
+    "<input type='button' value='Upgrade' class='gameBtn' onclick='upgradeTower()'>" + 
     "<br>" +
-    "<input type='button' value='Sell' onclick='sellTower()'>"
+    "<input type='button' value='Sell' class='gameBtn' onclick='sellTower()'>"
 
     : "Lvl: " + tower.level + "<br>" +
     "Dmg: " + tower.damage + "<br>" +
@@ -353,7 +353,7 @@ function updateInfo(tower) {
     "Range: " + tower.range/32 +  "<br>" + 
     "Atk Spd: " + tower.maxCd/20 + "<br>" +
     "Max level" + "<br>" +
-    "<input type='button' value='Sell' onclick='sellTower()'>"
+    "<input type='button' value='Sell' class='gameBtn' onclick='sellTower()'>"
 };
 
 //upgrading of tower

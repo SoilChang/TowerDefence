@@ -2,25 +2,21 @@
 	color: white;
     height:544px;
     width:120px;
-    float:left;
-    border: solid 1px black;
 }
 
 #game {
 	height: 544px;
     width: 896px;
-    float: left;
-    border: solid 1px black; 
 }
 
 .titles {
-	font-size: 15px;
+	font-size: 14px;
 	margin: 0px;
-	padding-top: 5px;
+	padding-top: 3px;
 	padding-left: 5px;
 }
 .gameInfo {
-	font-size: 14px;
+	font-size: 13px;
 	margin: 0;
 	padding-left: 5px;
 }
@@ -32,7 +28,7 @@
 .towerBtn {
 	color: brown;
 	width: 100px;
-	height: 50px;
+	height: 45px;
 }
 
 .tower {
