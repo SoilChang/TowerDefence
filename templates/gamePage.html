@@ -694,12 +694,15 @@
 			<!-- Option bar on the left for Game Canvas -->
 			<div id="c-game-left_hand_menu">
 				<div id="gameStatus">
+					<p id="score" class="gameInfo">Score: </p>
 					<p id="cash" class="gameInfo">Cash: </p>
 					<p id="wave" class="gameInfo">Wave: </p>
 					<div>
 						<p class="titles">Castle Info</p>
 						<p id="health" class="gameInfo">Health: </p>
 						<p id="castleText" class="gameInfo"></p>
+					</div>	
+					<div class="gameInfo"> Next wave:<span id="cdTimer" class="gameInfo"></span>s
 					</div>
 					<input type="button" value="start" id="pauseBtn" 
 					class="gameBtn" onclick="togglePause()"><br>
