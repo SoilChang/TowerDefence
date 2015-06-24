@@ -4,7 +4,7 @@
  */
 var constants = {
 	ticks: 25,
-	money : 5,
+	money : 100,
 	hitpoints : 10,
 	mediPackCost : 5,
 	mediPackFactor : 1.5,
